@@ -1,0 +1,9 @@
+---
+applications:
+- name:
+  memory: 256M
+  host: betterlife-finicial
+  domain: mybluemix.net
+  path: betterlife_0.1.war
+  instances: 1
+  disk_quota: 512M
