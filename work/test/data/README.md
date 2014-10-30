@@ -1,0 +1,1 @@
+All test related resources comes to this folder.
