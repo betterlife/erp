@@ -2,7 +2,11 @@ checkout:
   post:
     - git submodule sync
     - git submodule update --init
-
+test:
+  override:
+    - ant -f .builder/build.xml cc:report junit:report findbugs
+  post:
+    - ant -f .builder/build.xml docs:javadoc
 general:
   artifacts:
     - "target/artifact/package/" # war package 
