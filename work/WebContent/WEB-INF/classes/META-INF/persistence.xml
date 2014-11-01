@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+	<persistence-unit name="betterlife" transaction-type="JTA">
+		<jta-data-source>jdbc/betterlife-sqld</jta-data-source>
+		<exclude-unlisted-classes>false</exclude-unlisted-classes>
+		<properties>
+			<property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema(foreignKeys=true,schemaAction='drop,add')"   />
+		    <property name="openjpa.LockTimeout" value="30000" />
+			<property name="openjpa.jdbc.TransactionIsolation" value="read-committed" />
+			<property name="openjpa.Log" value="DefaultLevel=TRACE, Runtime=TRACE, Tool=TRACE, SQL=TRACE"/>
+			<property name="openjpa.jdbc.UpdateManager" value="operation-order" />
+		</properties>
+	</persistence-unit>
+</persistence>
