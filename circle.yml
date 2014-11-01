@@ -2,3 +2,9 @@ checkout:
   post:
     - git submodule sync
     - git submodule update --init
+
+general:
+  artifacts:
+    - "target/artifact/package/" # war package 
+    - "target/reports"           # reports 
+    - "target/docs"              # Java docs 
