@@ -10,5 +10,6 @@ test:
 general:
   artifacts:
     - "target/artifact/package/" # war package 
-    - "target/reports"           # reports 
+    - "target/reports"           # reports
+    - "target/data"              # test meta data
     - "target/docs"              # Java docs 
