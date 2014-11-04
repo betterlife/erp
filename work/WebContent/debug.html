@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+    <meta charset="utf-8">
+    <title>Dummy index page.</title>
+    <script type="text/javascript" src="js/jquery/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="js/debug.js"></script>
+    <link rel="stylesheet" href="css/debug.css" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <script type="text/javascript" src="js/bootstrap/bootstrap.min.js"></script>
+</head>
+<body class="debug-body">
+<div id="container-fluid">
+    <div class="text-center debug-page-title">
+        <b>Development Debug Page</b>
+    </div>
+    <div class="debug-page-block">
+        Get Object by Id / Object Type:
+        <select name="object_type" id="object_type">
+            <option value="Expense">Expense</option>
+            <option value="CostCenter">CostCenter</option>
+            <option value="ExpenseCategory">Expense Category</option>
+            <option value="User">User</option>
+        </select>
+        <input name="object_id" id="object_id" placeholder="Object Id, Empty to get the list" required="true" size="30"/>
+        <input value="Jump to result" type="button" onclick="jump_to_detail_page()"/>
+    </div>
+
+    <div class="debug-page-block">
+        <form action="/betterlife/rest/ExpenseCategory" method="post" class="form-control panel">
+            Category Name: <input type="text" name="categoryName" placeholder="Expense Category Name" size="30"/>
+            <input type="submit" value="Create Expense Category"/>
+        </form>
+        <form action="/betterlife/rest/User" method="post" class="form-control panel">
+            User Name: <input type="text" name="username" placeholder="User Name" size="20"/>
+            Password : <input type="text" name="password" placeholder="Password" size="20"/>
+            <input type="submit" value="Create Expense Category"/>
+         </form>
+        <form action="/betterlife/rest/CostCenter" method="post" class="form-control panel">
+            Cost Center Name: <input type="text" name="name" placeholder="Cost Center Name" size="20"/>
+            <input type="submit" value="Create Cost Center"/>
+         </form>
+        <form action="/betterlife/rest/Expense" method="post" class="form-control panel">
+            Cost Center Id: <input type="text" name="costCenter" placeholder="Cost Center Id" size="20"/>
+            User Id: <input type="text" name="user" placeholder="User Id" size="20"/><br/>
+            Expense Category Id: <input type="text" name="expenseCategory" placeholder="Expense Category Id" size="20"/>
+            Expense Date: <input type="date" name="date" placeholder="Expense Date"/><br/>
+            Expense Amount: <input type="number" name="amount" placeholder="Total Amount" size="10"/><br/>
+            Remark: <textarea name="remark" placeholder="Remark for the expense"></textarea>
+            <br/><input type="submit" value="Create Expense Record"/>
+         </form>
+    </div>
+
+</div>
+</body>
+</html>

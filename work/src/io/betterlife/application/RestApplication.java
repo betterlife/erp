@@ -1,6 +1,6 @@
 package io.betterlife.application;
 
-import io.betterlife.rest.finical.ExpenseService;
+import io.betterlife.rest.BaseService;
 
 import javax.naming.InitialContext;
 import javax.ws.rs.core.Application;
@@ -15,7 +15,7 @@ public class RestApplication extends Application {
 
     public Set<Class<?>> getClasses() {
         Set<Class<?>> classes = new HashSet<>();
-        classes.add(ExpenseService.class);
+        classes.add(BaseService.class);
         return classes;
     }
 

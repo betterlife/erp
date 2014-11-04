@@ -6,7 +6,7 @@
 		<jta-data-source>jdbc/betterlife-sqld</jta-data-source>
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 		<properties>
-			<property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema(foreignKeys=true,schemaAction='drop,add')"   />
+			<property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema(foreignKeys=true,schemaAction='add')"   />
 		    <property name="openjpa.LockTimeout" value="30000" />
 			<property name="openjpa.jdbc.TransactionIsolation" value="read-committed" />
 			<property name="openjpa.Log" value="DefaultLevel=TRACE, Runtime=TRACE, Tool=TRACE, SQL=TRACE"/>

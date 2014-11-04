@@ -6,6 +6,7 @@ import io.betterlife.domains.security.User;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * Author: Lawrence Liu(xqinliu@cn.ibm.com)
@@ -14,77 +15,58 @@ import java.util.Date;
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name = "getExpenseById", query = "SELECT e FROM Expense e WHERE e.id = :id ")
+    @NamedQuery(name = "Expense.getById", query = "SELECT e FROM Expense e WHERE e.id = :id ")
 })
-
 public class Expense extends BaseObject {
 
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    long id;
-
-    @ManyToOne
-    private ExpenseCategory category;
-
-    @ManyToOne
-    private CostCenter costCenter;
-
-    @ManyToOne
-    private User user;
-    private BigDecimal amount;
-    private String remark;
-    private Date date;
-
-    public void setCategory(ExpenseCategory category) {
-        this.category = category;
+    public void setExpenseCategory(ExpenseCategory expenseCategory) {
+        setValue("expenseCategory", expenseCategory);
     }
 
-    public ExpenseCategory getCategory() {
-        return category;
+    @ManyToOne
+    public ExpenseCategory getExpenseCategory() {
+        return getValue("expenseCategory");
     }
 
     public void setCostCenter(CostCenter costCenter) {
-        this.costCenter = costCenter;
+        setValue("costCenter", costCenter);
     }
 
+    @ManyToOne
     public CostCenter getCostCenter() {
-        return costCenter;
+        return getValue("costCenter");
     }
 
     public void setUser(User user) {
-        this.user = user;
+        setValue("user", user);
     }
 
+    @ManyToOne
     public User getUser() {
-        return user;
+        return getValue("user");
     }
 
     public void setAmount(BigDecimal amount) {
-        this.amount = amount;
+        setValue("amount", amount);
     }
 
     public BigDecimal getAmount() {
-        return amount;
+        return getValue("amount");
     }
 
     public void setRemark(String remark) {
-        this.remark = remark;
+        setValue("remark", remark);
     }
 
     public String getRemark() {
-        return remark;
+        return getValue("remark");
     }
 
-    public void setExpenseDate(Date date) {
-        this.date = date;
+    public void setDate(Date date) {
+        setValue("date", date);
     }
 
     public Date getDate() {
-        return date;
+        return getValue("date");
     }
-
-    public long getId(){
-        return id;
-    }
-
 }

@@ -2,37 +2,33 @@ package io.betterlife.domains.finical;
 
 import io.betterlife.domains.BaseObject;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Author: Lawrence Liu(xqinliu@cn.ibm.com)
  * Date: 10/31/14
  */
 @Entity
+@NamedQueries({
+    @NamedQuery(name = "ExpenseCategory.getById", query = "SELECT e FROM ExpenseCategory e WHERE e.id = :id ")
+})
 public class ExpenseCategory extends BaseObject {
 
-
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    long id;
-
-    private String categoryName;
-
-    public ExpenseCategory(){}
+    public ExpenseCategory() {
+        System.out.println("Init Expense Category");
+    }
 
     public ExpenseCategory(String categoryName) {
         this();
         setCategoryName(categoryName);
     }
 
-    public void setCategoryName(String categoryName){
-        this.categoryName = categoryName;
+    public void setCategoryName(String categoryName) {
+        setValue("categoryName", categoryName);
     }
 
     public String getCategoryName() {
-        return categoryName;
+        return getValue("categoryName");
     }
+
 }

@@ -13,7 +13,7 @@
    		</init-param>
    		<load-on-startup>5</load-on-startup>
    	</servlet>
-   	<servlet-mapping>
+	<servlet-mapping>
    		<servlet-name>RestServlet</servlet-name>
    		<url-pattern>/rest/*</url-pattern>
    	</servlet-mapping>

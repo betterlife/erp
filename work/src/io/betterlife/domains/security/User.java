@@ -3,9 +3,8 @@ package io.betterlife.domains.security;
 import io.betterlife.domains.BaseObject;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 /**
  * Author: Lawrence Liu(xqinliu@cn.ibm.com)
@@ -13,28 +12,25 @@ import javax.persistence.Id;
  */
 
 @Entity
+@NamedQueries({
+    @NamedQuery(name = "User.getById", query = "SELECT u FROM User u WHERE u.id = :id ")
+})
 public class User extends BaseObject {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
-
-    private String username;
-    private String password;
-
     public void setUsername(String username) {
-        this.username = username;
+        setValue("username",username);
     }
 
     public String getUsername() {
-        return username;
+        return getValue("username");
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        setValue("password", password);
     }
 
     public String getPassword() {
-        return password;
+        return getValue("password");
     }
+
 }
