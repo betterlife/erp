@@ -1,4 +1,4 @@
-var context_root = "/betterlife";
+var context_root = "/";
 
 function jump_to_detail_page() {
     var objectType = $("#object_type").val();
