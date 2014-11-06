@@ -7,6 +7,7 @@ test:
     - ant -f .builder/build.xml cc:report junit:report findbugs
   post:
     - ant -f .builder/build.xml docs:javadoc
+    - cp -R target/data/* $CI_REPORTS
 general:
   artifacts:
     - "target/artifact/package/" # war package 
