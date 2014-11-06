@@ -1,4 +1,4 @@
-package io.betterlife.domains.finical;
+package io.betterlife.domains.financial;
 
 import io.betterlife.domains.BaseObject;
 

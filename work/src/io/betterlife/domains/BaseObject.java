@@ -1,14 +1,13 @@
 package io.betterlife.domains;
 
-import io.betterlife.domains.finical.CostCenter;
-import io.betterlife.domains.finical.Expense;
-import io.betterlife.domains.finical.ExpenseCategory;
 import io.betterlife.domains.security.User;
 import io.betterlife.persistence.BaseOperator;
+import io.betterlife.persistence.BaseMetaData;
 import org.apache.commons.lang3.ClassUtils;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,11 +17,8 @@ import java.util.Map;
  * Date: 10/31/14
  */
 @MappedSuperclass
-public abstract class BaseObject {
+public abstract class BaseObject extends BaseMetaData {
 
-    //TODO.xqliu 如果不同的Entity里面有相同的名称的字段,会发生冲突.-->在key里面加上Entity的名称部分-->在setValues里面getFieldMeta的时候,需要也加上
-    private static Map<String, Class> _fieldsMeta = new HashMap<>();
-    private static boolean fieldMetaAlreadySet  = false;
 
     private Map<String, Object> _map = new HashMap<>();
 
@@ -36,15 +32,6 @@ public abstract class BaseObject {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    @Transient
-    public static Class getFieldMeta(String fieldName) {
-        return _fieldsMeta.get(fieldName);
-    }
-
-    public static void setFieldMeta(String fieldName, Class clazz) {
-        _fieldsMeta.put(fieldName, clazz);
     }
 
     @Transient
@@ -93,25 +80,26 @@ public abstract class BaseObject {
     }
 
     public void setValues(EntityManager entityManager, Map<String, String> parameters) {
-        setAllFieldMetas();
+        setAllFieldMetaData(entityManager);
         for (Map.Entry<String, String> entry : parameters.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
-            Class clazz = getFieldMeta(key);
+            Class clazz = getFieldMetaData(this.getClass(), key);
             if (clazz.equals(String.class)) {
                 setValue(key, value);
             } else if (clazz.equals(Date.class)) {
-                //If clazz is Date, then we assume a time stamp will pass here.
                 try {
-                    setValue(key, new Date(Long.parseLong(value)));
+                    Date date = new SimpleDateFormat("yyyy-MM-dd").parse(value);
+                    setValue(key, date);
                 } catch (Exception e) {
-                    //Do nothing right now.
+                    //If clazz is Date and failed to parse by "yyyy-MM-dd", then we assume a time stamp will pass here.
+                    setValue(key, new Date(Long.parseLong(value)));
                 }
             } else if (clazz.equals(Long.class)) {
                 setValue(key, Long.parseLong(value));
             } else if (clazz.equals(BigDecimal.class)) {
                 setValue(key, new BigDecimal(value));
-            } else if (ClassUtils.isAssignable(clazz, BaseObject.class)){
+            } else if (ClassUtils.isAssignable(clazz, BaseObject.class)) {
                 //If clazz is child type of BaseObject, then we assume an id will be passed here.
                 BaseObject baseObj = getBaseObjectById(entityManager, value, clazz);
                 if (null != baseObj) {
@@ -126,24 +114,4 @@ public abstract class BaseObject {
             Long.parseLong(id), clazz.getSimpleName() + ".getById");
     }
 
-    public void setAllFieldMetas() {
-        if (!fieldMetaAlreadySet) {
-            BaseObject.setFieldMeta("id", Long.class);
-            BaseObject.setFieldMeta("lastModifyDate", Date.class);
-            BaseObject.setFieldMeta("lastModify", User.class);
-            BaseObject.setFieldMeta("createDate", Date.class);
-            BaseObject.setFieldMeta("creator", User.class);
-            ExpenseCategory.setFieldMeta("categoryName", String.class);
-            User.setFieldMeta("username", String.class);
-            User.setFieldMeta("password", String.class);
-            CostCenter.setFieldMeta("name", String.class);
-            Expense.setFieldMeta("expenseCategory", ExpenseCategory.class);
-            Expense.setFieldMeta("costCenter", CostCenter.class);
-            Expense.setFieldMeta("user", User.class);
-            Expense.setFieldMeta("amount", BigDecimal.class);
-            Expense.setFieldMeta("remark", String.class);
-            Expense.setFieldMeta("date", Date.class);
-            fieldMetaAlreadySet = true;
-        }
-    }
 }

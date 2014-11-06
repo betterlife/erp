@@ -1,4 +1,4 @@
-package io.betterlife.domains.finical;
+package io.betterlife.domains.financial;
 
 import io.betterlife.domains.BaseObject;
 import io.betterlife.domains.security.User;
@@ -6,7 +6,6 @@ import io.betterlife.domains.security.User;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.HashMap;
 
 /**
  * Author: Lawrence Liu(xqinliu@cn.ibm.com)

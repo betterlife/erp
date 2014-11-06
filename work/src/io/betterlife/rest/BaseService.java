@@ -1,11 +1,7 @@
 package io.betterlife.rest;
 
-import io.betterlife.application.Config;
+import io.betterlife.application.ApplicationConfig;
 import io.betterlife.domains.BaseObject;
-import io.betterlife.domains.finical.CostCenter;
-import io.betterlife.domains.finical.Expense;
-import io.betterlife.domains.finical.ExpenseCategory;
-import io.betterlife.domains.security.User;
 import io.betterlife.persistence.BaseOperator;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -32,14 +28,11 @@ import java.util.Map;
 @Stateless
 public class BaseService {
 
-    @PersistenceContext(unitName = Config.PersistenceUnitName)
+    @PersistenceContext(unitName = ApplicationConfig.PersistenceUnitName)
     private EntityManager entityManager;
 
     public BaseService() {
-        BaseService.registerServiceEntity("ExpenseCategory", ExpenseCategory.class);
-        BaseService.registerServiceEntity("User", User.class);
-        BaseService.registerServiceEntity("CostCenter", CostCenter.class);
-        BaseService.registerServiceEntity("Expense", Expense.class);
+        ApplicationConfig.registerEntities();
     }
 
     private static final Map<String, Class> classes = new HashMap<>();
@@ -51,6 +44,14 @@ public class BaseService {
     public static void registerServiceEntity(String name, Class clazz) {
         classes.put(name, clazz);
     }
+
+    @GET
+    @Path("/entity/{entityName}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getEntityMeta(@PathParam("entityName") String entityName) {
+        return "";
+    }
+
 
     @GET
     @Path("/{objectType}/{id}")

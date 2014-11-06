@@ -1,11 +1,6 @@
-package io.betterlife.domains.finical;
+package io.betterlife.domains.financial;
 
-import io.betterlife.domains.security.User;
-import org.junit.Assert;
 import org.junit.Test;
-
-import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * Author: Lawrence Liu(xqinliu@cn.ibm.com)

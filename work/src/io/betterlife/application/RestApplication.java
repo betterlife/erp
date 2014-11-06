@@ -23,7 +23,7 @@ public class RestApplication extends Application {
          HashSet<Object> set = new HashSet<>();
          try {
              InitialContext ctx = new InitialContext();
-             Object obj = ctx.lookup(Config.DataSourceName);
+             Object obj = ctx.lookup(ApplicationConfig.DataSourceName);
              set.add(obj);
          } catch (Exception ex) {
              throw new RuntimeException(ex);
