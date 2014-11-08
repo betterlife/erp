@@ -1,14 +1,21 @@
 <!DOCTYPE html>
-<html lang="zh_CN">
+<html lang="zh_CN" data-ng-app="debugApp">
 <head>
     <meta charset="utf-8">
     <title>Dummy index page.</title>
-    <script type="text/javascript" src="js/jquery/jquery-2.0.3.min.js"></script>
-    <script type="text/javascript" src="js/debug.js"></script>
-    <link rel="stylesheet" href="css/debug.css" type="text/css" media="screen"/>
+
+    <script type="text/javascript" src='js/bower_components/angular/angular.min.js'></script>
+    <script type="text/javascript" src="js/bower_components/angular-cookies/angular-cookies.min.js"></script>
+    <script type="text/javascript" src="js/bower_components/angular-route/angular-route.min.js"></script>
+    <script type="text/javascript" src="js/bower_components/jquery/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="js/bower_components/bootstrap/js/bootstrap.min.js"></script>
+
     <link rel="stylesheet" href="js/bower_components/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="js/bower_components/bootstrap/css/bootstrap-theme.min.css">
-    <script type="text/javascript" src="js/bootstrap/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="js/debug/debug.js"></script>
+    <link rel="stylesheet" href="css/debug.css" type="text/css" media="screen"/>
+
 </head>
 <body class="debug-body">
 <div id="container-fluid">
@@ -27,6 +34,12 @@
         <input value="Jump to result" type="button" onclick="jump_to_detail_page()"/>
     </div>
 
+    <div class="debug-page-block" ng-controller="debugLoginCtrl">
+        User Name: <input type="text" name="username" ng-model="username" placeholder="User Name" size="20"/>
+        Password : <input type="text" name="password" ng-model="password" placeholder="Password" size="20"/>
+        <input type="submit" value="Login user" ng-click="login()"/> {{message}}
+    </div>
+
     <div class="debug-page-block">
         <form action="/rest/ExpenseCategory" method="post" class="form-control panel">
             Category Name: <input type="text" name="categoryName" placeholder="Expense Category Name" size="30"/>
@@ -35,7 +48,7 @@
         <form action="/rest/User" method="post" class="form-control panel">
             User Name: <input type="text" name="username" placeholder="User Name" size="20"/>
             Password : <input type="text" name="password" placeholder="Password" size="20"/>
-            <input type="submit" value="Create Expense Category"/>
+            <input type="submit" value="Create User"/>
          </form>
         <form action="/rest/CostCenter" method="post" class="form-control panel">
             Cost Center Name: <input type="text" name="name" placeholder="Cost Center Name" size="20"/>
