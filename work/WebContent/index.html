@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html>
-<head lang="zh_CN" data-ng-app='mainApp'>
+<html data-ng-app='mainApp'>
+<head lang="zh_CN">
     <meta charset="UTF-8">
     <title>Betterlife ERP Dashboard</title>
     <script type="text/javascript" src='js/bower_components/angular/angular.min.js'></script>
@@ -18,10 +18,18 @@
     <script type="text/javascript" src="js/app/controller/dashboardCtrl.js"></script>
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body ng-controller="mainController">
+<ul class="nav nav-pills pull-right">
+    <li><a href="/#dashboard">Dashboard</a><br/></li>
+    <li><a href="/#login">Login</a></li>
+</ul>
 <div ng-view>
-    <a href="/#dashboard">Dashboard</a><br/>
-    <a href="/#login">Login</a>
 </div>
+<hr/>
+<pre>$location.path() = {{$location.path()}}</pre>
+<pre>$route.current.templateUrl = {{$route.current.templateUrl}}</pre>
+<pre>$route.current.params = {{$route.current.params}}</pre>
+<pre>$route.current.scope.name = {{$route.current.scope.name}}</pre>
+<pre>$routeParams = {{$routeParams}}</pre>
 </body>
 </html>

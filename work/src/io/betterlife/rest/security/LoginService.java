@@ -4,14 +4,13 @@ import io.betterlife.application.ApplicationConfig;
 import io.betterlife.domains.security.User;
 import io.betterlife.persistence.BaseOperator;
 import io.betterlife.util.rest.ExecuteResult;
-import org.apache.openjpa.persistence.meta.CompileTimeLogger;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.xml.ws.RequestWrapper;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;

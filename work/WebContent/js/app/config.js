@@ -8,6 +8,11 @@
                 return $sce.trustAsHtml(text);
             };
         }])
+        .controller('mainController', function($scope, $route, $routeParams, $location) {
+            $scope.$route = $route;
+            $scope.$location = $location;
+            $scope.$routeParams = $routeParams;
+        })
         .config(['$routeProvider', '$locationProvider',
             function ($routeProvider, $locationProvider) {
                 console.log("Config route provider");
