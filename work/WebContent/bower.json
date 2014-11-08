@@ -1,0 +1,27 @@
+{
+    "name": "Life Better ERP System",
+    "version": "0.1.0",
+    "homepage": "https://hub.jazz.net/project/redchamber/betterlife-erp",
+    "authors": [
+        "Lawrence as Developer <lawrence@betterlife.io>"
+    ],
+    "description": "Life Better ERP System",
+    "keywords": [
+        "Life Better",
+        "ERP"
+    ],
+    "license": "MIT",
+    "ignore": [
+        "css/bower_components"
+    ],
+    "dependencies": {
+        "angular" : "~1.2.16",
+        "angular-route": "~1.2.7",
+        "jquery-ui": "~1.10.3",
+        "bootstrap": "~3.0.3",
+        "angular-bootstrap": "~0.10.0",
+        "angular-cookies"  : "~1.2.16",
+        "angular-ui-date": "latest",
+        "momentjs" : "latest"
+    }
+}

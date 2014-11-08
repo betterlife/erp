@@ -33,10 +33,10 @@ public class LoginService {
     private static final Logger logger = Logger.getLogger(LoginService.class.getName());
 
     @POST
-    @Path("/login")
+    @Path("/login/{username}/{password}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String login(@QueryParam("username") String username,
-                        @QueryParam("password") String password) throws IOException {
+    public String login(@PathParam("username") String username,
+                        @PathParam("password") String password) throws IOException {
         User user = null;
         try {
             Map<String, String> params = new HashMap<>(2);

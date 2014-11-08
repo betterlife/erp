@@ -1,0 +1,38 @@
+<div class="center-block col-sm-8 no-float">
+    <form role="form" name="loginform" method="post" class="form-horizontal">
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-6">
+                <h3>Betterlife 系统登陆</h3>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-6">
+                <div class="alert alert-danger alert-dismissible" role="alert" ng-show="login_error.length > 0">
+                    <span class="glyphicon glyphicon-warning-sign"></span>
+                    <span style="padding-left: 15px" ng-bind-html="login_error | to_trusted"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="username" class="col-sm-2 control-label">用户名</label>
+
+            <div class="col-sm-6">
+                <input id="username" name="username" ng-model="username" type="text" placeholder="请输入用户名"
+                       class="big-input form-control" required="required">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="password" class="col-sm-2 control-label">密码</label>
+
+            <div class="col-sm-6">
+                <input id="password" name="password" ng-model="password" type="password" placeholder="请输入密码"
+                       class="big-input form-control" required="required">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-6">
+                <button type="button" class="btn btn-primary" ng-click="login()">登陆系统</button>
+            </div>
+        </div>
+    </form>
+</div>
