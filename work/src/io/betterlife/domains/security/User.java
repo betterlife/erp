@@ -13,9 +13,13 @@ import javax.persistence.NamedQuery;
 
 @Entity
 @NamedQueries({
-    @NamedQuery(name = "User.getById", query = "SELECT u FROM User u WHERE u.id = :id ")
+    @NamedQuery(name = "User.getById", query = "SELECT u FROM User u WHERE u.id = :id "),
+    @NamedQuery(name = User.GetByUserNameAndPasswordQuery,
+        query = "SELECT u from User u WHERE u.username =: username AND u.password = :password")
 })
 public class User extends BaseObject {
+
+    public static final String GetByUserNameAndPasswordQuery = "User.getByUsernameAndPassword";
 
     public void setUsername(String username) {
         setValue("username",username);
