@@ -3,6 +3,7 @@ package io.betterlife.domains;
 import io.betterlife.domains.security.User;
 import io.betterlife.persistence.BaseOperator;
 import io.betterlife.persistence.BaseMetaData;
+import io.betterlife.persistence.NamedQueryRules;
 import org.apache.commons.lang3.ClassUtils;
 
 import javax.persistence.*;
@@ -101,17 +102,13 @@ public abstract class BaseObject extends BaseMetaData {
                 setValue(key, new BigDecimal(value));
             } else if (ClassUtils.isAssignable(clazz, BaseObject.class)) {
                 //If clazz is child type of BaseObject, then we assume an id will be passed here.
-                BaseObject baseObj = getBaseObjectById(entityManager, value, clazz);
+                BaseObject baseObj = BaseOperator.getInstance().getBaseObjectById(entityManager, Long.parseLong(value),
+                    NamedQueryRules.getInstance().getIdQueryForEntity(clazz.getSimpleName()));
                 if (null != baseObj) {
                     setValue(key, baseObj);
                 }
             }
         }
-    }
-
-    public <T> T getBaseObjectById(EntityManager entityManager, String id, Class clazz) {
-        return BaseOperator.getInstance().getBaseObject(entityManager,
-            Long.parseLong(id), clazz.getSimpleName() + ".getById");
     }
 
 }

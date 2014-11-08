@@ -3,6 +3,7 @@ package io.betterlife.rest;
 import io.betterlife.application.ApplicationConfig;
 import io.betterlife.domains.BaseObject;
 import io.betterlife.persistence.BaseOperator;
+import io.betterlife.util.rest.ExecuteResult;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.ejb.Stateless;
@@ -73,7 +74,7 @@ public class BaseService {
     @Produces(MediaType.APPLICATION_JSON)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public String create(@PathParam("objectType") String objectType, MultivaluedMap<String, String> formParams)
-        throws ClassNotFoundException, IllegalAccessException, InstantiationException, UnsupportedEncodingException {
+        throws ClassNotFoundException, IllegalAccessException, InstantiationException, IOException {
         Map<String, String> parameters = new HashMap<>();
         for (String theKey : formParams.keySet()) {
             parameters.put(theKey, URLDecoder.decode(formParams.getFirst(theKey), "UTF-8"));
@@ -84,18 +85,15 @@ public class BaseService {
             ((BaseObject) obj).setValues(entityManager, parameters);
             BaseOperator.getInstance().save(entityManager, obj);
         }
-        return "SUCCESS";
+        return ExecuteResult.getRestString("SUCCESS");
     }
 
     public String get(EntityManager entityManager, long id, String queryName) throws IOException {
-        Object object = BaseOperator.getInstance().getBaseObject(entityManager, id, queryName);
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.writeValueAsString(object);
+        return ExecuteResult.getRestString(BaseOperator.getInstance().getBaseObjectById(entityManager, id, queryName));
     }
 
     public String getAll(EntityManager entityManager, String queryName) throws IOException {
         List<Object> result = BaseOperator.getInstance().getBaseObjects(entityManager, queryName);
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.writeValueAsString(result);
+        return ExecuteResult.getRestString(result);
     }
 }

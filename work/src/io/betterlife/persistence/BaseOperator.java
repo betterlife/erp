@@ -1,7 +1,7 @@
 package io.betterlife.persistence;
 
 import io.betterlife.domains.BaseObject;
-import org.apache.openjpa.persistence.OpenJPAPersistence;
+import io.betterlife.util.jpa.OpenJPAUtil;
 import org.apache.openjpa.persistence.OpenJPAQuery;
 
 import javax.persistence.EntityManager;
@@ -12,29 +12,23 @@ import java.util.*;
  * Date: 10/31/14
  */
 public class BaseOperator {
-    private static BaseOperator ourInstance = new BaseOperator();
+    private static BaseOperator instance = new BaseOperator();
+    private OpenJPAUtil openJPAUtil = OpenJPAUtil.getInstance();
 
     public static BaseOperator getInstance() {
-        return ourInstance;
+        return instance;
     }
 
     private BaseOperator() {
     }
 
-    public <T> T getBaseObject(EntityManager em, long id, String queryName) {
+    public <T> T getBaseObjectById(EntityManager em, long id, String queryName) {
         T obj = null;
-        OpenJPAQuery q = OpenJPAPersistence.cast(em.createNamedQuery(queryName));
-        assert q != null;
+        OpenJPAQuery q = openJPAUtil.getOpenJPAQuery(em, queryName);
         q.setParameter("id", id);
-        Collection coll = q.getResultList();
-        if (coll != null) {
-            @SuppressWarnings("unchecked")
-            Iterator<T> it = (Iterator<T>) coll.iterator();
-            if (it.hasNext()) {
-                obj = it.next();
-            }
-        }
-        return obj;
+        @SuppressWarnings("unchecked")
+        final T singleResult = (T) q.getSingleResult();
+        return singleResult;
     }
 
     public <T> void save(EntityManager em, T obj) {
@@ -48,15 +42,24 @@ public class BaseOperator {
         }
     }
 
+    public <T> T getBaseObject(EntityManager em, String queryName, Map<String, ?> queryParams) {
+        OpenJPAQuery q = openJPAUtil.getOpenJPAQuery(em, queryName);
+        for (String key : queryParams.keySet()){
+            q.setParameter(key, queryParams.get(key));
+        }
+        @SuppressWarnings("unchecked")
+        final T singleResult = (T) q.getSingleResult();
+        return singleResult;
+    }
+
     public <T> List<T> getBaseObjects(EntityManager em, String queryName) {
         List<T> result = new ArrayList<>();
-        OpenJPAQuery q = OpenJPAPersistence.cast(em.createNamedQuery(queryName));
-        assert q != null;
+        OpenJPAQuery q = openJPAUtil.getOpenJPAQuery(em, queryName);
         Collection coll = q.getResultList();
         if (coll != null) {
             @SuppressWarnings("unchecked")
             Iterator<T> it = (Iterator<T>) coll.iterator();
-            if (it.hasNext()) {
+            while (it.hasNext()) {
                 result.add(it.next());
             }
         }
