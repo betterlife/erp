@@ -20,8 +20,8 @@
     <base href="/">
 
 </head>
-<body>
-<div ng-controller="mainController">
+<body ng-controller="mainController">
+<div>
     <nav class="navbar navbar-default" role="navigation">
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
@@ -52,10 +52,14 @@
 <div ng-view>
 </div>
 <hr/>
-<pre>$location.path() = {{$location.path()}}</pre>
-<pre>$route.current.templateUrl = {{$route.current.templateUrl}}</pre>
-<pre>$route.current.params = {{$route.current.params}}</pre>
-<pre>$route.current.scope.name = {{$route.current.scope.name}}</pre>
-<pre>$routeParams = {{$routeParams}}</pre>
+<div class="col-sm-6">
+    <pre>
+        $location.path() = {{$location.path()}}<br/>
+        $route.current.templateUrl = {{$route.current.templateUrl}}<br/>
+        $route.current.params = {{$route.current.params}}<br/>
+        $route.current.scope.name = {{$route.current.scope.name}}<br/>
+        $routeParams = {{$routeParams}}
+    </pre>
+</div>
 </body>
 </html>

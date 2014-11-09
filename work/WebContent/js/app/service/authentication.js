@@ -4,7 +4,7 @@ var loginService = function ($rootScope, $http, $cookieStore, $location) {
     internal.user = null;
     internal.login = function (username, password, loginCallback) {
         //TODO 修改为POST请求的形式
-        $http.post('/rest/login/' + username + '/' + password, {}, {})
+        $http.post('/rest/security/login/' + username + '/' + password, {}, {})
             .success(function (data) {
                 internal.user = data.result;
                 if (internal.user === null) {
@@ -37,12 +37,13 @@ var loginService = function ($rootScope, $http, $cookieStore, $location) {
         $cookieStore.remove('user');
         var removed_user = internal.user;
         internal.user = undefined;
-        $location.path('/login');
-        $http.get('/rest/logout').success(
-            function (data, status, headers, config) {
-                console.log("successful logout user %s", removed_user);
+        $http.post('/rest/security/logout/' + removed_user.username, {}, {})
+            .success(function (data, status, headers, config) {
+                console.info("successful logout user %s", removed_user);
+                $location.path('/login');
             }).error(function (data, status) {
-                console.log("error during logout user %s: %s, %s", removed_user, data, status);
+                console.error("error during logout user %s: %s, %s", removed_user, data, status);
+                $location.path('/login');
             });
     };
 

@@ -22,14 +22,21 @@ import java.util.logging.Logger;
  * Date: 11/7/14
  * Security service, for login, logout etc.
  */
-@Path("/")
+@Path("/security")
 @Stateless
-public class LoginService {
+public class SecurityService {
 
     @PersistenceContext(unitName = ApplicationConfig.PersistenceUnitName)
     private EntityManager entityManager;
 
-    private static final Logger logger = Logger.getLogger(LoginService.class.getName());
+    private static final Logger logger = Logger.getLogger(SecurityService.class.getName());
+
+    @POST
+    @Path("/logout/{username}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String logout(@PathParam("username") String username) throws IOException {
+        return ExecuteResult.getRestString("LOGOUT");
+    }
 
     @POST
     @Path("/login/{username}/{password}")

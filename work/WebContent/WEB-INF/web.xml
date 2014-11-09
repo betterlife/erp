@@ -20,8 +20,8 @@
 	<filter-mapping>
 		<filter-name>IndexFilter</filter-name>
 		<url-pattern>/dashboard</url-pattern>
-		<url-pattern>/login</url-pattern>
-		<url-pattern>/logout</url-pattern>
+		<url-pattern>/login/*</url-pattern>
+		<url-pattern>/logout/*</url-pattern>
 	</filter-mapping>
 	<servlet-mapping>
    		<servlet-name>RestServlet</servlet-name>
