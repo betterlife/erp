@@ -6,3 +6,4 @@ target
 *.iws
 *.ipr
 *.iml
+WebContent/js/bower_components
