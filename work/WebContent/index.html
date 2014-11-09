@@ -37,16 +37,14 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li ng-class="{active: isActive('/')}">
+                    <li ng-class="{active: isActive('/dashboard')}">
                         <a href="/dashboard" ng-show="isLoggedIn()">Dashboard</a>
                     </li>
                     <li><a href="/login" ng-show="!isLoggedIn()">Login</a></li>
                     <li><a href="/logout" ng-show="isLoggedIn()">Logout</a></li>
                 </ul>
             </div>
-            <!-- /.navbar-collapse -->
         </div>
-        <!-- /.container-fluid -->
     </nav>
 </div>
 <div ng-view>
