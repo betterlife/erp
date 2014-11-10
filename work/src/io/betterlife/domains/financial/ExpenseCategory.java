@@ -14,9 +14,7 @@ import javax.persistence.*;
 })
 public class ExpenseCategory extends BaseObject {
 
-    public ExpenseCategory() {
-        System.out.println("Init Expense Category");
-    }
+    public ExpenseCategory() {}
 
     public ExpenseCategory(String categoryName) {
         this();

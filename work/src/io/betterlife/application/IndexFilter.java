@@ -1,7 +1,7 @@
 package io.betterlife.application;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +19,7 @@ import java.util.Map;
  */
 public class IndexFilter implements Filter {
 
-    private static final Log logger = LogFactory.getLog(IndexFilter.class.getName());
+    private static final Logger logger = LogManager.getLogger(IndexFilter.class.getName());
     private static final Map<String, String> redirectCache = new HashMap<>(16);
 
     @Override
