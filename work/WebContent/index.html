@@ -23,38 +23,39 @@
 
 </head>
 <body ng-controller="mainController">
-<div>
-    <nav class="navbar navbar-default" role="navigation">
-        <div class="container-fluid">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                        data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">Betterlife ERP</a>
-            </div>
+<div class="container-fluid">
+    <div>
+        <nav class="navbar navbar-default" role="navigation" ng-show="isLoggedIn()">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                            data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Betterlife ERP</a>
+                </div>
 
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li ng-class="{active: (isActive('/dashboard') || isActive('/'))}">
-                        <a href="/dashboard" ng-show="isLoggedIn()">Dashboard</a>
-                    </li>
-                    <li><a href="/login" ng-show="!isLoggedIn()">Login</a></li>
-                    <li><a href="/logout" ng-show="isLoggedIn()">Logout</a></li>
-                </ul>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li ng-class="{active: (isActive('/dashboard') || isActive('/'))}">
+                            <a href="/dashboard" ng-show="isLoggedIn()">Dashboard</a>
+                        </li>
+                        <li><a href="/login" ng-show="!isLoggedIn()">Login</a></li>
+                        <li><a href="/logout" ng-show="isLoggedIn()">Logout</a></li>
+                    </ul>
+                </div>
             </div>
-        </div>
-    </nav>
-</div>
-<div ng-view>
-</div>
-<hr/>
-<div class="col-sm-6">
+        </nav>
+    </div>
+    <div ng-view>
+    </div>
+    <hr/>
+    <div class="col-sm-6">
     <pre>
         $location.path() = {{$location.path()}}<br/>
         $route.current.templateUrl = {{$route.current.templateUrl}}<br/>
@@ -62,6 +63,7 @@
         $route.current.scope.name = {{$route.current.scope.name}}<br/>
         $routeParams = {{$routeParams}}
     </pre>
+    </div>
 </div>
 </body>
 </html>
