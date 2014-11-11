@@ -5,6 +5,9 @@ import io.betterlife.domains.BaseObject;
 import io.betterlife.persistence.BaseMetaData;
 import io.betterlife.persistence.BaseOperator;
 import io.betterlife.util.rest.ExecuteResult;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.ejb.Stateless;
@@ -33,6 +36,8 @@ public class EntityService {
     @PersistenceContext(unitName = ApplicationConfig.PersistenceUnitName)
     private EntityManager entityManager;
 
+    private static final Logger logger = LogManager.getLogger(EntityService.class.getName());
+
     private static final Map<String, Class> classes = new HashMap<>();
 
     private static Class getServiceEntity(String name) {
@@ -47,8 +52,15 @@ public class EntityService {
     @Path("/entity/{entityName}")
     @Produces(MediaType.APPLICATION_JSON)
     public String getEntityMeta(@PathParam("entityName") String entityName) throws IOException {
+        logger.debug("Getting entity meta data for " + entityName);
+        entityName = StringUtils.uncapitalize(entityName);
+        BaseMetaData.getInstance().setAllFieldMetaData(entityManager);
         Map<String, Class> meta = BaseMetaData.getInstance().getMetaDataOfClass(getServiceEntity(entityName));
-        return ExecuteResult.getRestString(meta);
+        String result = ExecuteResult.getRestString(meta);
+        if (logger.isTraceEnabled()){
+            logger.trace("Returning \n%s\n for entity[%s] meta", result, entityName);
+        }
+        return result;
     }
 
 

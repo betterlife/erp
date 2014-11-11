@@ -2,16 +2,16 @@
 <html lang="zh_CN" data-ng-app="debugApp">
 <head>
     <meta charset="utf-8">
-    <title>Dummy index page.</title>
-
+    <title>Debug Page</title>
     <script type="text/javascript" src='js/bower_components/angular/angular.min.js'></script>
     <script type="text/javascript" src="js/bower_components/angular-cookies/angular-cookies.min.js"></script>
     <script type="text/javascript" src="js/bower_components/angular-route/angular-route.min.js"></script>
-    <script type="text/javascript" src="js/bower_components/jquery/jquery-2.0.3.min.js"></script>
-    <script type="text/javascript" src="js/bower_components/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/bower_components/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="js/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
-    <link rel="stylesheet" href="js/bower_components/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="js/bower_components/bootstrap/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/normalize.css"/>
+    <link rel="stylesheet" href="js/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="js/bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
 
     <script type="text/javascript" src="js/debug/debug.js"></script>
     <link rel="stylesheet" href="css/debug.css" type="text/css" media="screen"/>
@@ -21,6 +21,14 @@
 <div id="container-fluid">
     <div class="text-center debug-page-title">
         <b>Development Debug Page</b>
+    </div>
+    <div class="debug-page-block" ng-controller="showEntityMetaCtrl">
+        <label for="entityName">Entity Name:</label>
+        <input id="entityName" name="entityName" type="text" ng-model="entityName"/>
+        <div class="display-json-block" style="width:100%" ng-show="entityMetaInfo != null">
+            <code>{{entityMetaInfo}}</code>
+        </div>
+        <button type="button" ng-click="showEntityMeta()">Get Meta Data Info</button>
     </div>
     <div class="debug-page-block">
         Get Object by Id / Object Type:

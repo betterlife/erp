@@ -9,10 +9,8 @@
     <script type="text/javascript" src="js/bower_components/angular-route/angular-route.min.js"></script>
     <script type="text/javascript" src="js/bower_components/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="js/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="js/bower_components/ng-admin/build/ng-admin.min.js"></script>
 
     <link rel="stylesheet" href="css/normalize.css"/>
-    <link rel="stylesheet" href="js/bower_components/ng-admin/build/ng-admin.min.css">
     <link rel="stylesheet" href="js/bower_components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="js/bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
 
@@ -24,9 +22,9 @@
     <base href="/">
 
 </head>
-<body ng-controller="mainController">
+<body>
 <div class="container-fluid">
-    <div>
+    <div ng-controller="mainController">
         <nav class="navbar navbar-default" role="navigation" ng-show="isLoggedIn()">
             <div class="container-fluid">
                 <!-- Brand and toggle get grouped for better mobile display -->
@@ -57,15 +55,6 @@
     <div ng-view>
     </div>
     <hr/>
-    <div class="col-sm-6">
-    <pre>
-        $location.path() = {{$location.path()}}<br/>
-        $route.current.templateUrl = {{$route.current.templateUrl}}<br/>
-        $route.current.params = {{$route.current.params}}<br/>
-        $route.current.scope.name = {{$route.current.scope.name}}<br/>
-        $routeParams = {{$routeParams}}
-    </pre>
-    </div>
 </div>
 </body>
 </html>

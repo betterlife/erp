@@ -23,6 +23,13 @@ angular.module('debugApp', ['ngRoute', 'ngCookies'])
             return $sce.trustAsHtml(text);
         };
     }])
+    .controller('showEntityMetaCtrl', function($scope, $http) {
+        $scope.showEntityMeta = function(){
+            $http.get('/rest/entity/' + $scope.entityName).success(function(data){
+                $scope.entityMetaInfo = data.result;
+            });
+        }
+    })
     .controller('debugLoginCtrl', function($scope, $http) {
         $scope.login = function(){
             $http.post('/rest/login/' + $scope.username + '/' + $scope.password, {}, {})
