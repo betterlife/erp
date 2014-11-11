@@ -1,25 +1,26 @@
 {
-    "name": "Life Better ERP System",
-    "version": "0.1.0",
-    "homepage": "https://github.com/betterlife/erp.git",
-    "authors": [
-        "Lawrence as Developer <lawrence@betterlife.io>"
-    ],
-    "description": "Life Better ERP System, build upon REST + AngularJS",
-    "keywords": [
-        "Life Better",
-        "ERP"
-    ],
-    "directory" : "js/bower_components",
-    "license": "MIT",
-    "ignore": [
-        "js/bower_components"
-    ],
-    "dependencies": {
-        "angular" : "~1.3.2",
-        "angular-route": "~1.3.2",
-        "angular-cookies"  : "~1.3.2",
-        "jquery": "~2.0.3",
-        "bootstrap": "~3.2.0"
-    }
+  "name": "Life Better ERP System",
+  "version": "0.1.0",
+  "homepage": "https://github.com/betterlife/erp.git",
+  "authors": [
+    "Lawrence as Developer <lawrence@betterlife.io>"
+  ],
+  "description": "Life Better ERP System, build upon REST + AngularJS",
+  "keywords": [
+    "Life Better",
+    "ERP"
+  ],
+  "directory": "js/bower_components",
+  "license": "MIT",
+  "ignore": [
+    "js/bower_components"
+  ],
+  "dependencies": {
+    "angular": "~1.3.2",
+    "angular-route": "~1.3.2",
+    "angular-cookies": "~1.3.2",
+    "jquery": "~2.0.3",
+    "bootstrap": "~3.2.0",
+    "ng-admin": "~0.2.5"
+  }
 }

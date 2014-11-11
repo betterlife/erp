@@ -1,12 +1,13 @@
 checkout:
-  post:
+  post:  
     - git submodule sync
     - git submodule update --init
+    - bower install
 test:
   override:
-    - ant -f .builder/build.xml cc:report junit:report findbugs
+    - ant -f .builder/build.xml reportall
   post:
-    - ant -f .builder/build.xml docs:javadoc
+    - ant -f .builder/build.xml docs.javadoc
     - cp -R target/data/* $CI_REPORTS
 general:
   artifacts:
