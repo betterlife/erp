@@ -5,13 +5,13 @@ checkout:
     - cd work/WebContent;bower install
 test:
   override:
-    - ant -f .builder/build.xml reportall
+    - ant -f .builder/build.xml junit.run
   post:
-    - ant -f .builder/build.xml docs.javadoc
+    - ant -f .builder/build.xml reportall docs.javadoc
     - cp -R target/data/* $CI_REPORTS
 general:
   artifacts:
     - "target/artifact/package/" # war package 
     - "target/reports"           # reports
-    - "target/data/junit"        # test meta data
+    - "target/data"              # data
     - "target/docs"              # Java docs 
