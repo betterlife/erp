@@ -1,3 +1,7 @@
 .no-float {
     float:none;
 }
+
+body {
+    padding-top:0;
+}
