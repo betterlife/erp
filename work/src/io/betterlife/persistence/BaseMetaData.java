@@ -16,15 +16,20 @@ import java.util.*;
  * Date: 11/7/14
  */
 
-@MappedSuperclass
-public abstract class BaseMetaData {
+public class BaseMetaData {
     private static Map<String, Map<String, Class>> _fieldsMetaData = new HashMap<>();
     private static boolean hasMetaData = false;
+    private static BaseMetaData instance = new BaseMetaData();
 
-    @Transient
+    private BaseMetaData(){}
+
     public Class getFieldMetaData(Class<? extends BaseObject> aClass, String fieldName) {
         Map<String, Class> meta = _fieldsMetaData.get(aClass.getName());
         return meta.get(fieldName);
+    }
+
+    public Map<String, Class> getMetaDataOfClass(Class<? extends BaseObject> clazz) {
+        return _fieldsMetaData.get(clazz.getName());
     }
 
     private void setFieldMetaData(Class<? extends BaseObject> aClass, String fieldName, Class clazz) {
@@ -36,7 +41,10 @@ public abstract class BaseMetaData {
         meta.put(fieldName, clazz);
     }
 
-    @Transient
+    public static BaseMetaData getInstance() {
+        return instance;
+    }
+
     public boolean hasMetaData() {
         return hasMetaData;
     }

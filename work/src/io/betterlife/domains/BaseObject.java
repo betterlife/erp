@@ -5,6 +5,7 @@ import io.betterlife.persistence.BaseOperator;
 import io.betterlife.persistence.BaseMetaData;
 import io.betterlife.persistence.NamedQueryRules;
 import org.apache.commons.lang3.ClassUtils;
+import org.slf4j.helpers.BasicMDCAdapter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -18,8 +19,7 @@ import java.util.Map;
  * Date: 10/31/14
  */
 @MappedSuperclass
-public abstract class BaseObject extends BaseMetaData {
-
+public abstract class BaseObject {
 
     private Map<String, Object> _map = new HashMap<>();
 
@@ -81,11 +81,11 @@ public abstract class BaseObject extends BaseMetaData {
     }
 
     public void setValues(EntityManager entityManager, Map<String, String> parameters) {
-        setAllFieldMetaData(entityManager);
+        BaseMetaData.getInstance().setAllFieldMetaData(entityManager);
         for (Map.Entry<String, String> entry : parameters.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
-            Class clazz = getFieldMetaData(this.getClass(), key);
+            Class clazz = BaseMetaData.getInstance().getFieldMetaData(this.getClass(), key);
             if (clazz.equals(String.class)) {
                 setValue(key, value);
             } else if (clazz.equals(Date.class)) {
