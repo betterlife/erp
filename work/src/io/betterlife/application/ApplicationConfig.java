@@ -4,7 +4,7 @@ import io.betterlife.domains.financial.CostCenter;
 import io.betterlife.domains.financial.Expense;
 import io.betterlife.domains.financial.ExpenseCategory;
 import io.betterlife.domains.security.User;
-import io.betterlife.rest.BaseService;
+import io.betterlife.rest.EntityService;
 
 /**
  * Author: Lawrence Liu(xqinliu@cn.ibm.com)
@@ -28,10 +28,14 @@ public class ApplicationConfig {
      */
     public static final String TableNamePrefix = "BL_";
 
+    /** Register all entities, this registry will be used for
+     *  Generate Entity CRUD rest services
+     *  Generate meta data for creation of front end CRUD UI.
+     */
     public static void registerEntities(){
-        BaseService.registerServiceEntity("ExpenseCategory", ExpenseCategory.class);
-        BaseService.registerServiceEntity("User", User.class);
-        BaseService.registerServiceEntity("CostCenter", CostCenter.class);
-        BaseService.registerServiceEntity("Expense", Expense.class);
+        EntityService.registerServiceEntity("expenseCategory", ExpenseCategory.class);
+        EntityService.registerServiceEntity("user", User.class);
+        EntityService.registerServiceEntity("costCenter", CostCenter.class);
+        EntityService.registerServiceEntity("expense", Expense.class);
     }
 }
