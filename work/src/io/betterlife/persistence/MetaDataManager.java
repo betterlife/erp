@@ -4,11 +4,9 @@ import io.betterlife.domains.BaseObject;
 import org.apache.commons.lang3.ClassUtils;
 
 import javax.persistence.EntityManager;
-import javax.persistence.MappedSuperclass;
 import javax.persistence.metamodel.Attribute;
 import javax.persistence.metamodel.ManagedType;
 import javax.persistence.metamodel.Metamodel;
-import java.beans.Transient;
 import java.util.*;
 
 /**
@@ -16,12 +14,12 @@ import java.util.*;
  * Date: 11/7/14
  */
 
-public class BaseMetaData {
+public class MetaDataManager {
     private static Map<String, Map<String, Class>> _fieldsMetaData = new HashMap<>();
     private static boolean hasMetaData = false;
-    private static BaseMetaData instance = new BaseMetaData();
+    private static MetaDataManager instance = new MetaDataManager();
 
-    private BaseMetaData(){}
+    private MetaDataManager(){}
 
     public Class getFieldMetaData(Class<? extends BaseObject> aClass, String fieldName) {
         Map<String, Class> meta = _fieldsMetaData.get(aClass.getName());
@@ -41,7 +39,7 @@ public class BaseMetaData {
         meta.put(fieldName, clazz);
     }
 
-    public static BaseMetaData getInstance() {
+    public static MetaDataManager getInstance() {
         return instance;
     }
 
@@ -50,7 +48,7 @@ public class BaseMetaData {
     }
 
     private void setHasMetaData(boolean hasMetaData) {
-        BaseMetaData.hasMetaData = hasMetaData;
+        MetaDataManager.hasMetaData = hasMetaData;
     }
 
     public void setAllFieldMetaData(EntityManager entityManager) {

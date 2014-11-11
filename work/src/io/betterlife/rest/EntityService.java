@@ -2,13 +2,12 @@ package io.betterlife.rest;
 
 import io.betterlife.application.ApplicationConfig;
 import io.betterlife.domains.BaseObject;
-import io.betterlife.persistence.BaseMetaData;
+import io.betterlife.persistence.MetaDataManager;
 import io.betterlife.persistence.BaseOperator;
 import io.betterlife.util.rest.ExecuteResult;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -19,7 +18,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
@@ -54,8 +52,8 @@ public class EntityService {
     public String getEntityMeta(@PathParam("entityName") String entityName) throws IOException {
         logger.debug("Getting entity meta data for " + entityName);
         entityName = StringUtils.uncapitalize(entityName);
-        BaseMetaData.getInstance().setAllFieldMetaData(entityManager);
-        Map<String, Class> meta = BaseMetaData.getInstance().getMetaDataOfClass(getServiceEntity(entityName));
+        MetaDataManager.getInstance().setAllFieldMetaData(entityManager);
+        Map<String, Class> meta = MetaDataManager.getInstance().getMetaDataOfClass(getServiceEntity(entityName));
         String result = ExecuteResult.getRestString(meta);
         if (logger.isTraceEnabled()){
             logger.trace("Returning \n%s\n for entity[%s] meta", result, entityName);

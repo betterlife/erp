@@ -2,10 +2,9 @@ package io.betterlife.domains;
 
 import io.betterlife.domains.security.User;
 import io.betterlife.persistence.BaseOperator;
-import io.betterlife.persistence.BaseMetaData;
+import io.betterlife.persistence.MetaDataManager;
 import io.betterlife.persistence.NamedQueryRules;
 import org.apache.commons.lang3.ClassUtils;
-import org.slf4j.helpers.BasicMDCAdapter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -81,11 +80,11 @@ public abstract class BaseObject {
     }
 
     public void setValues(EntityManager entityManager, Map<String, String> parameters) {
-        BaseMetaData.getInstance().setAllFieldMetaData(entityManager);
+        MetaDataManager.getInstance().setAllFieldMetaData(entityManager);
         for (Map.Entry<String, String> entry : parameters.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
-            Class clazz = BaseMetaData.getInstance().getFieldMetaData(this.getClass(), key);
+            Class clazz = MetaDataManager.getInstance().getFieldMetaData(this.getClass(), key);
             if (clazz.equals(String.class)) {
                 setValue(key, value);
             } else if (clazz.equals(Date.class)) {
