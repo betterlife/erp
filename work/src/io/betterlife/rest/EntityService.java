@@ -2,6 +2,7 @@ package io.betterlife.rest;
 
 import io.betterlife.application.ApplicationConfig;
 import io.betterlife.domains.BaseObject;
+import io.betterlife.persistence.BaseMetaData;
 import io.betterlife.persistence.BaseOperator;
 import io.betterlife.util.rest.ExecuteResult;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -27,14 +28,10 @@ import java.util.Map;
  */
 @Path("/")
 @Stateless
-public class BaseService {
+public class EntityService {
 
     @PersistenceContext(unitName = ApplicationConfig.PersistenceUnitName)
     private EntityManager entityManager;
-
-    public BaseService() {
-        ApplicationConfig.registerEntities();
-    }
 
     private static final Map<String, Class> classes = new HashMap<>();
 
@@ -49,8 +46,9 @@ public class BaseService {
     @GET
     @Path("/entity/{entityName}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getEntityMeta(@PathParam("entityName") String entityName) {
-        return "";
+    public String getEntityMeta(@PathParam("entityName") String entityName) throws IOException {
+        Map<String, Class> meta = BaseMetaData.getInstance().getMetaDataOfClass(getServiceEntity(entityName));
+        return ExecuteResult.getRestString(meta);
     }
 
 

@@ -1,6 +1,6 @@
 package io.betterlife.application;
 
-import io.betterlife.rest.BaseService;
+import io.betterlife.rest.EntityService;
 import io.betterlife.rest.security.SecurityService;
 
 import javax.naming.InitialContext;
@@ -16,8 +16,9 @@ public class RestApplication extends Application {
 
     public Set<Class<?>> getClasses() {
         Set<Class<?>> classes = new HashSet<>();
-        classes.add(BaseService.class);
+        classes.add(EntityService.class);
         classes.add(SecurityService.class);
+        ApplicationConfig.registerEntities();
         return classes;
     }
 
