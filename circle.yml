@@ -2,7 +2,7 @@ checkout:
   post:  
     - git submodule sync
     - git submodule update --init
-    - bower install
+    - cd work/WebContent;bower install
 test:
   override:
     - ant -f .builder/build.xml reportall
