@@ -8,8 +8,8 @@
                 return $sce.trustAsHtml(text);
             };
         }])
-        .controller('mainController', function($scope, $rootScope, $http, $location,
-                                               loginService, $route, $routeParams) {
+        .controller('mainController', function ($scope, $rootScope, $http, $location,
+                                                loginService, $route, $routeParams) {
             $scope.$route = $route;
             $scope.$location = $location;
             $scope.$routeParams = $routeParams;
@@ -18,7 +18,7 @@
                 return route === $location.path();
             };
 
-            $scope.isLoggedIn = function (){
+            $scope.isLoggedIn = function () {
                 return loginService.isLoggedIn();
             }
         })
@@ -32,6 +32,7 @@
                     .when('/dashboard', dashboardCtrl.routerConfig)
                     .when('/login', loginCtrl.routerConfig)
                     .when('/logout', logoutCtrl.routerConfig)
+                    .when('/user/:operation', userCtrl.routerConfig)
                     .otherwise({redirectTo: '/login'});
                 $locationProvider.html5Mode(false);
             }])

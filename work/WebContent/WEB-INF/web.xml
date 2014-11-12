@@ -28,6 +28,7 @@
 	<filter-mapping>
 		<filter-name>IndexFilter</filter-name>
 		<url-pattern>/dashboard</url-pattern>
+		<url-pattern>/user/*</url-pattern>
 		<url-pattern>/login/*</url-pattern>
 		<url-pattern>/logout/*</url-pattern>
 	</filter-mapping>

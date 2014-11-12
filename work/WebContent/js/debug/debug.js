@@ -26,7 +26,7 @@ angular.module('debugApp', ['ngRoute', 'ngCookies'])
     .controller('showEntityMetaCtrl', function($scope, $http) {
         $scope.showEntityMeta = function(){
             $http.get('/rest/entity/' + $scope.entityName).success(function(data){
-                $scope.entityMetaInfo = data.result;
+                $scope.entityMetaInfo = JSON.stringify(data.result);
             });
         }
     })

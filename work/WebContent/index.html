@@ -18,6 +18,7 @@
     <script type="text/javascript" src="js/app/service/authentication.js"></script>
     <script type="text/javascript" src="js/app/controller/loginCtrl.js"></script>
     <script type="text/javascript" src="js/app/controller/dashboardCtrl.js"></script>
+    <script type="text/javascript" src="js/app/controller/userCtrl.js"></script>
     <link rel="stylesheet" href="css/style.css">
     <base href="/">
 
@@ -44,6 +45,13 @@
                     <ul class="nav navbar-nav">
                         <li ng-class="{active: (isActive('/dashboard') || isActive('/'))}">
                             <a href="/dashboard" ng-show="isLoggedIn()">Dashboard</a>
+                        </li>
+                        <li ng-class="{active: (isActive('/user'))}" class="dropdown" ng-show="isLoggedIn()">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">User <span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="/user/create">Create User</a></li>
+                                <li><a href="/user/list">List Users</a></li>
+                            </ul>
                         </li>
                         <li><a href="/login" ng-show="!isLoggedIn()">Login</a></li>
                         <li><a href="/logout" ng-show="isLoggedIn()">Logout</a></li>
