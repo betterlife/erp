@@ -4,19 +4,19 @@ import io.betterlife.application.ApplicationConfig;
 import io.betterlife.domains.security.User;
 import io.betterlife.persistence.BaseOperator;
 import io.betterlife.util.rest.ExecuteResult;
+import io.betterlife.util.rest.RequestUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
-import java.util.HashMap;
+import java.io.InputStream;
 import java.util.Map;
 
 /**
@@ -44,26 +44,26 @@ public class SecurityService {
     }
 
     @POST
-    @Path("/login/{username}/{password}")
+    @Path("/login")
     @Produces(MediaType.APPLICATION_JSON)
-    public String login(@PathParam("username") String username,
-                        @PathParam("password") String password) throws IOException {
+    public String login(@Context HttpServletRequest request, InputStream requestBody) throws IOException {
+         Map<String, String> params = RequestUtil.getInstance().requestToJson(requestBody);
         User user = null;
         try {
             if (logger.isDebugEnabled()) {
-                logger.debug(String.format("Login request, [%s:%s]", username, password));
+                logger.debug(String.format("Login request, [%s:%s]",
+                                           params.get("username"), params.get("password")));
             }
-            Map<String, String> params = new HashMap<>(2);
-            params.put("username", username);
-            params.put("password", password);
             user = BaseOperator.getInstance().getBaseObject(entityManager, User.GetByUserNameAndPasswordQuery, params);
         } catch (Exception e) {
             logger.warn(String.format(
                             "Error to get user username[%s%], password[%s%]",
-                            username, "HIDDEN_FOR_SECURITY"
+                            params.get("username"), "HIDDEN_FOR_SECURITY"
                         )
             );
         }
         return ExecuteResult.getRestString(user);
     }
+
+
 }

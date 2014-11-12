@@ -4,20 +4,22 @@ var loginService = function ($rootScope, $http, $cookieStore, $location) {
     internal.user = null;
     internal.login = function (username, password, loginCallback) {
         //TODO 修改为POST请求的形式
-        $http.post('/rest/security/login/' + username + '/' + password, {}, {})
-            .success(function (data) {
-                internal.user = data.result;
-                if (internal.user === null) {
-                    $cookieStore.remove('user');
-                }
-                else {
-                    $cookieStore.put('user', internal.user);
-                }
-                $rootScope.login_errors = '';
-                loginCallback(data.user);
-            }).error(function (data, status) {
-                $rootScope.login_error = '登录失败, 请检查用户名密码, 或者点这里<a class="alert-link" href="mailto:helpdesk@betterlife.io">报告登陆问题</a>';
-            });
+        $http.post('/rest/security/login', {
+            "username" : username,
+            "password" : password
+        }, {}).success(function (data) {
+            internal.user = data.result;
+            if (internal.user === null) {
+                $cookieStore.remove('user');
+            }
+            else {
+                $cookieStore.put('user', internal.user);
+            }
+            $rootScope.login_errors = '';
+            loginCallback(data.user);
+        }).error(function (data, status) {
+            $rootScope.login_error = '登录失败, 请检查用户名密码, 或者点这里<a class="alert-link" href="mailto:helpdesk@betterlife.io">报告登陆问题</a>';
+        });
     };
 
     internal.getLoggedInUser = function () {
