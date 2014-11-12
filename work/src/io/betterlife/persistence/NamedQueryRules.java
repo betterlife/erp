@@ -16,4 +16,8 @@ public class NamedQueryRules {
     public String getIdQueryForEntity(String entityName){
         return entityName + ".getById";
     }
+
+    public String getAllQueryForEntity(String entityName) {
+        return entityName + ".getAll";
+    }
 }

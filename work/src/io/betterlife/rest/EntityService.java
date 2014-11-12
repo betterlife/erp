@@ -4,6 +4,7 @@ import io.betterlife.application.ApplicationConfig;
 import io.betterlife.domains.BaseObject;
 import io.betterlife.persistence.MetaDataManager;
 import io.betterlife.persistence.BaseOperator;
+import io.betterlife.persistence.NamedQueryRules;
 import io.betterlife.util.rest.ExecuteResult;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -37,6 +38,7 @@ public class EntityService {
     private static final Logger logger = LogManager.getLogger(EntityService.class.getName());
 
     private static final Map<String, Class> classes = new HashMap<>();
+    private NamedQueryRules namedQueryRule;
 
     private static Class getServiceEntity(String name) {
         return classes.get(name);
@@ -67,14 +69,18 @@ public class EntityService {
     @Produces(MediaType.APPLICATION_JSON)
     public String getObjectByTypeAndId(@PathParam("id") long id,
                                        @PathParam("objectType") String objectType) throws IOException {
-        return get(entityManager, id, objectType + "." + "getById");
+        return ExecuteResult.getRestString(BaseOperator.getInstance().getBaseObjectById(
+                                               entityManager, id, namedQueryRule.getIdQueryForEntity(objectType)));
     }
 
     @GET
     @Path("/{objectType}")
     @Produces(MediaType.APPLICATION_JSON)
     public String getAllByObjectType(@PathParam("objectType") String objectType) throws IOException {
-        return getAll(entityManager, objectType + "." + "getAll");
+        namedQueryRule = NamedQueryRules.getInstance();
+        List<Object> result = BaseOperator.getInstance().getBaseObjects(entityManager,
+                                                                        namedQueryRule.getAllQueryForEntity(objectType));
+        return ExecuteResult.getRestString(result);
     }
 
     @POST
@@ -96,12 +102,4 @@ public class EntityService {
         return ExecuteResult.getRestString("SUCCESS");
     }
 
-    public String get(EntityManager entityManager, long id, String queryName) throws IOException {
-        return ExecuteResult.getRestString(BaseOperator.getInstance().getBaseObjectById(entityManager, id, queryName));
-    }
-
-    public String getAll(EntityManager entityManager, String queryName) throws IOException {
-        List<Object> result = BaseOperator.getInstance().getBaseObjects(entityManager, queryName);
-        return ExecuteResult.getRestString(result);
-    }
 }
