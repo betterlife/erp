@@ -16,6 +16,7 @@ import javax.persistence.*;
 )
 @NamedQueries({
     @NamedQuery(name = "User.getById", query = "SELECT u FROM User u WHERE u.id = :id "),
+    @NamedQuery(name = "User.getAll", query = "SELECT u FROM User u"),
     @NamedQuery(name = User.GetByUserNameAndPasswordQuery,
         query = "SELECT u from User u WHERE u.username =: username AND u.password = :password")
 })

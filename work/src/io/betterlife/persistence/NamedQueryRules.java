@@ -1,5 +1,7 @@
 package io.betterlife.persistence;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * Author: Lawrence Liu(lawrence@betterlife.io)
  * Date: 11/7/14
@@ -14,10 +16,10 @@ public class NamedQueryRules {
     }
 
     public String getIdQueryForEntity(String entityName){
-        return entityName + ".getById";
+        return StringUtils.capitalize(entityName) + ".getById";
     }
 
     public String getAllQueryForEntity(String entityName) {
-        return entityName + ".getAll";
+        return StringUtils.capitalize(entityName) + ".getAll";
     }
 }

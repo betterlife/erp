@@ -6,6 +6,7 @@ import io.betterlife.persistence.MetaDataManager;
 import io.betterlife.persistence.BaseOperator;
 import io.betterlife.persistence.NamedQueryRules;
 import io.betterlife.util.rest.ExecuteResult;
+import io.betterlife.util.rest.RequestUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,10 +16,13 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
@@ -69,8 +73,10 @@ public class EntityService {
     @Produces(MediaType.APPLICATION_JSON)
     public String getObjectByTypeAndId(@PathParam("id") long id,
                                        @PathParam("objectType") String objectType) throws IOException {
+        namedQueryRule = NamedQueryRules.getInstance();
         return ExecuteResult.getRestString(BaseOperator.getInstance().getBaseObjectById(
-                                               entityManager, id, namedQueryRule.getIdQueryForEntity(objectType)));
+                                               entityManager, id, namedQueryRule.getIdQueryForEntity(objectType)
+                                           ));
     }
 
     @GET
@@ -87,12 +93,11 @@ public class EntityService {
     @Path("/{objectType}")
     @Produces(MediaType.APPLICATION_JSON)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public String create(@PathParam("objectType") String objectType, MultivaluedMap<String, String> formParams)
+    public String create(@PathParam("objectType") String objectType,
+                         @Context HttpServletRequest request,
+                         InputStream requestBody)
         throws ClassNotFoundException, IllegalAccessException, InstantiationException, IOException {
-        Map<String, String> parameters = new HashMap<>();
-        for (String theKey : formParams.keySet()) {
-            parameters.put(theKey, URLDecoder.decode(formParams.getFirst(theKey), "UTF-8"));
-        }
+        Map<String, String> parameters = RequestUtil.getInstance().requestToJson(requestBody);
         Class clazz = getServiceEntity(objectType);
         Object obj = clazz.newInstance();
         if (obj instanceof BaseObject) {
