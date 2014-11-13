@@ -5,6 +5,7 @@ import io.betterlife.domains.BaseObject;
 import io.betterlife.persistence.MetaDataManager;
 import io.betterlife.persistence.BaseOperator;
 import io.betterlife.persistence.NamedQueryRules;
+import io.betterlife.util.jpa.OpenJPAUtil;
 import io.betterlife.util.rest.ExecuteResult;
 import io.betterlife.util.rest.RequestUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -43,6 +44,7 @@ public class EntityService {
 
     private static final Map<String, Class> classes = new HashMap<>();
     private NamedQueryRules namedQueryRule;
+    private OpenJPAUtil openJPAUtil;
 
     private static Class getServiceEntity(String name) {
         return classes.get(name);
@@ -75,7 +77,7 @@ public class EntityService {
                                        @PathParam("objectType") String objectType) throws IOException {
         namedQueryRule = NamedQueryRules.getInstance();
         return ExecuteResult.getRestString(BaseOperator.getInstance().getBaseObjectById(
-                                               entityManager, id, namedQueryRule.getIdQueryForEntity(objectType)
+                                               entityManager, getOpenJPAUtil(), id, namedQueryRule.getIdQueryForEntity(objectType)
                                            ));
     }
 
@@ -107,4 +109,15 @@ public class EntityService {
         return ExecuteResult.getRestString("SUCCESS");
     }
 
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
+
+    public void setOpenJPAUtil(OpenJPAUtil openJPAUtil) {
+        this.openJPAUtil = openJPAUtil;
+    }
+
+    public OpenJPAUtil getOpenJPAUtil() {
+        return openJPAUtil;
+    }
 }

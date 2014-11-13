@@ -13,16 +13,21 @@ import java.util.*;
  */
 public class BaseOperator {
     private static BaseOperator instance = new BaseOperator();
-    private OpenJPAUtil openJPAUtil = OpenJPAUtil.getInstance();
+    private OpenJPAUtil openJPAUtil;
+
+    public void setOpenJPAUtil(OpenJPAUtil util) {
+        this.openJPAUtil = util;
+    }
 
     public static BaseOperator getInstance() {
         return instance;
     }
 
     private BaseOperator() {
+        //setOpenJPAUtil(OpenJPAUtil.getInstance());
     }
 
-    public <T> T getBaseObjectById(EntityManager em, long id, String queryName) {
+    public <T> T getBaseObjectById(EntityManager em, OpenJPAUtil openJPAUtil, long id, String queryName) {
         T obj = null;
         OpenJPAQuery q = openJPAUtil.getOpenJPAQuery(em, queryName);
         q.setParameter("id", id);

@@ -20,8 +20,6 @@ public class OpenJPAUtil {
     }
 
     public OpenJPAQuery getOpenJPAQuery(EntityManager em, String queryName) {
-        OpenJPAQuery q = OpenJPAPersistence.cast(em.createNamedQuery(queryName));
-        assert q != null;
-        return q;
+        return OpenJPAPersistence.cast(em.createNamedQuery(queryName));
     }
 }

@@ -4,6 +4,7 @@ import io.betterlife.domains.security.User;
 import io.betterlife.persistence.BaseOperator;
 import io.betterlife.persistence.MetaDataManager;
 import io.betterlife.persistence.NamedQueryRules;
+import io.betterlife.util.jpa.OpenJPAUtil;
 import org.apache.commons.lang3.ClassUtils;
 
 import javax.persistence.*;
@@ -21,6 +22,8 @@ import java.util.Map;
 public abstract class BaseObject {
 
     private Map<String, Object> _map = new HashMap<>();
+
+    private OpenJPAUtil openJPAUtil = OpenJPAUtil.getInstance();
 
     private long id;
 
@@ -101,7 +104,7 @@ public abstract class BaseObject {
                 setValue(key, new BigDecimal(value));
             } else if (ClassUtils.isAssignable(clazz, BaseObject.class)) {
                 //If clazz is child type of BaseObject, then we assume an id will be passed here.
-                BaseObject baseObj = BaseOperator.getInstance().getBaseObjectById(entityManager, Long.parseLong(value),
+                BaseObject baseObj = BaseOperator.getInstance().getBaseObjectById(entityManager, openJPAUtil, Long.parseLong(value),
                     NamedQueryRules.getInstance().getIdQueryForEntity(clazz.getSimpleName()));
                 if (null != baseObj) {
                     setValue(key, baseObj);
