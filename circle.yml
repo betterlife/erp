@@ -8,7 +8,7 @@ test:
   override:
     - ant -f .builder/build.xml cc.report
   post:
-    - ant -f .builder/build.xml findbugs pmd docs.javadoc
+    - ant -f .builder/build.xml findbugs pmd
     - cp -R target/data/* $CI_REPORTS
 general:
   artifacts:
