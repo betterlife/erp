@@ -10,9 +10,8 @@ test:
   post:
     - ant -f .builder/build.xml findbugs pmd
     - cp -R target/data/* $CI_REPORTS
+    - cd target/artifact/; tar -cf reports.tar.gz ../reports/codeCoverage
 general:
   artifacts:
-    - "target/artifact/package/" # war package 
-    - "target/reports"           # reports
-    - "target/data"              # data
-    - "target/docs"              # Java docs 
+    - "target/artifact/package/"        # war package
+    - "target/artifact/reports.tar.gz"  # reports
