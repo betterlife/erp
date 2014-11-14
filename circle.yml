@@ -3,9 +3,10 @@ checkout:
     - git submodule sync
     - git submodule update --init
     - cd work/WebContent;bower install
+    - echo $CLOVER_LICENSE > .builder/tools/clover-ant/lib/clover.license
 test:
   override:
-    - ant -f .builder/build.xml junit.run
+    - ant -f .builder/build.xml junit.run.all
   post:
     - ant -f .builder/build.xml reportall docs.javadoc
     - cp -R target/data/* $CI_REPORTS
