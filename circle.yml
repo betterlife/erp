@@ -15,5 +15,4 @@ general:
   artifacts:
     - "target/artifact/package/"        # war package
     - "target/artifact/reports.tar.gz"  # QA reports archive
-    - "target/reports"                  # QA reports
     - "target/data"                     # QA data
