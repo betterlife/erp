@@ -8,7 +8,7 @@ test:
   override:
     - ant -f .builder/build.xml build.war clean.classes cc.report
   post:
-    - ant -f .builder/build.xml findbugs pmd
+    - ant -f .builder/build.xml clean.classes compile findbugs pmd
     - cp -R target/data/* $CI_REPORTS
     - cd target/artifact/; tar -cf reports.tar.gz ../reports
 general:
