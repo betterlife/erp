@@ -8,3 +8,4 @@ target
 *.iml
 work/WebContent/js/bower_components
 *.class
+.clover
