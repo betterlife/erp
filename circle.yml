@@ -6,7 +6,7 @@ checkout:
     - echo $CLOVER_LICENSE > .builder/tools/clover-ant/lib/clover.license
 test:
   override:
-    - ant -f .builder/build.xml clean.classes cc.report
+    - ant -f .builder/build.xml build.war clean.classes cc.report
   post:
     - ant -f .builder/build.xml findbugs pmd
     - cp -R target/data/* $CI_REPORTS
@@ -14,4 +14,6 @@ test:
 general:
   artifacts:
     - "target/artifact/package/"        # war package
-    - "target/artifact/reports.tar.gz"  # reports
+    - "target/artifact/reports.tar.gz"  # QA reports archive
+    - "target/reports"                  # QA reports
+    - "target/data"                     # QA data
