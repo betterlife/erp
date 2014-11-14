@@ -1,5 +1,6 @@
 package io.betterlife.application;
 
+import io.betterlife.util.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,11 +22,11 @@ public class IndexFilter implements Filter {
 
     private static final Logger logger = LogManager.getLogger(IndexFilter.class.getName());
     private static final Map<String, String> redirectCache = new HashMap<>(16);
-
+    private String[] patterns;
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         logger.info("Init index filter...");
-        if (logger.isTraceEnabled()){
+        if (logger.isTraceEnabled()) {
             logger.trace("Filter Name: " + filterConfig.getFilterName());
             logger.trace("Filter Servlet Context" + filterConfig.getServletContext());
             Enumeration<String> initParams = filterConfig.getInitParameterNames();
@@ -34,10 +35,13 @@ public class IndexFilter implements Filter {
                 logger.trace(String.format("\tParam: %s, Value: %s", param, filterConfig.getInitParameter(param)));
             }
         }
+        String patternParam  = filterConfig.getInitParameter("url-pattern");
+        patterns = patternParam.split(",");
     }
 
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse,
+                         FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         String pathInfo =  request.getPathInfo();
@@ -46,16 +50,17 @@ public class IndexFilter implements Filter {
         }
         String redirectResult = redirectCache.get(pathInfo);
         if (null == redirectResult) {
-            if (pathInfo.startsWith("/")) {
+            if ("/".equals(pathInfo) ||
+                StringUtils.getInstance().startWithAnyPattern(patterns, pathInfo)) {
                 redirectResult = "/#" + pathInfo.substring(1, pathInfo.length());
                 redirectCache.put(pathInfo, redirectResult);
+            } else {
+                redirectResult = pathInfo;
             }
         }
         response.sendRedirect(redirectResult);
     }
 
     @Override
-    public void destroy() {
-
-    }
+    public void destroy() {}
 }

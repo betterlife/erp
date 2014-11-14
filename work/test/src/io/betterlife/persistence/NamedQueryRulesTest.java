@@ -1,12 +1,17 @@
 package io.betterlife.persistence;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
 public class NamedQueryRulesTest {
+    public static NamedQueryRules namedQueryRules;
 
-    NamedQueryRules namedQueryRules = NamedQueryRules.getInstance();
+    @BeforeClass
+    public static void setup() {
+        namedQueryRules = NamedQueryRules.getInstance();
+    }
 
     @Test
     public void testGetIdQueryForEntityLowerCase() throws Exception {
