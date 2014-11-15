@@ -2,6 +2,8 @@ package io.betterlife.util.rest;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.jms.MapMessage;
@@ -30,6 +32,7 @@ public class ExecuteResult<T> implements Serializable {
      * 普通的错误信息
      */
     private List<String> errorMessages = new ArrayList<String>();
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     /**
      * 判断当前执行结果是否正确，如果errorMessages和fieldErrors都为空，则无错
@@ -38,15 +41,6 @@ public class ExecuteResult<T> implements Serializable {
      */
     public boolean isSuccess() {
         return errorMessages.isEmpty();
-    }
-
-    /**
-     * 添加一条错误消息到列表中
-     *
-     * @param errorMessage 具体的错误信息
-     */
-    public void addErrorMessage(String errorMessage) {
-        this.errorMessages.add(errorMessage);
     }
 
     public T getResult() {
@@ -61,37 +55,28 @@ public class ExecuteResult<T> implements Serializable {
         return successMessage;
     }
 
-    public void setSuccessMessage(String successMessage) {
-        this.successMessage = successMessage;
-    }
-
     public List<String> getErrorMessages() {
         return errorMessages;
     }
 
-    public void setErrorMessages(List<String> errorMessages) {
-        this.errorMessages = errorMessages;
-    }
-
-    public static String getRestString(Object object) {
-        ExecuteResult<Object> result = new ExecuteResult<>();
-        ObjectMapper mapper = new ObjectMapper();
+    public String getRestString(T object) {
+        setResult(object);
         String resultStr = "";
         try {
-            if (null != object) {
-                result.setResult(object);
-            } else {
-                result.setResult(null);
-                result.addErrorMessage("Object is null");
-            }
-            resultStr = mapper.writeValueAsString(result);
+            resultStr = objectMapper.writeValueAsString(this);
         } catch (Exception e) {
-            logger.error("Exception writeValueAsString");
-            logger.error("Parameter object:" + object);
-            logger.error("Exception detail", e);
-            result.setResult(null);
-            result.addErrorMessage(e.toString());
+            logWriteValueAsStringError(object, e);
         }
-        return resultStr;
+        return (null == resultStr) ? "" : resultStr;
+    }
+
+    private void logWriteValueAsStringError(T object, Exception e) {
+        logger.error("Exception writeValueAsString");
+        logger.error("Parameter object:" + object);
+        logger.error("Exception detail", e);
+    }
+
+    public void setObjectMapper(ObjectMapper mapper){
+        this.objectMapper = mapper;
     }
 }

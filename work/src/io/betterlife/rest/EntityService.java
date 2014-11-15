@@ -28,6 +28,7 @@ import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Author: Lawrence Liu(xqinliu@cn.ibm.com)
@@ -62,7 +63,7 @@ public class EntityService {
         entityName = StringUtils.uncapitalize(entityName);
         MetaDataManager.getInstance().setAllFieldMetaData(entityManager);
         Map<String, Class> meta = MetaDataManager.getInstance().getMetaDataOfClass(getServiceEntity(entityName));
-        String result = ExecuteResult.getRestString(meta);
+        String result = new ExecuteResult<Map<String, Class>>().getRestString(meta);
         if (logger.isTraceEnabled()){
             logger.trace("Returning \n%s\n for entity[%s] meta", result, entityName);
         }
@@ -76,9 +77,9 @@ public class EntityService {
     public String getObjectByTypeAndId(@PathParam("id") long id,
                                        @PathParam("objectType") String objectType) throws IOException {
         namedQueryRule = NamedQueryRules.getInstance();
-        return ExecuteResult.getRestString(BaseOperator.getInstance().getBaseObjectById(
-                                               entityManager, getOpenJPAUtil(), id, namedQueryRule.getIdQueryForEntity(objectType)
-                                           ));
+        return new ExecuteResult<>().getRestString(BaseOperator.getInstance().getBaseObjectById(
+                                                       entityManager, getOpenJPAUtil(), id, namedQueryRule.getIdQueryForEntity(objectType)
+                                                   ));
     }
 
     @GET
@@ -88,7 +89,7 @@ public class EntityService {
         namedQueryRule = NamedQueryRules.getInstance();
         List<Object> result = BaseOperator.getInstance().getBaseObjects(entityManager,
                                                                         namedQueryRule.getAllQueryForEntity(objectType));
-        return ExecuteResult.getRestString(result);
+        return new ExecuteResult<List<Object>>().getRestString(result);
     }
 
     @POST
@@ -106,7 +107,7 @@ public class EntityService {
             ((BaseObject) obj).setValues(entityManager, parameters);
             BaseOperator.getInstance().save(entityManager, obj);
         }
-        return ExecuteResult.getRestString("SUCCESS");
+        return new ExecuteResult<String>().getRestString("SUCCESS");
     }
 
     public void setEntityManager(EntityManager entityManager) {

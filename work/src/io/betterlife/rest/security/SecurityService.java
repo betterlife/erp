@@ -1,6 +1,7 @@
 package io.betterlife.rest.security;
 
 import io.betterlife.application.ApplicationConfig;
+import io.betterlife.domains.BaseObject;
 import io.betterlife.domains.security.User;
 import io.betterlife.persistence.BaseOperator;
 import io.betterlife.util.rest.ExecuteResult;
@@ -40,7 +41,7 @@ public class SecurityService {
         if (logger.isDebugEnabled()) {
             logger.debug("Logout user: " + username);
         }
-        return ExecuteResult.getRestString("LOGOUT");
+        return new ExecuteResult<String>().getRestString("LOGOUT");
     }
 
     @POST
@@ -62,7 +63,7 @@ public class SecurityService {
                         )
             );
         }
-        return ExecuteResult.getRestString(user);
+        return new ExecuteResult<BaseObject>().getRestString(user);
     }
 
 
