@@ -46,6 +46,7 @@ public class EntityService {
     private static final Map<String, Class> classes = new HashMap<>();
     private NamedQueryRules namedQueryRule;
     private OpenJPAUtil openJPAUtil;
+    private BaseOperator operator = BaseOperator.getInstance();
 
     private static Class getServiceEntity(String name) {
         return classes.get(name);
@@ -77,9 +78,11 @@ public class EntityService {
     public String getObjectByTypeAndId(@PathParam("id") long id,
                                        @PathParam("objectType") String objectType) throws IOException {
         namedQueryRule = NamedQueryRules.getInstance();
-        return new ExecuteResult<>().getRestString(BaseOperator.getInstance().getBaseObjectById(
-                                                       entityManager, getOpenJPAUtil(), id, namedQueryRule.getIdQueryForEntity(objectType)
-                                                   ));
+        return new ExecuteResult<>().getRestString(
+            getOperator().getBaseObjectById(
+                entityManager, getOpenJPAUtil(), id, namedQueryRule.getIdQueryForEntity(objectType)
+            )
+        );
     }
 
     @GET
@@ -87,8 +90,10 @@ public class EntityService {
     @Produces(MediaType.APPLICATION_JSON)
     public String getAllByObjectType(@PathParam("objectType") String objectType) throws IOException {
         namedQueryRule = NamedQueryRules.getInstance();
-        List<Object> result = BaseOperator.getInstance().getBaseObjects(entityManager,
-                                                                        namedQueryRule.getAllQueryForEntity(objectType));
+        List<Object> result = getOperator().getBaseObjects(
+            entityManager,
+            namedQueryRule.getAllQueryForEntity(objectType)
+        );
         return new ExecuteResult<List<Object>>().getRestString(result);
     }
 
@@ -105,7 +110,7 @@ public class EntityService {
         Object obj = clazz.newInstance();
         if (obj instanceof BaseObject) {
             ((BaseObject) obj).setValues(entityManager, parameters);
-            BaseOperator.getInstance().save(entityManager, obj);
+            getOperator().save(entityManager, obj);
         }
         return new ExecuteResult<String>().getRestString("SUCCESS");
     }
@@ -120,5 +125,13 @@ public class EntityService {
 
     public OpenJPAUtil getOpenJPAUtil() {
         return openJPAUtil;
+    }
+
+    public void setOperator(BaseOperator operator) {
+        this.operator = operator;
+    }
+
+    public BaseOperator getOperator() {
+        return operator;
     }
 }
