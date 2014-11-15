@@ -21,14 +21,14 @@ public class StringUtilsTest {
     private String[] patterns;
     private String toMatch;
 
-    public StringUtilsTest(String[] patterns, String toMatch, boolean expected){
+    public StringUtilsTest(String[] patterns, String toMatch, boolean expected) {
         this.expected = expected;
         this.patterns = patterns;
         this.toMatch = toMatch;
     }
 
     @Parameterized.Parameters
-    public static Collection testData(){
+    public static Collection testData() {
         List<Object> data = new ArrayList<>();
         data.add(new Object[]{new String[]{"abc", "", "def", "///", "\\*\\"}, "abc", true});
         data.add(new Object[]{new String[]{"abc", "", "def", "///", "\\*\\"}, "\\*\\", true});
@@ -38,7 +38,9 @@ public class StringUtilsTest {
         data.add(new Object[]{new String[]{"abc", "def", "///", "\\*\\"}, "", true});
         return data;
     }
-    @Test public void testMatchAny() {
+
+    @Test
+    public void testMatchAny() {
         final boolean actual = StringUtils.getInstance().startWithAnyPattern(patterns, toMatch);
         assertEquals(String.format("Failed on match [%s] with [%s]", toMatch, StringUtils.join(patterns)), expected, actual);
     }
