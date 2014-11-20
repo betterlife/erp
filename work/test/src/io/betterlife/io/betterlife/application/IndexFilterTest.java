@@ -3,6 +3,7 @@ package io.betterlife.io.betterlife.application;
 import io.betterlife.application.IndexFilter;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -27,7 +28,7 @@ public class IndexFilterTest {
     private IndexFilter filter;
 
     @Before
-    public void setUp() throws ServletException {
+    public void setUp() throws ServletException, IOException {
         request = mock(HttpServletRequest.class);
         response = mock(HttpServletResponse.class);
         filterChain = mock(FilterChain.class);
@@ -36,6 +37,7 @@ public class IndexFilterTest {
         when(filterConfig.getServletContext()).thenReturn(context);
         when(filterConfig.getInitParameter("url-pattern"))
             .thenReturn("/dashboard,/user/*,/login/*,/logout/*");
+        Mockito.doNothing().when(filterChain).doFilter(request, response);
         filter = new IndexFilter();
         filter.init(filterConfig);
     }
@@ -44,34 +46,39 @@ public class IndexFilterTest {
     public void testDoFilterRoot() throws IOException, ServletException {
         when(request.getPathInfo()).thenReturn("/");
         filter.doFilter(request, response, filterChain);
-        verify(response).sendRedirect("/#");
+        verify(response,times(1)).sendRedirect("/#");
+        verify(filterChain,times(1)).doFilter(request, response);
     }
 
     @Test
     public void testNoFilterRoot() throws IOException, ServletException {
         when(request.getPathInfo()).thenReturn("/#");
         filter.doFilter(request, response, filterChain);
-        verify(response).sendRedirect("/#");
+        verify(response, times(0)).sendRedirect("/#");
+        verify(filterChain,times(1)).doFilter(request, response);
     }
 
     @Test
     public void testIgnorePath() throws IOException, ServletException {
         when(request.getPathInfo()).thenReturn("/js/jquery.js");
         filter.doFilter(request, response, filterChain);
-        verify(response).sendRedirect("/js/jquery.js");
+        verify(response, times(0)).sendRedirect("/js/jquery.js");
+        verify(filterChain,times(1)).doFilter(request, response);
     }
 
     @Test
     public void testRedirectPath() throws IOException, ServletException {
         when(request.getPathInfo()).thenReturn("/dashboard");
         filter.doFilter(request, response, filterChain);
-        verify(response).sendRedirect("/#dashboard");
+        verify(response,times(1)).sendRedirect("/#dashboard");
+        verify(filterChain,times(1)).doFilter(request, response);
     }
 
     @Test
     public void testNoRedirectPath() throws IOException, ServletException {
         when(request.getPathInfo()).thenReturn("/#dashboard");
         filter.doFilter(request, response, filterChain);
-        verify(response).sendRedirect("/#dashboard");
+        verify(response,times(0)).sendRedirect("/#dashboard");
+        verify(filterChain,times(1)).doFilter(request, response);
     }
 }

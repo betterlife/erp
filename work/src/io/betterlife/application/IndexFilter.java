@@ -58,7 +58,10 @@ public class IndexFilter implements Filter {
                 redirectResult = pathInfo;
             }
         }
-        response.sendRedirect(redirectResult);
+        if (!redirectResult.equals(pathInfo)) {
+            response.sendRedirect(redirectResult);
+        }
+        filterChain.doFilter(request, response);
     }
 
     @Override
