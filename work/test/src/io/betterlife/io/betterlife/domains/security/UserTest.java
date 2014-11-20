@@ -5,17 +5,25 @@ import io.betterlife.persistence.BaseOperator;
 import io.betterlife.rest.EntityService;
 import io.betterlife.util.JsonUtils;
 import io.betterlife.util.jpa.OpenJPAUtil;
-import io.betterlife.util.rest.ExecuteResult;
+import netscape.javascript.JSUtil;
 import org.apache.openjpa.persistence.OpenJPAQuery;
 import org.codehaus.jackson.JsonNode;
 import org.junit.Before;
 import org.junit.Test;
 
 import javax.persistence.EntityManager;
+import javax.persistence.metamodel.Attribute;
+import javax.persistence.metamodel.ManagedType;
+import javax.persistence.metamodel.Metamodel;
+import javax.servlet.http.HttpServletRequest;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -59,5 +67,64 @@ public class UserTest {
         final String password = node.get("result").get("password").getTextValue();
         assertEquals("password", password);
         verify(operator).getBaseObjectById(entityManager, openJPAUtil, 1, "User.getById");
+    }
+
+    @Test
+    public void testCreateUser() throws ClassNotFoundException, IOException, InstantiationException, IllegalAccessException {
+        EntityService entityService = new EntityService();
+        HttpServletRequest servletRequest = mock(HttpServletRequest.class);
+        InputStream stream = mock(InputStream.class);
+        entityService.create("User", servletRequest, stream);
+        fail("Not Implemented");
+    }
+
+    @Test
+    public void testGetServiceEntity() throws IOException {
+        EntityService service = new EntityService();
+        Set<Attribute> attributes = mockAttributes();
+        ManagedType type = mockManagedType(attributes);
+        Metamodel model = mockMetamodel(type);
+        EntityManager manager = mockEntityManager(model);
+        service.setEntityManager(manager);
+        String userMeta = service.getEntityMeta("User");
+        JsonNode expect = JsonUtils.getInstance().stringToJsonNode("{\"result\":{\"id\":\"java.lang.Long\",\"username\":\"java.lang.String\",\"password\":\"java.lang.String\"},\"success\":true,\"successMessage\":null,\"errorMessages\":[]}\n");
+        JsonNode node = JsonUtils.getInstance().stringToJsonNode(userMeta);
+        assertEquals(expect, node);
+    }
+
+    private EntityManager mockEntityManager(Metamodel model) {
+        EntityManager entityManager = mock(EntityManager.class);
+        when(entityManager.getMetamodel()).thenReturn(model);
+        return entityManager;
+    }
+
+    private Metamodel mockMetamodel(ManagedType type) {
+        Metamodel model = mock(Metamodel.class);
+        Set<ManagedType<?>> types = new HashSet<>();
+        types.add(type);
+        when(model.getManagedTypes()).thenReturn(types);
+        return model;
+    }
+
+    private ManagedType mockManagedType(Set<Attribute> attributes) {
+        ManagedType type = mock(ManagedType.class);
+        when(type.getJavaType()).thenReturn(User.class);
+        when(type.getAttributes()).thenReturn(attributes);
+        return type;
+    }
+
+    private Set<Attribute> mockAttributes() {
+        Set<Attribute> attributes = new HashSet<>(4);
+        attributes.add(mockAttribute(Long.class, "id"));
+        attributes.add(mockAttribute(String.class, "username"));
+        attributes.add(mockAttribute(String.class, "password"));
+        return attributes;
+    }
+
+    private Attribute mockAttribute(Class javaType, String name) {
+        Attribute attribute = mock(Attribute.class);
+        when(attribute.getJavaType()).thenReturn(javaType);
+        when(attribute.getName()).thenReturn(name);
+        return attribute;
     }
 }
