@@ -47,12 +47,17 @@ public class EntityService {
     private NamedQueryRules namedQueryRule;
     private OpenJPAUtil openJPAUtil;
     private BaseOperator operator = BaseOperator.getInstance();
+    private static boolean serviceEntityRegistered = false;
 
     private static Class getServiceEntity(String name) {
+        if (!serviceEntityRegistered) {
+            ApplicationConfig.registerEntities();
+            serviceEntityRegistered = true;
+        }
         return classes.get(name);
     }
 
-    public static void registerServiceEntity(String name, Class clazz) {
+    public static synchronized void registerServiceEntity(String name, Class clazz) {
         classes.put(name, clazz);
     }
 

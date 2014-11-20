@@ -18,7 +18,6 @@ public class RestApplication extends Application {
         Set<Class<?>> classes = new HashSet<>();
         classes.add(EntityService.class);
         classes.add(SecurityService.class);
-        ApplicationConfig.registerEntities();
         return classes;
     }
 
