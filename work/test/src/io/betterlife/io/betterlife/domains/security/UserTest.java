@@ -5,7 +5,6 @@ import io.betterlife.persistence.BaseOperator;
 import io.betterlife.rest.EntityService;
 import io.betterlife.util.JsonUtils;
 import io.betterlife.util.jpa.OpenJPAUtil;
-import netscape.javascript.JSUtil;
 import org.apache.openjpa.persistence.OpenJPAQuery;
 import org.codehaus.jackson.JsonNode;
 import org.junit.Before;
