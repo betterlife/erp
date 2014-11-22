@@ -26,8 +26,8 @@ public class IOUtil {
     private IOUtil() {
     }
 
-    public String inputStreamToString(InputStream requestBody) throws IOException {
-        return IOUtils.toString(requestBody, "UTF-8");
+    public String inputStreamToString(InputStream inputStream) throws IOException {
+        return IOUtils.toString(inputStream, "UTF-8");
     }
 
     public InputStream stringToInputStream(String content) throws IOException {

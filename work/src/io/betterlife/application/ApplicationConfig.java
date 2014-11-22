@@ -5,6 +5,7 @@ import io.betterlife.domains.financial.Expense;
 import io.betterlife.domains.financial.ExpenseCategory;
 import io.betterlife.domains.security.User;
 import io.betterlife.rest.EntityService;
+import io.betterlife.rest.ServiceEntityManager;
 
 /**
  * Author: Lawrence Liu(xqinliu@cn.ibm.com)
@@ -33,9 +34,9 @@ public class ApplicationConfig {
      *  Generate meta data for creation of front end CRUD UI.
      */
     public static void registerEntities(){
-        EntityService.registerServiceEntity("expenseCategory", ExpenseCategory.class);
-        EntityService.registerServiceEntity("user", User.class);
-        EntityService.registerServiceEntity("costCenter", CostCenter.class);
-        EntityService.registerServiceEntity("expense", Expense.class);
+        ServiceEntityManager.getInstance().registerServiceEntity("expenseCategory", ExpenseCategory.class);
+        ServiceEntityManager.getInstance().registerServiceEntity("user", User.class);
+        ServiceEntityManager.getInstance().registerServiceEntity("costCenter", CostCenter.class);
+        ServiceEntityManager.getInstance().registerServiceEntity("expense", Expense.class);
     }
 }

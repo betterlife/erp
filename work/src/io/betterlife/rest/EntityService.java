@@ -5,6 +5,7 @@ import io.betterlife.domains.BaseObject;
 import io.betterlife.persistence.MetaDataManager;
 import io.betterlife.persistence.BaseOperator;
 import io.betterlife.persistence.NamedQueryRules;
+import io.betterlife.util.EntityUtils;
 import io.betterlife.util.jpa.OpenJPAUtil;
 import io.betterlife.util.rest.ExecuteResult;
 import io.betterlife.util.rest.IOUtil;
@@ -40,23 +41,9 @@ public class EntityService {
 
     private static final Logger logger = LogManager.getLogger(EntityService.class.getName());
 
-    private static final Map<String, Class> classes = new HashMap<>();
     private NamedQueryRules namedQueryRule;
     private OpenJPAUtil openJPAUtil;
     private BaseOperator operator = BaseOperator.getInstance();
-    private static boolean serviceEntityRegistered = false;
-
-    private static Class getServiceEntity(String name) {
-        if (!serviceEntityRegistered) {
-            ApplicationConfig.registerEntities();
-            serviceEntityRegistered = true;
-        }
-        return classes.get(name);
-    }
-
-    public static synchronized void registerServiceEntity(String name, Class clazz) {
-        classes.put(name, clazz);
-    }
 
     @GET
     @Path("/entity/{entityName}")
@@ -65,7 +52,8 @@ public class EntityService {
         logger.debug("Getting entity meta data for " + entityName);
         entityName = StringUtils.uncapitalize(entityName);
         MetaDataManager.getInstance().setAllFieldMetaData(entityManager);
-        Map<String, Class> meta = MetaDataManager.getInstance().getMetaDataOfClass(getServiceEntity(entityName));
+        Map<String, Class> meta = MetaDataManager.getInstance().getMetaDataOfClass(
+            ServiceEntityManager.getInstance().getServiceEntity(entityName));
         String result = new ExecuteResult<Map<String, Class>>().getRestString(meta);
         if (logger.isTraceEnabled()){
             logger.trace("Returning \n%s\n for entity[%s] meta", result, entityName);
@@ -108,12 +96,9 @@ public class EntityService {
                          InputStream requestBody)
         throws ClassNotFoundException, IllegalAccessException, InstantiationException, IOException {
         Map<String, String> parameters = IOUtil.getInstance().inputStreamToJson(requestBody);
-        Class clazz = getServiceEntity(objectType);
-        Object obj = clazz.newInstance();
-        if (obj instanceof BaseObject) {
-            ((BaseObject) obj).setValues(entityManager, parameters);
-            getOperator().save(entityManager, obj);
-        }
+        Object obj = ServiceEntityManager.getInstance().entityObjectFromType(objectType);
+        EntityUtils.getInstance().mapToBaseObject(entityManager, obj, parameters);
+        getOperator().save(entityManager, obj);
         return new ExecuteResult<String>().getRestString("SUCCESS");
     }
 

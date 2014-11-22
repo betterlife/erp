@@ -1,6 +1,7 @@
 package io.betterlife.util;
 
 import org.apache.commons.io.IOUtils;
+import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -19,6 +20,10 @@ public class JsonUtils {
     }
 
     private JsonUtils() {
+    }
+
+    public <T> String objectToJsonString(T object) throws IOException {
+        return new ObjectMapper().writeValueAsString(object);
     }
 
     public JsonNode stringToJsonNode (String str) throws IOException {
