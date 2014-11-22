@@ -31,7 +31,7 @@ import static org.mockito.Mockito.when;
  * Author: Lawrence Liu(xqinliu@cn.ibm.com)
  * Date: 10/31/14
  */
-public class UserTest {
+public class EntityServiceTest {
 
     private BaseOperator operator;
     private EntityManager entityManager;

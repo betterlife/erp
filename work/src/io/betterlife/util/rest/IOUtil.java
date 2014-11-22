@@ -15,22 +15,26 @@ import java.util.Map;
  * Author: Lawrence Liu(lawrence@betterlife.io)
  * Date: 11/12/14
  */
-public class RequestUtil {
-    private static RequestUtil ourInstance = new RequestUtil();
-    private static final Logger logger = LogManager.getLogger(RequestUtil.class.getName());
+public class IOUtil {
+    private static IOUtil ourInstance = new IOUtil();
+    private static final Logger logger = LogManager.getLogger(IOUtil.class.getName());
 
-    public static RequestUtil getInstance() {
+    public static IOUtil getInstance() {
         return ourInstance;
     }
 
-    private RequestUtil() {
+    private IOUtil() {
     }
 
     public String inputStreamToString(InputStream requestBody) throws IOException {
         return IOUtils.toString(requestBody, "UTF-8");
     }
 
-    public Map<String, String> requestToJson(InputStream requestBody) throws IOException {
+    public InputStream stringToInputStream(String content) throws IOException {
+        return IOUtils.toInputStream(content);
+    }
+
+    public Map<String, String> inputStreamToJson(InputStream requestBody) throws IOException {
         String requestStr = inputStreamToString(requestBody);
         Map<String,String> map = new HashMap<>();
         ObjectMapper mapper = new ObjectMapper();

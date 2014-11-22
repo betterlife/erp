@@ -5,7 +5,7 @@ import io.betterlife.domains.BaseObject;
 import io.betterlife.domains.security.User;
 import io.betterlife.persistence.BaseOperator;
 import io.betterlife.util.rest.ExecuteResult;
-import io.betterlife.util.rest.RequestUtil;
+import io.betterlife.util.rest.IOUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -48,7 +48,7 @@ public class SecurityService {
     @Path("/login")
     @Produces(MediaType.APPLICATION_JSON)
     public String login(@Context HttpServletRequest request, InputStream requestBody) throws IOException {
-         Map<String, String> params = RequestUtil.getInstance().requestToJson(requestBody);
+         Map<String, String> params = IOUtil.getInstance().inputStreamToJson(requestBody);
         User user = null;
         try {
             if (logger.isDebugEnabled()) {

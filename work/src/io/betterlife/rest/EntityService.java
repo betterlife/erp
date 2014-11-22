@@ -7,7 +7,7 @@ import io.betterlife.persistence.BaseOperator;
 import io.betterlife.persistence.NamedQueryRules;
 import io.betterlife.util.jpa.OpenJPAUtil;
 import io.betterlife.util.rest.ExecuteResult;
-import io.betterlife.util.rest.RequestUtil;
+import io.betterlife.util.rest.IOUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,14 +21,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Author: Lawrence Liu(xqinliu@cn.ibm.com)
@@ -110,7 +107,7 @@ public class EntityService {
                          @Context HttpServletRequest request,
                          InputStream requestBody)
         throws ClassNotFoundException, IllegalAccessException, InstantiationException, IOException {
-        Map<String, String> parameters = RequestUtil.getInstance().requestToJson(requestBody);
+        Map<String, String> parameters = IOUtil.getInstance().inputStreamToJson(requestBody);
         Class clazz = getServiceEntity(objectType);
         Object obj = clazz.newInstance();
         if (obj instanceof BaseObject) {
