@@ -50,13 +50,12 @@ public class IndexFilter implements Filter {
         }
         String redirectResult = redirectCache.get(pathInfo);
         if (null == redirectResult) {
-            if ("/".equals(pathInfo) ||
-                StringUtils.getInstance().startWithAnyPattern(patterns, pathInfo)) {
+            if (StringUtils.getInstance().startWithAnyPattern(patterns, pathInfo)) {
                 redirectResult = "/#" + pathInfo.substring(1, pathInfo.length());
-                redirectCache.put(pathInfo, redirectResult);
             } else {
                 redirectResult = pathInfo;
             }
+            redirectCache.put(pathInfo, redirectResult);
         }
         if (!redirectResult.equals(pathInfo)) {
             response.sendRedirect(redirectResult);
