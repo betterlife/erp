@@ -40,8 +40,7 @@ public class EntityService {
     private static final Logger logger = LogManager.getLogger(EntityService.class.getName());
 
     private NamedQueryRules namedQueryRule;
-    private OpenJPAUtil openJPAUtil;
-    private BaseOperator operator = BaseOperator.getInstance();
+    private BaseOperator operator;
 
     @GET
     @Path("/entity/{entityName}")
@@ -65,10 +64,9 @@ public class EntityService {
     @Produces(MediaType.APPLICATION_JSON)
     public String getObjectByTypeAndId(@PathParam("id") long id,
                                        @PathParam("objectType") String objectType) throws IOException {
-        namedQueryRule = NamedQueryRules.getInstance();
         return new ExecuteResult<>().getRestString(
             getOperator().getBaseObjectById(
-                entityManager, id, namedQueryRule.getIdQueryForEntity(objectType)
+                entityManager, id, getNamedQueryRule().getIdQueryForEntity(objectType)
             )
         );
     }
@@ -77,10 +75,9 @@ public class EntityService {
     @Path("/{objectType}")
     @Produces(MediaType.APPLICATION_JSON)
     public String getAllByObjectType(@PathParam("objectType") String objectType) throws IOException {
-        namedQueryRule = NamedQueryRules.getInstance();
         List<Object> result = getOperator().getBaseObjects(
             entityManager,
-            namedQueryRule.getAllQueryForEntity(objectType)
+            getNamedQueryRule().getAllQueryForEntity(objectType)
         );
         return new ExecuteResult<List<Object>>().getRestString(result);
     }
@@ -104,12 +101,15 @@ public class EntityService {
         this.entityManager = entityManager;
     }
 
-    public void setOpenJPAUtil(OpenJPAUtil openJPAUtil) {
-        this.openJPAUtil = openJPAUtil;
+    public NamedQueryRules getNamedQueryRule(){
+        if (null == this.namedQueryRule) {
+            setNamedQueryRule(NamedQueryRules.getInstance());
+        }
+        return this.namedQueryRule;
     }
 
-    public OpenJPAUtil getOpenJPAUtil() {
-        return openJPAUtil;
+    public void setNamedQueryRule(NamedQueryRules rule) {
+        this.namedQueryRule = rule;
     }
 
     public void setOperator(BaseOperator operator) {
@@ -117,6 +117,9 @@ public class EntityService {
     }
 
     public BaseOperator getOperator() {
+        if (null == operator) {
+            setOperator(BaseOperator.getInstance());
+        }
         return operator;
     }
 }
