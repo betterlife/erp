@@ -19,17 +19,22 @@ public class BaseOperator {
         this.openJPAUtil = util;
     }
 
+    public OpenJPAUtil getOpenJPAUtil() {
+        if (null == openJPAUtil) {
+            this.openJPAUtil = OpenJPAUtil.getInstance();
+        }
+        return this.openJPAUtil;
+    }
+
     public static BaseOperator getInstance() {
         return instance;
     }
 
-    private BaseOperator() {
-        //setOpenJPAUtil(OpenJPAUtil.getInstance());
-    }
+    private BaseOperator() {}
 
-    public <T> T getBaseObjectById(EntityManager em, OpenJPAUtil openJPAUtil, long id, String queryName) {
+    public <T> T getBaseObjectById(EntityManager em, long id, String queryName) {
         T obj = null;
-        OpenJPAQuery q = openJPAUtil.getOpenJPAQuery(em, queryName);
+        OpenJPAQuery q = getOpenJPAUtil().getOpenJPAQuery(em, queryName);
         q.setParameter("id", id);
         @SuppressWarnings("unchecked")
         final T singleResult = (T) q.getSingleResult();
@@ -48,7 +53,7 @@ public class BaseOperator {
     }
 
     public <T> T getBaseObject(EntityManager em, String queryName, Map<String, ?> queryParams) {
-        OpenJPAQuery q = openJPAUtil.getOpenJPAQuery(em, queryName);
+        OpenJPAQuery q = getOpenJPAUtil().getOpenJPAQuery(em, queryName);
         for (String key : queryParams.keySet()){
             q.setParameter(key, queryParams.get(key));
         }
@@ -59,7 +64,7 @@ public class BaseOperator {
 
     public <T> List<T> getBaseObjects(EntityManager em, String queryName) {
         List<T> result = new ArrayList<>();
-        OpenJPAQuery q = openJPAUtil.getOpenJPAQuery(em, queryName);
+        OpenJPAQuery q = getOpenJPAUtil().getOpenJPAQuery(em, queryName);
         Collection coll = q.getResultList();
         if (coll != null) {
             @SuppressWarnings("unchecked")

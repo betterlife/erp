@@ -1,7 +1,6 @@
 package io.betterlife.rest;
 
 import io.betterlife.application.ApplicationConfig;
-import io.betterlife.domains.BaseObject;
 import io.betterlife.persistence.MetaDataManager;
 import io.betterlife.persistence.BaseOperator;
 import io.betterlife.persistence.NamedQueryRules;
@@ -24,7 +23,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -70,7 +68,7 @@ public class EntityService {
         namedQueryRule = NamedQueryRules.getInstance();
         return new ExecuteResult<>().getRestString(
             getOperator().getBaseObjectById(
-                entityManager, getOpenJPAUtil(), id, namedQueryRule.getIdQueryForEntity(objectType)
+                entityManager, id, namedQueryRule.getIdQueryForEntity(objectType)
             )
         );
     }
