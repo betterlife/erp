@@ -10,7 +10,8 @@ import javax.persistence.*;
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name = "CostCenter.getById", query = "SELECT c FROM CostCenter c WHERE c.id = :id ")
+    @NamedQuery(name = "CostCenter.getById", query = "SELECT c FROM CostCenter c WHERE c.id = :id "),
+    @NamedQuery(name = "CostCenter.getAll",  query = "SELECT c FROM CostCenter c")
 })
 public class CostCenter extends BaseObject {
 

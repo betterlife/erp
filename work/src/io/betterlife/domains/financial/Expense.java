@@ -14,7 +14,8 @@ import java.util.Date;
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name = "Expense.getById", query = "SELECT e FROM Expense e WHERE e.id = :id ")
+    @NamedQuery(name = "Expense.getById", query = "SELECT e FROM Expense e WHERE e.id = :id "),
+    @NamedQuery(name = "Expense.getAll",  query = "SELECT e FROM Expense e WHERE e.id = :id ")
 })
 public class Expense extends BaseObject {
 
