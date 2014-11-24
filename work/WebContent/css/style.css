@@ -5,3 +5,7 @@
 body {
     padding-top:0;
 }
+
+.navbar-nav {
+    width: 90%;
+}
