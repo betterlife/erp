@@ -20,6 +20,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
             match = true;
         } else {
             for (String pattern : patterns) {
+                pattern = pattern.replace("*","");
                 if (StringUtils.startsWith(toMatch, pattern)) {
                     match = true;
                     break;

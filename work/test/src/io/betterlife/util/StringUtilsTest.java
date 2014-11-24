@@ -22,9 +22,9 @@ public class StringUtilsTest {
     private String toMatch;
 
     public StringUtilsTest(String[] patterns, String toMatch, boolean expected) {
-        this.expected = expected;
         this.patterns = patterns;
         this.toMatch = toMatch;
+        this.expected = expected;
     }
 
     @Parameterized.Parameters
@@ -36,6 +36,7 @@ public class StringUtilsTest {
         data.add(new Object[]{new String[]{"abc", "", "def", "///", "\\*\\"}, "abcd", true});
         data.add(new Object[]{new String[]{"abc", "def", "///", "\\*\\"}, "g", false});
         data.add(new Object[]{new String[]{"abc", "def", "///", "\\*\\"}, "", true});
+        data.add(new Object[]{new String[] {"/user/*"}, "/user/list", true});
         return data;
     }
 

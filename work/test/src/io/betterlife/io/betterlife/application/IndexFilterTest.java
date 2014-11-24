@@ -81,4 +81,12 @@ public class IndexFilterTest {
         verify(response,times(0)).sendRedirect("/#dashboard");
         verify(filterChain,times(1)).doFilter(request, response);
     }
+
+    @Test
+    public void testRedirectForTwoLevelPath() throws IOException, ServletException {
+        when(request.getPathInfo()).thenReturn("/user/list");
+        filter.doFilter(request, response, filterChain);
+        verify(response,times(1)).sendRedirect("/#user/list");
+        verify(filterChain,times(1)).doFilter(request, response);
+    }
 }
