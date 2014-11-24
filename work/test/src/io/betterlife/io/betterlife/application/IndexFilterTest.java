@@ -46,7 +46,7 @@ public class IndexFilterTest {
     public void testDoFilterRoot() throws IOException, ServletException {
         when(request.getPathInfo()).thenReturn("/");
         filter.doFilter(request, response, filterChain);
-        verify(response,times(1)).sendRedirect("/#");
+        verify(response,times(0)).sendRedirect("/#");
         verify(filterChain,times(1)).doFilter(request, response);
     }
 
