@@ -45,8 +45,8 @@ public class IndexFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         String pathInfo =  request.getPathInfo();
-        if (logger.isDebugEnabled()) {
-            logger.debug("Request path info: " + pathInfo);
+        if (logger.isTraceEnabled()) {
+            logger.trace("Request path info: " + pathInfo);
         }
         String redirectResult = redirectCache.get(pathInfo);
         if (null == redirectResult) {
