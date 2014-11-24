@@ -1,0 +1,17 @@
+<div ng-show="isInModel('create')">
+    <form method="post" class="form-control panel">
+        Expense Category Name: <input type="text" ng-model="categoryName" name="categoryName" placeholder="Expense Category Name" size="20"/>
+        <input type="submit" value="Create Expense Category" ng-click="create()"/>
+    </form>
+</div>
+<div ng-show="isInModel('edit')">
+    <form method="post" class="form-control panel">
+        <input type="hidden" ng-model="id" name="id"/>
+        Expense Category Name: <input type="text" ng-model="categoryName" name="categoryName" placeholder="Expense Category Name" size="20"/>
+        <input type="submit" value="Update Expense Category"/>
+    </form>
+</div>
+<div ng-show="isInModel('list')">
+    List all existing Expense Category.
+    <pre>{{data | json}}</pre>
+</div>

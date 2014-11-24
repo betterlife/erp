@@ -33,6 +33,9 @@
                     .when('/login', loginCtrl.routerConfig)
                     .when('/logout', logoutCtrl.routerConfig)
                     .when('/user/:operation', userCtrl.routerConfig)
+                    .when('/expense/:operation', expenseCtrl.routerConfig)
+                    .when('/expenseCategory/:operation', expenseCategoryCtrl.routerConfig)
+                    .when('/costCenter/:operation', costCenterCtrl.routerConfig)
                     .otherwise({redirectTo: '/login'});
                 $locationProvider.html5Mode(false);
             }])

@@ -19,6 +19,11 @@
     <script type="text/javascript" src="js/app/controller/loginCtrl.js"></script>
     <script type="text/javascript" src="js/app/controller/dashboardCtrl.js"></script>
     <script type="text/javascript" src="js/app/controller/userCtrl.js"></script>
+    <script type="text/javascript" src="js/app/controller/expenseCtrl.js"></script>
+    <script type="text/javascript" src="js/app/controller/expenseCategoryCtrl.js"></script>
+    <script type="text/javascript" src="js/app/controller/costCenterCtrl.js"></script>
+    <script type="text/javascript" src="js/app/directive/menu.js"></script>
+    <script type="text/javascript" src="js/app/filter/commonFilters.js"></script>
     <link rel="stylesheet" href="css/style.css">
     <base href="/">
 
@@ -46,13 +51,10 @@
                         <li ng-class="{active: (isActive('/dashboard') || isActive('/'))}">
                             <a href="/dashboard" ng-show="isLoggedIn()">Dashboard</a>
                         </li>
-                        <li ng-class="{active: (isActive('/user'))}" class="dropdown" ng-show="isLoggedIn()">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">User <span class="caret"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="/user/create">Create User</a></li>
-                                <li><a href="/user/list">List Users</a></li>
-                            </ul>
-                        </li>
+                        <menuitem entitylabel="User" ng-show="isLoggedIn()"></menuitem>
+                        <menuitem entitylabel="Expense Category" ng-show="isLoggedIn()"></menuitem>
+                        <menuitem entitylabel="Cost Center" ng-show="isLoggedIn()"></menuitem>
+                        <menuitem entitylabel="Expense" ng-show="isLoggedIn()"></menuitem>
                         <li><a href="/login" ng-show="!isLoggedIn()">Login</a></li>
                         <li><a href="/logout" ng-show="isLoggedIn()">Logout</a></li>
                     </ul>
