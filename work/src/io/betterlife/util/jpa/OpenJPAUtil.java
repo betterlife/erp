@@ -22,4 +22,10 @@ public class OpenJPAUtil {
     public OpenJPAQuery getOpenJPAQuery(EntityManager em, String queryName) {
         return OpenJPAPersistence.cast(em.createNamedQuery(queryName));
     }
+
+    public <T> T getSingleResult(OpenJPAQuery q) {
+        @SuppressWarnings("unchecked")
+        final T singleResult = (T) q.getSingleResult();
+        return singleResult;
+    }
 }

@@ -36,9 +36,7 @@ public class BaseOperator {
         T obj = null;
         OpenJPAQuery q = getOpenJPAUtil().getOpenJPAQuery(em, queryName);
         q.setParameter("id", id);
-        @SuppressWarnings("unchecked")
-        final T singleResult = (T) q.getSingleResult();
-        return singleResult;
+        return getOpenJPAUtil().getSingleResult(q);
     }
 
     public <T> void save(EntityManager em, T obj) {
@@ -57,9 +55,7 @@ public class BaseOperator {
         for (String key : queryParams.keySet()){
             q.setParameter(key, queryParams.get(key));
         }
-        @SuppressWarnings("unchecked")
-        final T singleResult = (T) q.getSingleResult();
-        return singleResult;
+        return getOpenJPAUtil().getSingleResult(q);
     }
 
     public <T> List<T> getBaseObjects(EntityManager em, String queryName) {
