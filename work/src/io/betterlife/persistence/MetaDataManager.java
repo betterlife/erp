@@ -26,7 +26,11 @@ public class MetaDataManager {
         return meta.get(fieldName);
     }
 
-    public Map<String, Class> getMetaDataOfClass(Class<? extends BaseObject> clazz) {
+    public Map<String, Class> getMetaDataOfClass(EntityManager entityManager,
+                                                 Class<? extends BaseObject> clazz) {
+        if (entityManager != null && (null == _fieldsMetaData || _fieldsMetaData.size() == 0)) {
+            setAllFieldMetaData(entityManager);
+        }
         return _fieldsMetaData.get(clazz.getName());
     }
 

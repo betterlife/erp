@@ -32,10 +32,34 @@
                     .when('/dashboard', dashboardCtrl.routerConfig)
                     .when('/login', loginCtrl.routerConfig)
                     .when('/logout', logoutCtrl.routerConfig)
-                    .when('/user/:operation', userCtrl.routerConfig)
-                    .when('/expense/:operation', expenseCtrl.routerConfig)
-                    .when('/expenseCategory/:operation', expenseCategoryCtrl.routerConfig)
-                    .when('/costCenter/:operation', costCenterCtrl.routerConfig)
+                    .when('/:entityType/create', {
+                        templateUrl: function ($routeParams){
+                            return '/rest/form/' + $routeParams.entityType + '/create';
+                        },
+                        controller: createCtrl,
+                        authenticate: true
+                    })
+                    .when('/:entityType/edit', {
+                        templateUrl: function ($routeParams){
+                            return '/rest/form/' + $routeParams.entityType + '/edit';
+                        },
+                        controller: editCtrl,
+                        authenticate: true
+                    })
+                    .when('/:entityType/list', {
+                        templateUrl: function ($routeParams){
+                            return '/rest/form/' + $routeParams.entityType + '/list';
+                        },
+                        controller: listCtrl,
+                        authenticate: true
+                    })
+                    .when('/:entityType/detail/:id',{
+                        templateUrl: function ($routeParams){
+                            return '/rest/form/' + $routeParams.entityType + '/detail';
+                        },
+                        controller: detailCtrl,
+                        authenticate: true
+                    })
                     .otherwise({redirectTo: '/login'});
                 $locationProvider.html5Mode(false);
             }])

@@ -5,7 +5,6 @@ import io.betterlife.persistence.MetaDataManager;
 import io.betterlife.persistence.BaseOperator;
 import io.betterlife.persistence.NamedQueryRules;
 import io.betterlife.util.EntityUtils;
-import io.betterlife.util.jpa.OpenJPAUtil;
 import io.betterlife.util.rest.ExecuteResult;
 import io.betterlife.util.rest.IOUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -43,55 +42,51 @@ public class EntityService {
     private BaseOperator operator;
 
     @GET
-    @Path("/entity/{entityName}")
+    @Path("/entity/{entityType}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getEntityMeta(@PathParam("entityName") String entityName) throws IOException {
-        logger.debug("Getting entity meta data for " + entityName);
-        entityName = StringUtils.uncapitalize(entityName);
-        MetaDataManager.getInstance().setAllFieldMetaData(entityManager);
-        Map<String, Class> meta = MetaDataManager.getInstance().getMetaDataOfClass(
-            ServiceEntityManager.getInstance().getServiceEntity(entityName));
+    public String getEntityMeta(@PathParam("entityType") String entityType) throws IOException {
+        logger.debug("Getting entity meta data for " + entityType);
+        Map<String, Class> meta = ServiceEntityManager.getInstance().getMetaFromEntityType(entityManager, entityType);
         String result = new ExecuteResult<Map<String, Class>>().getRestString(meta);
         if (logger.isTraceEnabled()){
-            logger.trace("Returning \n%s\n for entity[%s] meta", result, entityName);
+            logger.trace("Returning \n%s\n for entity[%s] meta", result, entityType);
         }
         return result;
     }
 
-
     @GET
-    @Path("/{objectType}/{id}")
+    @Path("/{entityType}/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public String getObjectByTypeAndId(@PathParam("id") long id,
-                                       @PathParam("objectType") String objectType) throws IOException {
+                                       @PathParam("entityType") String entityType) throws IOException {
         return new ExecuteResult<>().getRestString(
             getOperator().getBaseObjectById(
-                entityManager, id, getNamedQueryRule().getIdQueryForEntity(objectType)
+                entityManager, id, getNamedQueryRule().getIdQueryForEntity(entityType)
             )
         );
     }
 
     @GET
-    @Path("/{objectType}")
+    @Path("/{entityType}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getAllByObjectType(@PathParam("objectType") String objectType) throws IOException {
+    public String getAllByObjectType(@PathParam("entityType") String entityType) throws IOException {
         List<Object> result = getOperator().getBaseObjects(
             entityManager,
-            getNamedQueryRule().getAllQueryForEntity(objectType)
+            getNamedQueryRule().getAllQueryForEntity(entityType)
         );
         return new ExecuteResult<List<Object>>().getRestString(result);
     }
 
     @POST
-    @Path("/{objectType}")
+    @Path("/{entityType}")
     @Produces(MediaType.APPLICATION_JSON)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public String create(@PathParam("objectType") String objectType,
+    public String create(@PathParam("entityType") String entityType,
                          @Context HttpServletRequest request,
                          InputStream requestBody)
         throws ClassNotFoundException, IllegalAccessException, InstantiationException, IOException {
         Map<String, String> parameters = IOUtil.getInstance().inputStreamToJson(requestBody);
-        Object obj = ServiceEntityManager.getInstance().entityObjectFromType(objectType);
+        Object obj = ServiceEntityManager.getInstance().entityObjectFromType(entityType);
         EntityUtils.getInstance().mapToBaseObject(entityManager, obj, parameters);
         getOperator().save(entityManager, obj);
         return new ExecuteResult<String>().getRestString("SUCCESS");

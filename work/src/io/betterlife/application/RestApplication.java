@@ -1,5 +1,6 @@
 package io.betterlife.application;
 
+import io.betterlife.rest.EntityFormService;
 import io.betterlife.rest.EntityService;
 import io.betterlife.rest.security.SecurityService;
 
@@ -18,6 +19,7 @@ public class RestApplication extends Application {
         Set<Class<?>> classes = new HashSet<>();
         classes.add(EntityService.class);
         classes.add(SecurityService.class);
+        classes.add(EntityFormService.class);
         return classes;
     }
 
