@@ -3,7 +3,6 @@ var loginService = function ($rootScope, $http, $cookieStore, $location) {
     var internal = {};
     internal.user = null;
     internal.login = function (username, password, loginCallback) {
-        //TODO 修改为POST请求的形式
         $http.post('/rest/security/login', {
             "username" : username,
             "password" : password
