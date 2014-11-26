@@ -1,7 +1,6 @@
 package io.betterlife.util;
 
 import io.betterlife.domains.BaseObject;
-import io.betterlife.rest.ServiceEntityManager;
 
 import javax.persistence.EntityManager;
 import java.util.Map;

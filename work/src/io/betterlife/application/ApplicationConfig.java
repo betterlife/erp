@@ -4,8 +4,6 @@ import io.betterlife.domains.financial.CostCenter;
 import io.betterlife.domains.financial.Expense;
 import io.betterlife.domains.financial.ExpenseCategory;
 import io.betterlife.domains.security.User;
-import io.betterlife.rest.EntityService;
-import io.betterlife.rest.ServiceEntityManager;
 
 /**
  * Author: Lawrence Liu(xqinliu@cn.ibm.com)

@@ -1,6 +1,5 @@
-package io.betterlife.rest;
+package io.betterlife.application;
 
-import io.betterlife.application.ApplicationConfig;
 import io.betterlife.persistence.MetaDataManager;
 import io.betterlife.util.StringUtils;
 

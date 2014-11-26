@@ -1,13 +1,12 @@
 package io.betterlife.rest;
 
 import io.betterlife.application.ApplicationConfig;
-import io.betterlife.persistence.MetaDataManager;
+import io.betterlife.application.ServiceEntityManager;
 import io.betterlife.persistence.BaseOperator;
 import io.betterlife.persistence.NamedQueryRules;
 import io.betterlife.util.EntityUtils;
 import io.betterlife.util.rest.ExecuteResult;
 import io.betterlife.util.rest.IOUtil;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
