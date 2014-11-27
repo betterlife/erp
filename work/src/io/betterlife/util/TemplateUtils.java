@@ -33,4 +33,9 @@ public class TemplateUtils {
             return "";
         }
     }
+
+    public String getNgModelNameForField(String key) {
+        return "entity." + key;
+    }
+
 }

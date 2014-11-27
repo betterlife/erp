@@ -39,6 +39,18 @@ public class EntityFormService {
     private static final Logger logger = LogManager.getLogger(EntityFormService.class.getName());
 
     private List<String> IgnoreFields;
+    private TemplateUtils templateUtils;
+
+    public TemplateUtils getTemplateUtils() {
+        if (null == templateUtils) {
+            templateUtils = TemplateUtils.getInstance();
+        }
+        return templateUtils;
+    }
+
+    public void setTemplateUtils(TemplateUtils templateUtils) {
+        this.templateUtils = templateUtils;
+    }
 
     public List<String> getIgnoreFields() {
         if (null == IgnoreFields) {
@@ -68,29 +80,25 @@ public class EntityFormService {
             appendFieldController(context, form, key, clazz, label);
             form.append("</div>");
         }
-        appendButtons(entityType, form);
+        appendButtons(context, entityType, form);
         form.append("</div>");
         form.append("<br/>");
         return form.toString();
     }
 
-    private void appendButtons(String entityType, StringBuilder form) {
-        form.append("<div class='form-group'>\n");
-        form.append("<div class='col-sm-offset-1 col-sm-4'>");
-        form.append("<input type='button' class='btn-default' value='Create ").append(StringUtils.capitalize(entityType)).append("' ng-click='create()'/>\n");
-        form.append("<input type='button' class='btn-default' value='Reset ").append("' ng-click='reset()'/>\n");
-        form.append("</div>");
-        form.append("</div>");
+    private void appendButtons(ServletContext context, String entityType, StringBuilder form) {
+        String template = getTemplateUtils().getHtmlTemplate(context, "templates/buttons.tpl.html");
+        form.append(template.replaceAll("\\$entityType", entityType));
     }
 
     private void appendFieldController(ServletContext context, StringBuilder form, String key, Class clazz, String label) {
         form.append("<div class='col-sm-4'>");
         if (String.class.equals(clazz)) {
-            appendStringController(form, key, label);
+            appendStringController(context, form, key, label);
         } else if (Date.class.equals(clazz)) {
             appendDateController(context, form, key);
         } else if (BigDecimal.class.equals(clazz)) {
-            appendBigDecimalController(form, key);
+            appendBigDecimalController(context, form, key, label);
         } else if (Integer.class.equals(clazz)) {
             appendIntegerController(form, key);
         } else if (Boolean.class.equals(clazz)) {
@@ -113,22 +121,35 @@ public class EntityFormService {
         form.append(key).append(" is a Integer");
     }
 
-    private void appendBigDecimalController(StringBuilder form, String key) {
-        form.append(key).append(" is a BigDecimal");
+    private void appendBigDecimalController(ServletContext context, StringBuilder form, String key, String label) {
+        String type="number";
+        String template = getTemplateUtils().getHtmlTemplate(context, "templates/string.tpl.html");
+        form.append(template
+                        .replaceAll("\\$type", type)
+                        .replaceAll("\\$ngModel", getTemplateUtils().getNgModelNameForField(key))
+                        .replaceAll("\\$name", key)
+                        .replaceAll("\\$placeholder", label));
     }
 
     private void appendDateController(ServletContext context, StringBuilder form, String key) {
-        String template = TemplateUtils.getInstance().getHtmlTemplate(context, "templates/date.tpl.html");
+        String template = getTemplateUtils().getHtmlTemplate(context, "templates/date.tpl.html");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        form.append(template.replaceAll("\\$ngModel\\$", "entity." + key).replaceAll("\\$defaultValue\\$", sdf.format(new Date())));
+        form.append(template
+                        .replaceAll("\\$ngModel", getTemplateUtils().getNgModelNameForField(key))
+                        .replaceAll("\\$defaultValue", sdf.format(new Date())));
     }
 
-    private void appendStringController(StringBuilder form, String key, String label) {
+    private void appendStringController(ServletContext context, StringBuilder form, String key, String label) {
         String type = "text";
         if ("password".equalsIgnoreCase(key)) {
             type = "password";
         }
-        form.append(String.format("<input type='%s' class='form-control' ng-model='%s' name='%s' placeholder='%s' size='20'/>",type, key, key, label));
+        String template = getTemplateUtils().getHtmlTemplate(context, "templates/string.tpl.html");
+        form.append(template
+                        .replaceAll("\\$type", type)
+                        .replaceAll("\\$ngModel", getTemplateUtils().getNgModelNameForField(key))
+                        .replaceAll("\\$name", key)
+                        .replaceAll("\\$placeholder", label));
     }
 
     private String appendLabel(StringBuilder form, String key) {
