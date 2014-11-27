@@ -15,8 +15,8 @@ import java.util.*;
  */
 
 public class MetaDataManager {
-    private static Map<String, Map<String, Class>> _fieldsMetaData = new HashMap<>();
-    private static boolean hasMetaData = false;
+    private Map<String, Map<String, Class>> _fieldsMetaData = new HashMap<>();
+    private boolean hasMetaData = false;
     private static MetaDataManager instance = new MetaDataManager();
 
     private MetaDataManager(){}
@@ -52,7 +52,7 @@ public class MetaDataManager {
     }
 
     private void setHasMetaData(boolean hasMetaData) {
-        MetaDataManager.hasMetaData = hasMetaData;
+        this.hasMetaData = hasMetaData;
     }
 
     public void setAllFieldMetaData(EntityManager entityManager) {

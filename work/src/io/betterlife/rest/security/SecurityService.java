@@ -58,7 +58,7 @@ public class SecurityService {
             user = BaseOperator.getInstance().getBaseObject(entityManager, User.GetByUserNameAndPasswordQuery, params);
         } catch (Exception e) {
             logger.warn(String.format(
-                            "Error to get user username[%s%], password[%s%]",
+                            "Error to get user username[%s], password[%s]",
                             params.get("username"), "HIDDEN_FOR_SECURITY"
                         )
             );

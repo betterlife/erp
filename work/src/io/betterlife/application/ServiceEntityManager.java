@@ -12,8 +12,8 @@ import java.util.Map;
  * Date: 11/22/14
  */
 public class ServiceEntityManager {
-    private static boolean serviceEntityRegistered = false;
-    private static final Map<String, Class> classes = new HashMap<>();
+    private boolean serviceEntityRegistered = false;
+    private final Map<String, Class> classes = new HashMap<>();
     private static ServiceEntityManager ourInstance = new ServiceEntityManager();
 
     public static ServiceEntityManager getInstance() {

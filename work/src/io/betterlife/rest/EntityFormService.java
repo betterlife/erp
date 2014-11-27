@@ -70,8 +70,9 @@ public class EntityFormService {
         Map<String, Class> meta = ServiceEntityManager.getInstance().getMetaFromEntityType(entityManager, entityType);
         StringBuilder form = new StringBuilder();
         form.append("<div class='form-group form-horizontal'>");
-        for (String key : meta.keySet()) {
-            Class clazz = meta.get(key);
+        for (Map.Entry<String, Class> entry : meta.entrySet()) {
+            final Class clazz = entry.getValue();
+            final String key = entry.getKey();
             if (getIgnoreFields().contains(key)) {
                 continue;
             }
@@ -154,7 +155,7 @@ public class EntityFormService {
 
     private String appendLabel(StringBuilder form, String key) {
         final String label = StringUtils.capitalize(key);
-        form.append(String.format("<label for='%s' class='col-sm-1 control-label'>%s</label>\n", label, label));
+        form.append(String.format("<label for='%s' class='col-sm-1 control-label'>%s</label>%n", label, label));
         return label;
     }
 

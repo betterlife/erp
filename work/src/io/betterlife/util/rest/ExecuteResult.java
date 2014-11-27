@@ -7,6 +7,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.jms.MapMessage;
+import java.beans.Transient;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -32,7 +33,8 @@ public class ExecuteResult<T> implements Serializable {
      * 普通的错误信息
      */
     private List<String> errorMessages = new ArrayList<String>();
-    private ObjectMapper objectMapper = new ObjectMapper();
+
+    private transient ObjectMapper objectMapper = new ObjectMapper();
 
     /**
      * 判断当前执行结果是否正确，如果errorMessages和fieldErrors都为空，则无错
