@@ -1,11 +1,15 @@
 .no-float {
-    float:none;
+    float: none;
 }
 
 body {
-    padding-top:0;
+    padding-top: 0;
 }
 
 .navbar-nav {
     width: 90%;
+}
+
+.nav, .pagination, .carousel, .panel-title a {
+    cursor: pointer;
 }

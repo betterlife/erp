@@ -2,7 +2,7 @@
 (function () {
     "use strict";
     console.log("Init angular module");
-    angular.module('mainApp', ['ngRoute', 'ngCookies'])
+    angular.module('mainApp', ['ngRoute', 'ngCookies', 'ui.bootstrap'])
         .filter('to_trusted', ['$sce', function ($sce) {
             return function (text) {
                 return $sce.trustAsHtml(text);
