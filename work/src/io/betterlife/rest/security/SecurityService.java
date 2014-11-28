@@ -4,8 +4,8 @@ import io.betterlife.application.ApplicationConfig;
 import io.betterlife.domains.BaseObject;
 import io.betterlife.domains.security.User;
 import io.betterlife.persistence.BaseOperator;
+import io.betterlife.util.IOUtil;
 import io.betterlife.util.rest.ExecuteResult;
-import io.betterlife.util.rest.IOUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

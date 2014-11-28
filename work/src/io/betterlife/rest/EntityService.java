@@ -6,7 +6,7 @@ import io.betterlife.persistence.BaseOperator;
 import io.betterlife.persistence.NamedQueryRules;
 import io.betterlife.util.EntityUtils;
 import io.betterlife.util.rest.ExecuteResult;
-import io.betterlife.util.rest.IOUtil;
+import io.betterlife.util.IOUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

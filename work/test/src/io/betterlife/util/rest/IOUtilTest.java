@@ -1,5 +1,6 @@
 package io.betterlife.util.rest;
 
+import io.betterlife.util.IOUtil;
 import org.apache.commons.io.IOUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;

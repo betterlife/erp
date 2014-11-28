@@ -37,7 +37,7 @@ public class TemplateUtilsTest {
         final String encoding = "UTF-8";
         final String content = "我是中文~~~";
         try {
-            BLFileUtils.getInstance().writeToAbsolutePath(absolutePath, content, encoding);
+            IOUtil.getInstance().writeToAbsolutePath(absolutePath, content, encoding);
             ServletContext context = mock(ServletContext.class);
             when(context.getRealPath(absolutePath)).thenThrow(IOException.class);
             String result = TemplateUtils.getInstance().getHtmlTemplate(context, absolutePath);
@@ -62,7 +62,7 @@ public class TemplateUtilsTest {
         final String absolutePath = "/tmp/" + UUID.randomUUID() + ".tpl.html";
         final String encoding = "UTF-8";
         try {
-            final String data = BLFileUtils.getInstance().writeToAbsolutePath(absolutePath, content, encoding);
+            final String data = IOUtil.getInstance().writeToAbsolutePath(absolutePath, content, encoding);
             ServletContext context = mock(ServletContext.class);
             when(context.getRealPath(absolutePath)).thenReturn(absolutePath);
             String result = TemplateUtils.getInstance().getHtmlTemplate(context, absolutePath);

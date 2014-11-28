@@ -1,11 +1,14 @@
-package io.betterlife.util.rest;
+package io.betterlife.util;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -44,5 +47,19 @@ public class IOUtil {
             logger.error(String.format("Error to read String[%s] to map", requestStr), e);
         }
         return map;
+    }
+
+    public String writeToAbsolutePath(final String absolutePath, final String fileContent,
+                                       final String encoding) throws IOException {
+        FileOutputStream outputStream  = null;
+        try {
+            outputStream = FileUtils.openOutputStream(new File(absolutePath));
+            IOUtils.write(fileContent, outputStream, encoding);
+        } finally {
+            if (null != outputStream) {
+                outputStream.close();
+            }
+        }
+        return fileContent;
     }
 }
