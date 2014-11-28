@@ -1,6 +1,7 @@
 package io.betterlife.util.rest;
 
 import io.betterlife.util.JsonUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.wink.json4j.JSONObject;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -43,7 +44,7 @@ public class ExecuteResultTest {
         when(mapper.writeValueAsString(result)).thenThrow(new IOException());
         result.setObjectMapper(mapper);
         String resultStr = result.getRestString(obj);
-        assertEquals("", resultStr);
+        assertEquals(StringUtils.EMPTY,  resultStr);
     }
 
     @Test
@@ -54,6 +55,6 @@ public class ExecuteResultTest {
         when(mapper.writeValueAsString(result)).thenReturn(null);
         result.setObjectMapper(mapper);
         String resultStr = result.getRestString(obj);
-        assertEquals("", resultStr);
+        assertEquals(StringUtils.EMPTY, resultStr);
     }
 }

@@ -1,5 +1,6 @@
 package io.betterlife.util;
 
+import clover.org.apache.commons.lang.StringUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
@@ -30,7 +31,7 @@ public class TemplateUtils {
             return FileUtils.readFileToString(new File(realPath), "UTF-8");
         } catch (Exception e) {
             logger.warn(String.format("Failed to get resource for file[%s], Returning empty string", filePath));
-            return "";
+            return StringUtils.EMPTY;
         }
     }
 

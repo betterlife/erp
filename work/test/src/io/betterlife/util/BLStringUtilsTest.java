@@ -15,13 +15,13 @@ import static org.junit.Assert.assertEquals;
  * Date: 11/14/14
  */
 @RunWith(Parameterized.class)
-public class StringUtilsTest {
+public class BLStringUtilsTest {
 
     private boolean expected;
     private String[] patterns;
     private String toMatch;
 
-    public StringUtilsTest(String[] patterns, String toMatch, boolean expected) {
+    public BLStringUtilsTest(String[] patterns, String toMatch, boolean expected) {
         this.patterns = patterns;
         this.toMatch = toMatch;
         this.expected = expected;
@@ -42,7 +42,7 @@ public class StringUtilsTest {
 
     @Test
     public void testMatchAny() {
-        final boolean actual = StringUtils.getInstance().startWithAnyPattern(patterns, toMatch);
-        assertEquals(String.format("Failed on match [%s] with [%s]", toMatch, StringUtils.join(patterns)), expected, actual);
+        final boolean actual = BLStringUtils.getInstance().startWithAnyPattern(patterns, toMatch);
+        assertEquals(String.format("Failed on match [%s] with [%s]", toMatch, BLStringUtils.join(patterns)), expected, actual);
     }
 }

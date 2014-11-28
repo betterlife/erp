@@ -1,7 +1,7 @@
 package io.betterlife.application;
 
 import io.betterlife.persistence.MetaDataManager;
-import io.betterlife.util.StringUtils;
+import io.betterlife.util.BLStringUtils;
 
 import javax.persistence.EntityManager;
 import java.util.HashMap;
@@ -40,7 +40,7 @@ public class ServiceEntityManager {
     }
 
     public Map<String, Class> getMetaFromEntityType(EntityManager entityManager, String entityType) {
-        entityType = StringUtils.uncapitalize(entityType);
+        entityType = BLStringUtils.uncapitalize(entityType);
         final Class entityClass = ServiceEntityManager.getInstance().getServiceEntityClass(entityType);
         return MetaDataManager.getInstance().getMetaDataOfClass(entityManager, entityClass);
     }

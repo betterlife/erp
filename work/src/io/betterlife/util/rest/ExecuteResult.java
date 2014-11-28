@@ -1,5 +1,6 @@
 package io.betterlife.util.rest;
 
+import clover.org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.codehaus.jackson.annotate.JsonIgnore;
@@ -63,13 +64,13 @@ public class ExecuteResult<T> implements Serializable {
 
     public String getRestString(T object) {
         setResult(object);
-        String resultStr = "";
+        String resultStr = StringUtils.EMPTY;
         try {
             resultStr = objectMapper.writeValueAsString(this);
         } catch (Exception e) {
             logWriteValueAsStringError(object, e);
         }
-        return (null == resultStr) ? "" : resultStr;
+        return (null == resultStr) ? StringUtils.EMPTY : resultStr;
     }
 
     private void logWriteValueAsStringError(T object, Exception e) {

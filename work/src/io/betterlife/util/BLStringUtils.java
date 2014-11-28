@@ -1,27 +1,29 @@
 package io.betterlife.util;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * Author: Lawrence Liu(lawrence@betterlife.io)
  * Date: 11/14/14
  */
-public class StringUtils extends org.apache.commons.lang3.StringUtils {
-    private static StringUtils ourInstance = new StringUtils();
+public class BLStringUtils extends org.apache.commons.lang3.StringUtils {
+    private static BLStringUtils ourInstance = new BLStringUtils();
 
-    public static StringUtils getInstance() {
+    public static BLStringUtils getInstance() {
         return ourInstance;
     }
 
-    private StringUtils() {
+    private BLStringUtils() {
     }
 
     public boolean startWithAnyPattern(String[] patterns, String toMatch) {
         boolean match = false;
-        if (StringUtils.isEmpty(toMatch)) {
+        if (BLStringUtils.isEmpty(toMatch)) {
             match = true;
         } else {
             for (String pattern : patterns) {
-                pattern = pattern.replace("*","");
-                if (StringUtils.startsWith(toMatch, pattern)) {
+                pattern = pattern.replace("*", StringUtils.EMPTY);
+                if (BLStringUtils.startsWith(toMatch, pattern)) {
                     match = true;
                     break;
                 }

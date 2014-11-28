@@ -3,7 +3,7 @@ package io.betterlife.rest;
 import io.betterlife.application.ApplicationConfig;
 import io.betterlife.application.ServiceEntityManager;
 import io.betterlife.domains.BaseObject;
-import io.betterlife.util.StringUtils;
+import io.betterlife.util.BLStringUtils;
 import io.betterlife.util.TemplateUtils;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.logging.log4j.LogManager;
@@ -154,7 +154,7 @@ public class EntityFormService {
     }
 
     private String appendLabel(StringBuilder form, String key) {
-        final String label = StringUtils.capitalize(key);
+        final String label = BLStringUtils.capitalize(key);
         form.append(String.format("<label for='%s' class='col-sm-1 control-label'>%s</label>%n", label, label));
         return label;
     }

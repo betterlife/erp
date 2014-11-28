@@ -1,6 +1,6 @@
 package io.betterlife.application;
 
-import io.betterlife.util.StringUtils;
+import io.betterlife.util.BLStringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -50,7 +50,7 @@ public class IndexFilter implements Filter {
         }
         String redirectResult = redirectCache.get(pathInfo);
         if (null == redirectResult) {
-            if (StringUtils.getInstance().startWithAnyPattern(patterns, pathInfo)) {
+            if (BLStringUtils.getInstance().startWithAnyPattern(patterns, pathInfo)) {
                 redirectResult = "/#" + pathInfo.substring(1, pathInfo.length());
             } else {
                 redirectResult = pathInfo;
