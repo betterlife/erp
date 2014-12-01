@@ -9,11 +9,7 @@ import javax.persistence.*;
  * Date: 10/31/14
  */
 
-@Entity
-@Table(
-    uniqueConstraints=
-    @UniqueConstraint(columnNames={"USERNAME"})
-)
+@Entity(name="UserEntity")
 @NamedQueries({
     @NamedQuery(name = "User.getById", query = "SELECT u FROM User u WHERE u.id = :id "),
     @NamedQuery(name = "User.getAll", query = "SELECT u FROM User u"),

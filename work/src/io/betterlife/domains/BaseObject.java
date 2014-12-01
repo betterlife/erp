@@ -23,8 +23,6 @@ public abstract class BaseObject {
 
     private Map<String, Object> _map = new HashMap<>();
 
-    private OpenJPAUtil openJPAUtil = OpenJPAUtil.getInstance();
-
     private long id;
 
     @Id
