@@ -1,7 +1,7 @@
 ---
 applications:
 - name: betterlife-erp
-  memory: 256M
+  memory: 384M
   host: betterlife-erp
   domain: mybluemix.net
   path: betterlife-erp_0.1.war
