@@ -14,7 +14,7 @@ public class BaseObjectTest {
 
     private BaseObject baseObject;
 
-    class MockBaseObject extends BaseObject{
+    static class MockBaseObject extends BaseObject{
 
     }
 
