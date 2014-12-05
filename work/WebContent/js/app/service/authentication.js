@@ -7,17 +7,17 @@ var loginService = function ($rootScope, $http, $cookieStore, $location) {
             "username" : username,
             "password" : password
         }, {}).success(function (data) {
-            internal.user = data.result;
-            if (internal.user === null) {
+            if (data.success == false) {
                 $cookieStore.remove('user');
-            }
-            else {
+                $rootScope.login_errors = data.errorMessages;
+            } else {
+                internal.user = data.result;
                 $cookieStore.put('user', internal.user);
+                loginCallback(data.user);
             }
-            $rootScope.login_errors = '';
-            loginCallback(data.user);
         }).error(function (data, status) {
-            $rootScope.login_error = '登录失败, 请检查用户名密码, 或者点这里<a class="alert-link" href="mailto:helpdesk@betterlife.io">报告登陆问题</a>';
+            $cookieStore.remove('user');
+            $rootScope.login_errors = ['登录失败, 请检查用户名密码, 或者点这里<a class="alert-link" href="mailto:helpdesk@betterlife.io">报告登陆问题</a>'];
         });
     };
 

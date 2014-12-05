@@ -16,10 +16,11 @@ var loginCtrl = function ($scope, $http, loginService, $location, $routeParams) 
         if (username !== undefined && username !== '' &&
             password !== undefined && password !== '') {
             loginService.login(username, password, function(user){
+                console.info(user);
                 redirect($location);
             });
         } else {
-            $scope.login_error = "请输入用户名密码";
+            $scope.login_errors= ["请输入用户名密码"];
         }
     };
 };

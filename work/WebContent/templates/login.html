@@ -7,9 +7,12 @@
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-6">
-                <div class="alert alert-danger alert-dismissible" role="alert" ng-show="login_error.length > 0">
-                    <span class="glyphicon glyphicon-warning-sign"></span>
-                    <span style="padding-left: 15px" ng-bind-html="login_error | to_trusted"></span>
+                <div class="alert alert-danger alert-dismissible" role="alert" ng-show="login_errors.length > 0">
+                    <span class="glyphicon glyphicon-warning-sign">
+                        <span class="animate-repeat" ng-repeat="login_error in login_errors">
+                            <span style="padding-left: 15px" ng-bind-html="login_error | to_trusted"></span>
+                        </span>
+                    </span>
                 </div>
             </div>
         </div>

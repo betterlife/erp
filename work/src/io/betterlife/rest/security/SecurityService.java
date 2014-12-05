@@ -6,6 +6,7 @@ import io.betterlife.domains.security.User;
 import io.betterlife.persistence.BaseOperator;
 import io.betterlife.util.IOUtil;
 import io.betterlife.util.rest.ExecuteResult;
+import io.betterlife.util.security.LoginUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -49,22 +50,8 @@ public class SecurityService {
     @Produces(MediaType.APPLICATION_JSON)
     public String login(@Context HttpServletRequest request, InputStream requestBody) throws IOException {
          Map<String, String> params = IOUtil.getInstance().inputStreamToJson(requestBody);
-        User user = null;
-        try {
-            if (logger.isDebugEnabled()) {
-                logger.debug(String.format("Login request, [%s:%s]",
-                                           params.get("username"), params.get("password")));
-            }
-            user = BaseOperator.getInstance().getBaseObject(entityManager, User.GetByUserNameAndPasswordQuery, params);
-        } catch (Exception e) {
-            logger.warn(String.format(
-                            "Error to get user username[%s], password[%s]",
-                            params.get("username"), "HIDDEN_FOR_SECURITY"
-                        )
-            );
-        }
-        return new ExecuteResult<BaseObject>().getRestString(user);
+        final String username = params.get("username");
+        final String password = params.get("password");
+        return LoginUtil.getInstance().login(entityManager, params, username, password);
     }
-
-
 }
