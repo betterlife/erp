@@ -37,6 +37,7 @@ public class BLStringUtilsTest {
         data.add(new Object[]{new String[]{"abc", "def", "///", "\\*\\"}, "g", false});
         data.add(new Object[]{new String[]{"abc", "def", "///", "\\*\\"}, "", true});
         data.add(new Object[]{new String[] {"/user/*"}, "/user/list", true});
+        data.add(new Object[]{new String[] {"/user/*"}, "/user", true});
         return data;
     }
 

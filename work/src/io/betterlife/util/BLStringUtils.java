@@ -22,7 +22,7 @@ public class BLStringUtils extends org.apache.commons.lang3.StringUtils {
             match = true;
         } else {
             for (String pattern : patterns) {
-                pattern = pattern.replace("*", StringUtils.EMPTY);
+                pattern = pattern.replace("/*", StringUtils.EMPTY);
                 if (BLStringUtils.startsWith(toMatch, pattern)) {
                     match = true;
                     break;
