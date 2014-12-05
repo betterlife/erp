@@ -53,27 +53,23 @@ public class BaseObjectTest {
 
     @Test
     public void testFieldLastModify() throws Exception {
-
+        User user = new User();
+        baseObject.setLastModify(user);
+        assertSame(user, baseObject.getLastModify());
     }
 
     @Test
-    public void testSetCreateDate() throws Exception {
-
+    public void testCreateDate() throws Exception {
+        final Date date = new Date();
+        baseObject.setCreateDate(date);
+        assertSame(date, baseObject.getCreateDate());
     }
 
     @Test
-    public void testGetCreateDate() throws Exception {
-
-    }
-
-    @Test
-    public void testSetCreator() throws Exception {
-
-    }
-
-    @Test
-    public void testGetCreator() throws Exception {
-
+    public void testCreator() throws Exception {
+        User user = new User();
+        baseObject.setCreator(user);
+        assertSame(user, baseObject.getCreator());
     }
 
     @Test
