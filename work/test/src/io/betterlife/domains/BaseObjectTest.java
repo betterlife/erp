@@ -10,13 +10,13 @@ import java.util.Date;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
+class MockBaseObject extends BaseObject {
+
+}
+
 public class BaseObjectTest {
 
     private BaseObject baseObject;
-
-    static class MockBaseObject extends BaseObject{
-
-    }
 
     @Before
     public void setUp() throws Exception {
