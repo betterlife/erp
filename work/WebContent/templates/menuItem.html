@@ -1,7 +1,7 @@
 <li class="dropdown" ng-class="{active: (isActive('/{{entitylabel | nospace | uncapitalize}}'))}">
-     <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{entitylabel}}<span class="caret"></span></a>
-     <ul class="dropdown-menu" role="menu">
-         <li><a href="/{{entitylabel | nospace | uncapitalize}}/create">Create {{entitylabel}}</a></li>
-         <li><a href="/{{entitylabel | nospace | uncapitalize}}/list">List {{entitylabel}}</a></li>
-     </ul>
+    <a class="dropdown-toggle" data-toggle="dropdown">{{entitylabel}}<span class="caret"></span></a>
+    <ul class="dropdown-menu" role="menu">
+        <li><a href="/{{entitylabel | nospace | uncapitalize}}/create">Create {{entitylabel}}</a></li>
+        <li><a href="/{{entitylabel | nospace | uncapitalize}}/list">List {{entitylabel}}</a></li>
+    </ul>
  </li>
