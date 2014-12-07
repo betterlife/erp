@@ -32,7 +32,7 @@ public class IOUtilTest {
         values.put("password", "ppppp");
         String str = new ObjectMapper().writeValueAsString(values);
         InputStream inputStream = IOUtils.toInputStream(str);
-        Map<String, String> result = IOUtil.getInstance().inputStreamToJson(inputStream);
+        Map<String, Object> result = IOUtil.getInstance().inputStreamToJson(inputStream);
         assertEquals(2, result.size());
         assertEquals(values, result);
     }

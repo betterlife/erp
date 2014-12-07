@@ -49,9 +49,9 @@ public class SecurityService {
     @Path("/login")
     @Produces(MediaType.APPLICATION_JSON)
     public String login(@Context HttpServletRequest request, InputStream requestBody) throws IOException {
-         Map<String, String> params = IOUtil.getInstance().inputStreamToJson(requestBody);
-        final String username = params.get("username");
-        final String password = params.get("password");
+         Map<String, Object> params = IOUtil.getInstance().inputStreamToJson(requestBody);
+        final String username = (String) params.get("username");
+        final String password = (String) params.get("password");
         return LoginUtil.getInstance().login(entityManager, params, username, password);
     }
 }

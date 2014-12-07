@@ -84,9 +84,9 @@ public class EntityService {
                          @Context HttpServletRequest request,
                          InputStream requestBody)
         throws ClassNotFoundException, IllegalAccessException, InstantiationException, IOException {
-        Map<String, String> parameters = IOUtil.getInstance().inputStreamToJson(requestBody);
+        Map<String, Object> parameters = IOUtil.getInstance().inputStreamToJson(requestBody);
         Object obj = ServiceEntityManager.getInstance().entityObjectFromType(entityType);
-        EntityUtils.getInstance().mapToBaseObject(entityManager, obj, parameters);
+        EntityUtils.getInstance().mapToBaseObject(entityManager, obj, (Map<String, String>)parameters.get("entity"));
         getOperator().save(entityManager, obj);
         return new ExecuteResult<String>().getRestString("SUCCESS");
     }

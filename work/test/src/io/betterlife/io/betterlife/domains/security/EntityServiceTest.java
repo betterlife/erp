@@ -77,7 +77,9 @@ public class EntityServiceTest {
         Map<String, String> userMap = new HashMap<>(2);
         userMap.put("username", "xqliu");
         userMap.put("password", "password");
-        InputStream stream = IOUtils.toInputStream(JsonUtils.getInstance().objectToJsonString(userMap));
+        Map<String, Object> entityMap = new HashMap<>(1);
+        entityMap.put("entity", userMap);
+        InputStream stream = IOUtils.toInputStream(JsonUtils.getInstance().objectToJsonString(entityMap));
         String response = entityService.create("user", servletRequest, stream);
         assertEquals(new ExecuteResult<String>().getRestString("SUCCESS"), response);
     }

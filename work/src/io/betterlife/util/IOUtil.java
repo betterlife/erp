@@ -37,12 +37,12 @@ public class IOUtil {
         return IOUtils.toInputStream(content);
     }
 
-    public Map<String, String> inputStreamToJson(InputStream requestBody) throws IOException {
+    public Map<String, Object> inputStreamToJson(InputStream requestBody) throws IOException {
         String requestStr = inputStreamToString(requestBody);
-        Map<String,String> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         ObjectMapper mapper = new ObjectMapper();
         try {
-            map = mapper.readValue(requestStr, new TypeReference<HashMap<String,String>>(){});
+            map = mapper.readValue(requestStr, new TypeReference<HashMap<String, Object>>(){});
         } catch (Exception e) {
             logger.error(String.format("Error to read String[%s] to map", requestStr), e);
         }

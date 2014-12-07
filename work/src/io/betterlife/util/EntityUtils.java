@@ -10,10 +10,10 @@ import java.util.Map;
  * Date: 11/22/14
  */
 public class EntityUtils {
-    private static EntityUtils ourInstance = new EntityUtils();
+    private static EntityUtils instance = new EntityUtils();
 
     public static EntityUtils getInstance() {
-        return ourInstance;
+        return instance;
     }
 
     private EntityUtils() {

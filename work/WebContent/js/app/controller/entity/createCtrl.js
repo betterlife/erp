@@ -16,9 +16,10 @@ var createCtrl = function ($scope, $http, $location, loginService, $routeParams)
 
     $scope.create = function () {
         $http.post("/rest/" + $scope.entityType, {
-        }, {}).success(function (data) {
+            'entity' : $scope.entity
+        },{}).success(function (data) {
             console.log(data);
-            $location.path("/user/list");
+            $location.path("/" + $scope.entityType + "/list");
         }).error(function (data, status) {
         });
     };

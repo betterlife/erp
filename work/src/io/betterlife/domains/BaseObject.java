@@ -4,12 +4,14 @@ import io.betterlife.domains.security.User;
 import io.betterlife.persistence.BaseOperator;
 import io.betterlife.persistence.MetaDataManager;
 import io.betterlife.persistence.NamedQueryRules;
-import io.betterlife.util.jpa.OpenJPAUtil;
+import io.betterlife.util.converter.Converter;
+import io.betterlife.util.converter.ConverterFactory;
 import org.apache.commons.lang3.ClassUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,6 +22,8 @@ import java.util.Map;
  */
 @MappedSuperclass
 public abstract class BaseObject {
+
+    private static final Logger logger = LogManager.getLogger(BaseObject.class.getName());
 
     private Map<String, Object> _map = new HashMap<>();
 
@@ -84,28 +88,33 @@ public abstract class BaseObject {
         MetaDataManager.getInstance().setAllFieldMetaData(entityManager);
         for (Map.Entry<String, String> entry : parameters.entrySet()) {
             String key = entry.getKey();
-            String value = entry.getValue();
+            Object value = entry.getValue();
             Class clazz = MetaDataManager.getInstance().getFieldMetaData(this.getClass(), key);
-            if (clazz.equals(String.class)) {
-                setValue(key, value);
-            } else if (clazz.equals(Date.class)) {
-                try {
-                    Date date = new SimpleDateFormat("yyyy-MM-dd").parse(value);
-                    setValue(key, date);
-                } catch (Exception e) {
-                    //If clazz is Date and failed to parse by "yyyy-MM-dd", then we assume a time stamp will pass here.
-                    setValue(key, new Date(Long.parseLong(value)));
-                }
-            } else if (clazz.equals(Long.class)) {
-                setValue(key, Long.parseLong(value));
-            } else if (clazz.equals(BigDecimal.class)) {
-                setValue(key, new BigDecimal(value));
-            } else if (ClassUtils.isAssignable(clazz, BaseObject.class)) {
-                //If clazz is child type of BaseObject, then we assume an id will be passed here.
-                BaseObject baseObj = BaseOperator.getInstance().getBaseObjectById(entityManager, Long.parseLong(value),
-                    NamedQueryRules.getInstance().getIdQueryForEntity(clazz.getSimpleName()));
+            if (logger.isTraceEnabled()) {
+                logger.trace(String.format("Setting [%s, %s] to type [%s]", value, value.getClass().getName(), clazz));
+            }
+            if (ClassUtils.isAssignable(clazz, BaseObject.class)) {
+                final String idQueryForEntity = NamedQueryRules.getInstance().getIdQueryForEntity(clazz.getSimpleName());
+                BaseObject baseObj = BaseOperator.getInstance().getBaseObjectById(
+                    entityManager, Long.parseLong((String) value),
+                    idQueryForEntity
+                );
                 if (null != baseObj) {
                     setValue(key, baseObj);
+                }
+            } else if (ClassUtils.isAssignable(value.getClass(), clazz)) {
+                setValue(key, value);
+            } else {
+                final Converter converter = ConverterFactory.getInstance().getConverter(value.getClass(), clazz);
+                Object convertedValue = null;
+                try {
+                    convertedValue = converter.convert(value);
+                    setValue(key, convertedValue);
+                } catch (ParseException e) {
+                    logger.error(String.format(
+                                     "Failed to convert[%s,%s] to type [%s]", value,
+                                     value.getClass().getName(), clazz.getName()
+                                 ), e);
                 }
             }
         }
