@@ -132,7 +132,7 @@ public class TemplateUtilsTest {
                      templateUtils.getFieldLabelHtml("user"));
         assertEquals("<label for='expense' class='col-sm-2 control-label'>Expense</label>\n",
                      templateUtils.getFieldLabelHtml("expense"));
-        assertEquals("<label for='expenseCategory' class='col-sm-2 control-label'>expenseCategory</label>\n",
+        assertEquals("<label for='expenseCategory' class='col-sm-2 control-label'>ExpenseCategory</label>\n",
                      templateUtils.getFieldLabelHtml("expenseCategory"));
         assertEquals("<label for='' class='col-sm-2 control-label'></label>\n",
                      templateUtils.getFieldLabelHtml(null));
