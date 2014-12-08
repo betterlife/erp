@@ -24,16 +24,13 @@ var listCtrl = function ($scope, $http, $location, loginService, $routeParams) {
     "use strict";
     $scope.entityType = $routeParams.entityType;
     $scope.captalizedEntityType = $scope.entityType.charAt(0).toUpperCase() + $scope.entityType.substr(1);
+    $scope.gridOptions = {
+        enableSorting: true
+    };
     $http.get("/rest/entity/" + $scope.captalizedEntityType, {}).success(function (metaData) {
-        $scope.columnDefs = metaData.result;
+        $scope.gridOptions.columnDefs = metaData.result;
         $http.get("/rest/" + $scope.captalizedEntityType, {}).success(function (entityData) {
-            $scope.entityData = entityData.result;
-            $scope.gridOptions = {
-                enableSorting: true,
-                columnDefs: $scope.columnDefs,
-                data: $scope.entityData
-            };
-            $("#grid1").attr("ui-grid", "gridOptions");
+            $scope.gridOptions.data = entityData.result;
         })
     });
 };
