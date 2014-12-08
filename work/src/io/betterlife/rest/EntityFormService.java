@@ -1,9 +1,8 @@
 package io.betterlife.rest;
 
 import io.betterlife.application.ApplicationConfig;
+import io.betterlife.application.FormConfig;
 import io.betterlife.application.ServiceEntityManager;
-import io.betterlife.domains.BaseObject;
-import io.betterlife.persistence.BaseOperator;
 import io.betterlife.util.TemplateUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,8 +17,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,7 +31,6 @@ public class EntityFormService {
 
     private static final Logger logger = LogManager.getLogger(EntityFormService.class.getName());
 
-    private List<String> IgnoreFields;
     private TemplateUtils templateUtils;
 
     public TemplateUtils getTemplateUtils() {
@@ -48,18 +44,6 @@ public class EntityFormService {
         this.templateUtils = templateUtils;
     }
 
-    public List<String> getIgnoreFields() {
-        if (null == IgnoreFields) {
-            IgnoreFields = new ArrayList<>(8);
-            IgnoreFields.add("id");
-            IgnoreFields.add("lastModifyDate");
-            IgnoreFields.add("lastModify");
-            IgnoreFields.add("createDate");
-            IgnoreFields.add("creator");
-        }
-        return IgnoreFields;
-    }
-
     @GET @Path("/{entityType}/create")
     @Produces(MediaType.TEXT_HTML)
     public String getCreateForm(@PathParam("entityType") String entityType, @Context ServletContext context) {
@@ -69,7 +53,7 @@ public class EntityFormService {
         for (Map.Entry<String, Class> entry : meta.entrySet()) {
             final Class clazz = entry.getValue();
             final String key = entry.getKey();
-            if (getIgnoreFields().contains(key)) {
+            if (FormConfig.getInstance().getFormIgnoreFields().contains(key)) {
                 continue;
             }
             form.append("<div class='form-group'>\n");

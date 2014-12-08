@@ -1,7 +1,9 @@
 package io.betterlife.rest;
 
 import io.betterlife.application.ApplicationConfig;
+import io.betterlife.application.FormConfig;
 import io.betterlife.application.ServiceEntityManager;
+import io.betterlife.domains.BaseObject;
 import io.betterlife.persistence.BaseOperator;
 import io.betterlife.persistence.NamedQueryRules;
 import io.betterlife.util.BLStringUtils;
@@ -51,6 +53,9 @@ public class EntityService {
         Map<String, Class> meta = ServiceEntityManager.getInstance().getMetaFromEntityType(entityManager, entityType);
         List<Map<String, String>> list = new ArrayList<>(meta.size());
         for (Map.Entry<String, Class> entry : meta.entrySet()) {
+            if (FormConfig.getInstance().getFormIgnoreFields().contains(entry.getKey())){
+                continue;
+            }
             Map<String, String> map = new HashMap<>();
             map.put("field", entry.getKey());
             map.put("name", BLStringUtils.capitalize(entry.getKey()));
@@ -79,11 +84,11 @@ public class EntityService {
     @Path("/{entityType}")
     @Produces(MediaType.APPLICATION_JSON)
     public String getAllByObjectType(@PathParam("entityType") String entityType) throws IOException {
-        List<Object> result = getOperator().getBaseObjects(
+        List<BaseObject> result = getOperator().getBaseObjects(
             entityManager,
             getNamedQueryRule().getAllQueryForEntity(entityType)
         );
-        return new ExecuteResult<List<Object>>().getRestString(result);
+        return new ExecuteResult<List<BaseObject>>().getRestString(result);
     }
 
     @POST
