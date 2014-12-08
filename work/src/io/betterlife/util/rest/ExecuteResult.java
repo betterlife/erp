@@ -6,6 +6,8 @@ import org.apache.logging.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,6 +63,8 @@ public class ExecuteResult<T> implements Serializable {
         setResult(object);
         String resultStr = StringUtils.EMPTY;
         try {
+            final DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+            objectMapper.getSerializationConfig().setDateFormat(df);
             resultStr = objectMapper.writeValueAsString(this);
         } catch (Exception e) {
             logWriteValueAsStringError(object, e);
