@@ -89,7 +89,7 @@ public class EntityServiceTest {
         EntityService service = new EntityService();
         EntityMockUtil.getInstance().mockObjectsForEntityService(service);
         String userMeta = service.getEntityMeta("User");
-        JsonNode expect = JsonUtils.getInstance().stringToJsonNode("{\"success\":true,\"successMessage\":null,\"errorMessages\":[],\"result\":[{\"field\":\"id\",\"name\":\"Id\"},{\"field\":\"username\",\"name\":\"Username\"},{\"field\":\"password\",\"name\":\"Password\"}]}");
+        JsonNode expect = JsonUtils.getInstance().stringToJsonNode("{\"success\":true,\"successMessage\":null,\"errorMessages\":[],\"result\":[{\"field\":\"username\",\"name\":\"Username\"},{\"field\":\"password\",\"name\":\"Password\"}]}");
         JsonNode node = JsonUtils.getInstance().stringToJsonNode(userMeta);
         assertEquals(expect, node);
     }
