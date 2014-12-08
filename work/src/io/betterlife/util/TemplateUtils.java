@@ -63,7 +63,8 @@ public class TemplateUtils {
         return form.toString();
     }
 
-    public String getBaseObjectController(ServletContext context, EntityManager entityManager, String key, Class<? extends BaseObject> clazz) {
+    public String getBaseObjectController(ServletContext context, EntityManager entityManager,
+                                          String key, Class<? extends BaseObject> clazz) {
         List<BaseObject> objects = BaseOperator.getInstance().getBaseObjects(
             entityManager,
             NamedQueryRules.getInstance().getAllQueryForEntity(clazz.getSimpleName())
@@ -125,10 +126,14 @@ public class TemplateUtils {
 
     public String getFieldLabelHtml(String key) {
         final String label = getFieldLabel(key);
-        return String.format("<label for='%s' class='col-sm-2 control-label'>%s</label>%n", label, label);
+        return String.format("<label for='%s' class='col-sm-2 control-label'>%s</label>%n",
+                             null == key ? BLStringUtils.EMPTY : key, label);
     }
 
     public String getFieldLabel(String key) {
+        if (null == key) {
+            return BLStringUtils.EMPTY;
+        }
         return BLStringUtils.capitalize(key);
     }
 
