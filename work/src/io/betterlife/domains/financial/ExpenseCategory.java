@@ -19,15 +19,15 @@ public class ExpenseCategory extends BaseObject {
 
     public ExpenseCategory(String categoryName) {
         this();
-        setCategoryName(categoryName);
+        setName(categoryName);
     }
 
-    public void setCategoryName(String categoryName) {
-        setValue("categoryName", categoryName);
+    public void setName(String name) {
+        setValue("name", name);
     }
 
-    public String getCategoryName() {
-        return getValue("categoryName");
+    public String getName() {
+        return getValue("name");
     }
 
 }
