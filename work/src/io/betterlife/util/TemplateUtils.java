@@ -132,6 +132,10 @@ public class TemplateUtils {
         return BLStringUtils.capitalize(key);
     }
 
+    public String getListController(ServletContext context, String entityType) {
+        return getHtmlTemplate(context, "templates/list.tpl.html");
+    }
+
     public String getNgModelNameForField(String key) {
         return "entity." + key;
     }

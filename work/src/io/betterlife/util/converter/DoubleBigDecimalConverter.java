@@ -11,7 +11,7 @@ public class DoubleBigDecimalConverter<F, T> implements Converter<F, T> {
 
     private static Converter<Double, BigDecimal> instance = new DoubleBigDecimalConverter<>();
 
-    public static Converter<Double, BigDecimal> getInstance(){
+    public static Converter<Double, BigDecimal> getInstance() {
         return instance;
     }
 

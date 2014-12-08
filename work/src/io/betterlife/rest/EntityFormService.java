@@ -2,6 +2,8 @@ package io.betterlife.rest;
 
 import io.betterlife.application.ApplicationConfig;
 import io.betterlife.application.ServiceEntityManager;
+import io.betterlife.domains.BaseObject;
+import io.betterlife.persistence.BaseOperator;
 import io.betterlife.util.TemplateUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -84,16 +86,16 @@ public class EntityFormService {
         return form.toString();
     }
 
-    @GET @Path("/{entityName}/edit")
+    @GET @Path("/{entityType}/edit")
     @Produces(MediaType.TEXT_HTML)
-    public String getEditForm(@PathParam("entityName") String entityName) {
+    public String getEditForm(@PathParam("entityType") String entityType) {
         return "Edit Form";
     }
 
-    @GET @Path("/{entityName}/list")
+    @GET @Path("/{entityType}/list")
     @Produces(MediaType.TEXT_HTML)
-    public String getListForm(@PathParam("entityName") String entityName) {
-        return "List Form";
+    public String getListForm(@PathParam("entityType") String entityType, @Context ServletContext context) {
+        return getTemplateUtils().getListController(context, entityType);
     }
 
     @GET @Path("/{entityName}/detail")

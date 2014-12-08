@@ -87,9 +87,9 @@ public class EntityServiceTest {
     @Test
     public void testGetServiceEntity() throws IOException {
         EntityService service = new EntityService();
-        EntityManager manager = EntityMockUtil.getInstance().mockObjectsForEntityService(service);
+        EntityMockUtil.getInstance().mockObjectsForEntityService(service);
         String userMeta = service.getEntityMeta("User");
-        JsonNode expect = JsonUtils.getInstance().stringToJsonNode("{\"result\":{\"id\":\"java.lang.Long\",\"username\":\"java.lang.String\",\"password\":\"java.lang.String\"},\"success\":true,\"successMessage\":null,\"errorMessages\":[]}\n");
+        JsonNode expect = JsonUtils.getInstance().stringToJsonNode("{\"success\":true,\"successMessage\":null,\"errorMessages\":[],\"result\":[{\"field\":\"id\",\"name\":\"Id\"},{\"field\":\"username\",\"name\":\"Username\"},{\"field\":\"password\",\"name\":\"Password\"}]}");
         JsonNode node = JsonUtils.getInstance().stringToJsonNode(userMeta);
         assertEquals(expect, node);
     }

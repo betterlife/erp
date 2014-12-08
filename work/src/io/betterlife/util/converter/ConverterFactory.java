@@ -13,10 +13,10 @@ public class ConverterFactory {
     private static ConverterFactory instance = new ConverterFactory();
     private static Map<String, Converter> converters;
 
-    private ConverterFactory(){
+    private ConverterFactory() {
         converters = new HashMap<>();
         converters.put(getKey(String.class, Date.class), StringDateConverter.getInstance());
-        converters.put(getKey(Double.class, BigDecimal.class),  DoubleBigDecimalConverter.getInstance());
+        converters.put(getKey(Double.class, BigDecimal.class), DoubleBigDecimalConverter.getInstance());
     }
 
     private String getKey(final Class<?> fromClazz, final Class<?> toClazz) {

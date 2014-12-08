@@ -4,6 +4,7 @@ import io.betterlife.application.ApplicationConfig;
 import io.betterlife.application.ServiceEntityManager;
 import io.betterlife.persistence.BaseOperator;
 import io.betterlife.persistence.NamedQueryRules;
+import io.betterlife.util.BLStringUtils;
 import io.betterlife.util.EntityUtils;
 import io.betterlife.util.rest.ExecuteResult;
 import io.betterlife.util.IOUtil;
@@ -21,6 +22,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -46,7 +49,14 @@ public class EntityService {
     public String getEntityMeta(@PathParam("entityType") String entityType) throws IOException {
         logger.debug("Getting entity meta data for " + entityType);
         Map<String, Class> meta = ServiceEntityManager.getInstance().getMetaFromEntityType(entityManager, entityType);
-        String result = new ExecuteResult<Map<String, Class>>().getRestString(meta);
+        List<Map<String, String>> list = new ArrayList<>(meta.size());
+        for (Map.Entry<String, Class> entry : meta.entrySet()) {
+            Map<String, String> map = new HashMap<>();
+            map.put("field", entry.getKey());
+            map.put("name", BLStringUtils.capitalize(entry.getKey()));
+            list.add(map);
+        }
+        String result = new ExecuteResult<List<Map<String, String>>>().getRestString(list);
         if (logger.isTraceEnabled()){
             logger.trace("Returning \n%s\n for entity[%s] meta", result, entityType);
         }
