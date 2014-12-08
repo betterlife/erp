@@ -25,7 +25,9 @@ var listCtrl = function ($scope, $http, $location, loginService, $routeParams) {
     $scope.entityType = $routeParams.entityType;
     $scope.captalizedEntityType = $scope.entityType.charAt(0).toUpperCase() + $scope.entityType.substr(1);
     $scope.gridOptions = {
-        enableSorting: true
+        enableSorting: true,
+        enableColumnResizing: true,
+        enableGridMenu: true
     };
     $http.get("/rest/entity/" + $scope.captalizedEntityType, {}).success(function (metaData) {
         $scope.gridOptions.columnDefs = metaData.result;
