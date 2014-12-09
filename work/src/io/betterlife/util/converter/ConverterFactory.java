@@ -17,6 +17,7 @@ public class ConverterFactory {
         converters = new HashMap<>();
         converters.put(getKey(String.class, Date.class), StringDateConverter.getInstance());
         converters.put(getKey(Double.class, BigDecimal.class), DoubleBigDecimalConverter.getInstance());
+        converters.put(getKey(Integer.class, BigDecimal.class), IntegerBigDecimalConverter.getInstance());
     }
 
     private String getKey(final Class<?> fromClazz, final Class<?> toClazz) {
