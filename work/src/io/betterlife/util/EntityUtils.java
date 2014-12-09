@@ -1,6 +1,7 @@
 package io.betterlife.util;
 
 import io.betterlife.domains.BaseObject;
+import org.apache.commons.lang3.ClassUtils;
 
 import javax.persistence.EntityManager;
 import java.util.Map;
@@ -23,5 +24,10 @@ public class EntityUtils {
         if (obj instanceof BaseObject) {
             ((BaseObject) obj).setValues(entityManager, parameters);
         }
+    }
+
+
+    public boolean isBaseObject(Class clazz) {
+        return ClassUtils.isAssignable(clazz, BaseObject.class);
     }
 }

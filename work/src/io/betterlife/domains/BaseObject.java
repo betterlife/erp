@@ -4,6 +4,7 @@ import io.betterlife.domains.security.User;
 import io.betterlife.persistence.BaseOperator;
 import io.betterlife.persistence.MetaDataManager;
 import io.betterlife.persistence.NamedQueryRules;
+import io.betterlife.util.EntityUtils;
 import io.betterlife.util.converter.Converter;
 import io.betterlife.util.converter.ConverterFactory;
 import org.apache.commons.lang3.ClassUtils;
@@ -93,7 +94,7 @@ public abstract class BaseObject {
             if (logger.isTraceEnabled()) {
                 logger.trace(String.format("Setting [%s, %s] to type [%s]", value, value.getClass().getName(), clazz));
             }
-            if (ClassUtils.isAssignable(clazz, BaseObject.class)) {
+            if (EntityUtils.getInstance().isBaseObject(clazz)) {
                 final String idQueryForEntity = NamedQueryRules.getInstance().getIdQueryForEntity(clazz.getSimpleName());
                 BaseObject baseObj = BaseOperator.getInstance().getBaseObjectById(
                     entityManager, Long.parseLong((String) value),
@@ -108,8 +109,12 @@ public abstract class BaseObject {
                 final Converter converter = ConverterFactory.getInstance().getConverter(value.getClass(), clazz);
                 Object convertedValue = null;
                 try {
-                    convertedValue = converter.convert(value);
-                    setValue(key, convertedValue);
+                    if (converter != null) {
+                        convertedValue = converter.convert(value);
+                        setValue(key, convertedValue);
+                    } else {
+                        logger.warn(String.format("Failed to get converter[%s->%s] for value[%s]", value.getClass(), clazz, value));
+                    }
                 } catch (ParseException e) {
                     logger.error(String.format(
                                      "Failed to convert[%s,%s] to type [%s]", value,
