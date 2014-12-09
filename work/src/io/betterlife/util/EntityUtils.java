@@ -1,9 +1,14 @@
 package io.betterlife.util;
 
+import io.betterlife.application.ServiceEntityManager;
 import io.betterlife.domains.BaseObject;
+import io.betterlife.rest.Form;
 import org.apache.commons.lang3.ClassUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.persistence.EntityManager;
+import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
@@ -11,6 +16,9 @@ import java.util.Map;
  * Date: 11/22/14
  */
 public class EntityUtils {
+
+    private static final Logger logger = LogManager.getLogger(EntityUtils.class.getName());
+
     private static EntityUtils instance = new EntityUtils();
 
     public static EntityUtils getInstance() {
@@ -26,8 +34,25 @@ public class EntityUtils {
         }
     }
 
-
     public boolean isBaseObject(Class clazz) {
         return ClassUtils.isAssignable(clazz, BaseObject.class);
+    }
+
+    public String getRepresentField(String entityType, String field) {
+        Class entityClass = ServiceEntityManager.getInstance().getServiceEntityClass(BLStringUtils.uncapitalize(entityType));
+        try {
+            Method method = entityClass.getDeclaredMethod("get" + BLStringUtils.capitalize(field));
+            if (null != method) {
+                Form form = method.getAnnotation(Form.class);
+                if (null != form) {
+                    field = field + "." + form.RepresentField();
+                } else {
+                    field = field + ".name";
+                }
+            }
+        } catch (Exception e) {
+            logger.warn(String.format("Failed to get represent field for field[%s], class[%s]", field, entityType));
+        }
+        return field;
     }
 }

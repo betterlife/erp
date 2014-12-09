@@ -60,7 +60,7 @@ public class EntityService {
             }
             String field = entry.getKey();
             if (EntityUtils.getInstance().isBaseObject(entry.getValue())){
-                field = getRepresentField(entityType, field);
+                field = EntityUtils.getInstance().getRepresentField(entityType, field);
             }
             Map<String, String> map = new HashMap<>();
             map.put("field", field);
@@ -74,23 +74,7 @@ public class EntityService {
         return result;
     }
 
-    private String getRepresentField(String entityType, String field) {
-        Class entityClass = ServiceEntityManager.getInstance().getServiceEntityClass(BLStringUtils.uncapitalize(entityType));
-        try {
-            Method method = entityClass.getDeclaredMethod("get" + BLStringUtils.capitalize(field));
-            if (null != method) {
-                Form form = method.getAnnotation(Form.class);
-                if (null != form) {
-                    field = field + "." + form.RepresentField();
-                } else {
-                    field = field + ".name";
-                }
-            }
-        } catch (Exception e) {
-            logger.warn(String.format("Failed to get represent field for field[%s], class[%s]", field, entityType));
-        }
-        return field;
-    }
+
 
     @GET
     @Path("/{entityType}/{id}")
