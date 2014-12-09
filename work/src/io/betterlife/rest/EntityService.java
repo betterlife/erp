@@ -24,6 +24,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -56,8 +58,12 @@ public class EntityService {
             if (FormConfig.getInstance().getFormIgnoreFields().contains(entry.getKey())){
                 continue;
             }
+            String field = entry.getKey();
+            if (EntityUtils.getInstance().isBaseObject(entry.getValue())){
+                field = getRepresentField(entityType, field);
+            }
             Map<String, String> map = new HashMap<>();
-            map.put("field", entry.getKey());
+            map.put("field", field);
             map.put("name", BLStringUtils.capitalize(entry.getKey()));
             list.add(map);
         }
@@ -66,6 +72,24 @@ public class EntityService {
             logger.trace("Returning \n%s\n for entity[%s] meta", result, entityType);
         }
         return result;
+    }
+
+    private String getRepresentField(String entityType, String field) {
+        Class entityClass = ServiceEntityManager.getInstance().getServiceEntityClass(BLStringUtils.uncapitalize(entityType));
+        try {
+            Method method = entityClass.getDeclaredMethod("get" + BLStringUtils.capitalize(field));
+            if (null != method) {
+                Form form = method.getAnnotation(Form.class);
+                if (null != form) {
+                    field = field + "." + form.RepresentField();
+                } else {
+                    field = field + ".name";
+                }
+            }
+        } catch (Exception e) {
+            logger.warn(String.format("Failed to get represent field for field[%s], class[%s]", field, entityType));
+        }
+        return field;
     }
 
     @GET

@@ -2,6 +2,7 @@ package io.betterlife.domains.financial;
 
 import io.betterlife.domains.BaseObject;
 import io.betterlife.domains.security.User;
+import io.betterlife.rest.Form;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -24,6 +25,7 @@ public class Expense extends BaseObject {
     }
 
     @ManyToOne
+    @Form(RepresentField="name")
     public ExpenseCategory getExpenseCategory() {
         return getValue("expenseCategory");
     }
@@ -33,6 +35,7 @@ public class Expense extends BaseObject {
     }
 
     @ManyToOne
+    @Form(RepresentField="name")
     public CostCenter getCostCenter() {
         return getValue("costCenter");
     }
@@ -42,6 +45,7 @@ public class Expense extends BaseObject {
     }
 
     @ManyToOne
+    @Form(RepresentField="username")
     public User getUser() {
         return getValue("user");
     }
