@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
  * Author: Lawrence Liu
  * Date: 12/9/14
  */
-@Target({ElementType.METHOD, ElementType.FIELD})
+@Target({ElementType.METHOD})
 @Retention( RetentionPolicy.RUNTIME )
 public @interface Form {
 

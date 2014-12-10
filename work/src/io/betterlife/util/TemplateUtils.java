@@ -43,7 +43,7 @@ public class TemplateUtils {
 
     @SuppressWarnings("unchecked")
     public String getFieldController(ServletContext context, EntityManager entityManager,
-                                     String key, Class clazz, String label) {
+                                     String entityType, String key, Class clazz, String label) {
         StringBuilder form = new StringBuilder();
         form.append("<div class='col-sm-4'>");
         if (String.class.equals(clazz)) {
@@ -57,21 +57,22 @@ public class TemplateUtils {
         } else if (Boolean.class.equals(clazz)) {
             form.append(getBooleanController(key));
         } else if (ClassUtils.getAllSuperclasses(clazz).contains(BaseObject.class)) {
-            form.append(getBaseObjectController(context, entityManager, key, clazz));
+            form.append(getBaseObjectController(context, entityManager, entityType, key, clazz));
         }
         form.append("</div>");
         return form.toString();
     }
 
     public String getBaseObjectController(ServletContext context, EntityManager entityManager,
-                                          String key, Class<? extends BaseObject> clazz) {
+                                          String entityType, String key, Class<? extends BaseObject> clazz) {
         List<BaseObject> objects = BaseOperator.getInstance().getBaseObjects(
             entityManager,
             NamedQueryRules.getInstance().getAllQueryForEntity(clazz.getSimpleName())
         );
+        String representField = EntityUtils.getInstance().getRepresentField(entityType, key);
         StringBuilder sb = new StringBuilder();
         for (BaseObject baseObject : objects) {
-            sb.append(String.format("<option value='%s'>%s</option>\n", baseObject.getId(), baseObject.getId()));
+            sb.append(String.format("<option value='%s'>%s</option>\n", baseObject.getId(), baseObject.getValue(representField)));
         }
         String template = getHtmlTemplate(context, "templates/fields/baseobject.tpl.html");
         return template

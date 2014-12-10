@@ -24,8 +24,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,7 +58,7 @@ public class EntityService {
             }
             String field = entry.getKey();
             if (EntityUtils.getInstance().isBaseObject(entry.getValue())){
-                field = EntityUtils.getInstance().getRepresentField(entityType, field);
+                field = EntityUtils.getInstance().getRepresentFieldWithDot(entityType, field);
             }
             Map<String, String> map = new HashMap<>();
             map.put("field", field);

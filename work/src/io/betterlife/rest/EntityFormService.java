@@ -59,7 +59,7 @@ public class EntityFormService {
             form.append("<div class='form-group'>\n");
             form.append(getTemplateUtils().getFieldLabelHtml(key));
             form.append(getTemplateUtils().getFieldController(
-                            context, entityManager, key,
+                            context, entityManager, entityType, key,
                             clazz, getTemplateUtils().getFieldLabel(key)
                         ));
             form.append("</div>");

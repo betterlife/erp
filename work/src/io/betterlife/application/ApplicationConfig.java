@@ -37,4 +37,8 @@ public class ApplicationConfig {
         ServiceEntityManager.getInstance().registerServiceEntity("costCenter", CostCenter.class);
         ServiceEntityManager.getInstance().registerServiceEntity("expense", Expense.class);
     }
+
+    public static String getDefaultRepresentField(){
+        return "name";
+    }
 }

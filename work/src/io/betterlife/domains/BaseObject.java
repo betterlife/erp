@@ -41,13 +41,13 @@ public abstract class BaseObject {
     }
 
     @Transient
-    protected <T> T getValue(String fieldName) {
+    public <T> T getValue(String fieldName) {
         @SuppressWarnings("unchecked")
         T result = (T) _map.get(fieldName);
         return result;
     }
 
-    protected <T> void setValue(String fieldName, T value) {
+    public <T> void setValue(String fieldName, T value) {
         _map.put(fieldName, value);
     }
 
