@@ -72,7 +72,7 @@ public class TemplateUtils {
         String representField = EntityUtils.getInstance().getRepresentField(entityType, key);
         StringBuilder sb = new StringBuilder();
         for (BaseObject baseObject : objects) {
-            sb.append(String.format("<option value='%s'>%s</option>\n", baseObject.getId(), baseObject.getValue(representField)));
+            sb.append(String.format("<option value='%s'>%s</option>%n", baseObject.getId(), baseObject.getValue(representField)));
         }
         String template = getHtmlTemplate(context, "templates/fields/baseobject.tpl.html");
         return template
