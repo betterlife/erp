@@ -36,4 +36,11 @@ public class User extends BaseObject {
         return getValue("password");
     }
 
+    public String getDisplayName() {
+        return getValue("displayName");
+    }
+
+    public void setDisplayName(String displayName) {
+        setValue("displayName", displayName);
+    }
 }

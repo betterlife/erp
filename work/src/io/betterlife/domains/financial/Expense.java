@@ -45,7 +45,7 @@ public class Expense extends BaseObject {
     }
 
     @ManyToOne
-    @Form(RepresentField="username")
+    @Form(RepresentField="displayName")
     public User getUser() {
         return getValue("user");
     }
