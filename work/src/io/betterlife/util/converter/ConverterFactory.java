@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class ConverterFactory {
     private static ConverterFactory instance = new ConverterFactory();
-    private static Map<String, Converter> converters;
+    private Map<String, Converter> converters;
 
     private ConverterFactory() {
         converters = new HashMap<>();
