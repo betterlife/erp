@@ -1,4 +1,4 @@
-package io.betterlife.io.betterlife.domains.security;
+package io.betterlife.rest;
 
 import io.betterlife.domains.security.User;
 import io.betterlife.persistence.BaseOperator;

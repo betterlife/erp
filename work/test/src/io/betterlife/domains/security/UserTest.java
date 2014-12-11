@@ -1,7 +1,10 @@
 package io.betterlife.domains.security;
 
+import io.betterlife.util.EntityVerifyUtil;
 import org.junit.Before;
 import org.junit.Test;
+
+import javax.persistence.Entity;
 
 import static org.junit.Assert.*;
 
@@ -18,8 +21,9 @@ public class UserTest {
     public void testGetUsername() throws Exception {
         final String username = "lxq";
         user.setUsername(username);
-        assertNotNull(user.getUsername());
-        assertEquals(username, user.getUsername());
+        final String username1 = user.getUsername();
+        assertNotNull(username1);
+        assertSame(username, username1);
     }
 
     @Test
@@ -28,16 +32,18 @@ public class UserTest {
         user.setUsername(username);
         final String newUsername = "newUserName";
         user.setUsername(newUsername);
-        assertEquals(newUsername, user.getUsername());
-        assertNotEquals(username, user.getUsername());
+        final String username1 = user.getUsername();
+        assertNotEquals(username, username1);
+        assertSame(newUsername, username1);
     }
 
     @Test
     public void testSetPassword() throws Exception {
         final String oldPassword = "passwOrd";
         user.setPassword(oldPassword);
-        assertNotNull(user.getPassword());
-        assertEquals(oldPassword, user.getPassword());
+        final String password = user.getPassword();
+        assertNotNull(password);
+        assertSame(oldPassword, password);
     }
 
     @Test
@@ -46,17 +52,19 @@ public class UserTest {
         user.setPassword(oldPwd);
         final String newPwd = "Passw0rd";
         user.setPassword(newPwd);
-        assertNotNull(user.getPassword());
-        assertEquals(newPwd, user.getPassword());
-        assertNotEquals(oldPwd, user.getPassword());
+        final String password = user.getPassword();
+        assertNotNull(password);
+        assertNotEquals(oldPwd, password);
+        assertSame(newPwd, password);
     }
 
     @Test
     public void testGetDisplayName() throws Exception {
         final String dn = "Liu Xiangqian";
         user.setDisplayName(dn);
-        assertNotNull(user.getDisplayName());
-        assertEquals(dn, user.getDisplayName());
+        final String displayName = user.getDisplayName();
+        assertNotNull(displayName);
+        assertSame(dn, displayName);
     }
 
     @Test
@@ -65,8 +73,27 @@ public class UserTest {
         user.setDisplayName(dn);
         final String nDn = "New Liu Xiangqian";
         user.setDisplayName(nDn);
-        assertNotNull(user.getDisplayName());
-        assertEquals(nDn, user.getDisplayName());
-        assertNotEquals(dn, user.getDisplayName());
+        final String displayName = user.getDisplayName();
+        assertNotNull(displayName);
+        assertEquals(nDn, displayName);
+        assertSame(nDn, displayName);
     }
+
+    @Test
+    public void testEntityAnnotationDefined() {
+        Entity userEntity = User.class.getAnnotation(Entity.class);
+        assertNotNull(userEntity);
+        assertEquals("UserEntity", userEntity.name());
+    }
+
+    @Test
+    public void testGetAllQueryDefined() {
+        EntityVerifyUtil.getInstance().verifyQueryDefined(User.class, User.class.getSimpleName() + "." + "getAll");
+    }
+
+    @Test
+    public void testGetByIdQueryDefined() {
+        EntityVerifyUtil.getInstance().verifyQueryDefined(User.class, User.class.getSimpleName() + "." + "getById");
+    }
+
 }
