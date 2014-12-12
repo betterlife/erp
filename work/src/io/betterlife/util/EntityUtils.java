@@ -29,10 +29,8 @@ public class EntityUtils {
     private EntityUtils() {
     }
 
-    public void mapToBaseObject(EntityManager entityManager, Object obj, Map<String, String> parameters) {
-        if (obj instanceof BaseObject) {
-            ((BaseObject) obj).setValues(entityManager, parameters);
-        }
+    public void mapToBaseObject(EntityManager entityManager, BaseObject obj, Map<String, Object> parameters) {
+        obj.setValues(entityManager, parameters);
     }
 
     public boolean isBaseObject(Class clazz) {

@@ -24,10 +24,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Author: Lawrence Liu(xqinliu@cn.ibm.com)
@@ -97,6 +94,26 @@ public class EntityService {
         return new ExecuteResult<List<BaseObject>>().getRestString(result);
     }
 
+    @PUT
+    @Path("/{entityType}/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public String update(@PathParam("entityType") String entityType,
+                         @PathParam("id") int id,
+                         @Context HttpServletRequest request,
+                         InputStream requestBody)
+        throws ClassNotFoundException, IllegalAccessException, InstantiationException, IOException {
+        Map<String, Object> parameters = IOUtil.getInstance().inputStreamToJson(requestBody);
+        Map<String, Object> entityParams = (Map<String, Object>) parameters.get("entity");
+        BaseObject existingObj = getOperator().getBaseObjectById(
+            entityManager, id, getNamedQueryRule().getIdQueryForEntity(entityType)
+        );
+        if (null != existingObj) {
+            existingObj.setValues(entityManager, entityParams);
+        }
+        return new ExecuteResult<String>().getRestString("SUCCESS");
+    }
+
     @POST
     @Path("/{entityType}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -106,8 +123,8 @@ public class EntityService {
                          InputStream requestBody)
         throws ClassNotFoundException, IllegalAccessException, InstantiationException, IOException {
         Map<String, Object> parameters = IOUtil.getInstance().inputStreamToJson(requestBody);
-        Object obj = ServiceEntityManager.getInstance().entityObjectFromType(entityType);
-        EntityUtils.getInstance().mapToBaseObject(entityManager, obj, (Map<String, String>)parameters.get("entity"));
+        BaseObject obj = ServiceEntityManager.getInstance().entityObjectFromType(entityType);
+        EntityUtils.getInstance().mapToBaseObject(entityManager, obj, (Map<String, Object>)parameters.get("entity"));
         getOperator().save(entityManager, obj);
         return new ExecuteResult<String>().getRestString("SUCCESS");
     }
