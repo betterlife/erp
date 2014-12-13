@@ -16,6 +16,7 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Author: Lawrence Liu(xqinliu@cn.ibm.com)
@@ -85,9 +86,9 @@ public abstract class BaseObject {
         return getValue("creator");
     }
 
-    public void setValues(EntityManager entityManager, Map<String, String> parameters) {
+    public void setValues(EntityManager entityManager, Map<String, Object> parameters) {
         MetaDataManager.getInstance().setAllFieldMetaData(entityManager);
-        for (Map.Entry<String, String> entry : parameters.entrySet()) {
+        for (Map.Entry<String, Object> entry : parameters.entrySet()) {
             String key = entry.getKey();
             Object value = entry.getValue();
             Class clazz = MetaDataManager.getInstance().getFieldMetaData(this.getClass(), key);
