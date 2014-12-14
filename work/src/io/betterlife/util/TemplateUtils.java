@@ -58,9 +58,24 @@ public class TemplateUtils {
             form.append(getBooleanController(key));
         } else if (ClassUtils.getAllSuperclasses(clazz).contains(BaseObject.class)) {
             form.append(getBaseObjectController(context, entityManager, entityType, key, clazz));
+        } else if (Enum.class.isAssignableFrom(clazz)){
+            form.append(getEnumController(context, key, clazz));
         }
         form.append("</div>");
         return form.toString();
+    }
+
+    private String getEnumController(ServletContext context, String key, Class clazz) {
+        Object[] enumArray = clazz.getEnumConstants();
+        StringBuilder sb = new StringBuilder();
+        for (Object enumVal : enumArray) {
+            sb.append(String.format("<option value='%s'>%s</option>%n", enumVal.toString(), enumVal.toString()));
+        }
+        String template = getHtmlTemplate(context, "templates/fields/enum.tpl.html");
+        return template
+            .replaceAll("\\$name", key)
+            .replaceAll("\\$ngModel", getNgModelNameForField(key))
+            .replaceAll("\\$options", sb.toString());
     }
 
     public String getBaseObjectController(ServletContext context, EntityManager entityManager,

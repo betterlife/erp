@@ -74,6 +74,7 @@ public class Fund extends BaseObject {
         return getValue("date");
     }
 
+    @Enumerated(EnumType.STRING)
     public FundType getFundType() {
         return getValue("fundType");
     }
