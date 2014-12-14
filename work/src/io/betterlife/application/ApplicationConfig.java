@@ -1,8 +1,8 @@
 package io.betterlife.application;
 
 import io.betterlife.domains.financial.CostCenter;
-import io.betterlife.domains.financial.Expense;
-import io.betterlife.domains.financial.ExpenseCategory;
+import io.betterlife.domains.financial.Fund;
+import io.betterlife.domains.financial.FundCategory;
 import io.betterlife.domains.security.User;
 
 /**
@@ -32,10 +32,10 @@ public class ApplicationConfig {
      *  Generate meta data for creation of front end CRUD UI.
      */
     public static void registerEntities(){
-        ServiceEntityManager.getInstance().registerServiceEntity("expenseCategory", ExpenseCategory.class);
+        ServiceEntityManager.getInstance().registerServiceEntity("fundCategory", FundCategory.class);
         ServiceEntityManager.getInstance().registerServiceEntity("user", User.class);
         ServiceEntityManager.getInstance().registerServiceEntity("costCenter", CostCenter.class);
-        ServiceEntityManager.getInstance().registerServiceEntity("expense", Expense.class);
+        ServiceEntityManager.getInstance().registerServiceEntity("fund", Fund.class);
     }
 
     public static String getDefaultRepresentField(){

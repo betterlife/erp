@@ -15,18 +15,18 @@ import java.util.Date;
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name = "Expense.getById", query = "SELECT e FROM Expense e WHERE e.id = :id "),
-    @NamedQuery(name = "Expense.getAll",  query = "SELECT e FROM Expense e")
+    @NamedQuery(name = "Fund.getById", query = "SELECT e FROM Fund e WHERE e.id = :id "),
+    @NamedQuery(name = "Fund.getAll",  query = "SELECT e FROM Fund e")
 })
-public class Expense extends BaseObject {
+public class Fund extends BaseObject {
 
-    public void setExpenseCategory(ExpenseCategory expenseCategory) {
-        setValue("expenseCategory", expenseCategory);
+    public void setExpenseCategory(FundCategory fundCategory) {
+        setValue("expenseCategory", fundCategory);
     }
 
     @ManyToOne
     @Form(RepresentField="name")
-    public ExpenseCategory getExpenseCategory() {
+    public FundCategory getExpenseCategory() {
         return getValue("expenseCategory");
     }
 
@@ -72,5 +72,13 @@ public class Expense extends BaseObject {
 
     public Date getDate() {
         return getValue("date");
+    }
+
+    public FundType getFundType() {
+        return getValue("fundType");
+    }
+
+    public void setFundType(FundType fundType) {
+        setValue("fundType", fundType);
     }
 }

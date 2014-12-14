@@ -7,21 +7,20 @@ import org.junit.Test;
 import javax.persistence.Entity;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
-public class ExpenseCategoryTest {
+public class FundCategoryTest {
 
-    private ExpenseCategory expenseCategory;
+    private FundCategory fundCategory;
 
     @Before
     public void setUp() throws Exception {
-        expenseCategory = new ExpenseCategory();
+        fundCategory = new FundCategory();
     }
 
     @Test
     public void testConstructorWithParam() {
         final String name = "Expense Category Name";
-        ExpenseCategory cc = new ExpenseCategory(name);
+        FundCategory cc = new FundCategory(name);
         assertNotNull(cc);
         assertEquals(name, cc.getName());
     }
@@ -29,20 +28,20 @@ public class ExpenseCategoryTest {
     @Test
     public void testSetName() throws Exception {
         final String name = "A Expense Category Name";
-        expenseCategory.setName(name);
+        fundCategory.setName(name);
         final String newName = "New Expense Category Name";
-        expenseCategory.setName(newName);
-        assertNotNull(expenseCategory.getName());
-        assertNotEquals(name, expenseCategory.getName());
-        assertEquals(newName, expenseCategory.getName());
+        fundCategory.setName(newName);
+        assertNotNull(fundCategory.getName());
+        assertNotEquals(name, fundCategory.getName());
+        assertEquals(newName, fundCategory.getName());
     }
 
     @Test
     public void testGetName() throws Exception {
         final String name = "A Expense Category Name";
-        expenseCategory.setName(name);
-        assertNotNull(expenseCategory.getName());
-        assertEquals(name, expenseCategory.getName());
+        fundCategory.setName(name);
+        assertNotNull(fundCategory.getName());
+        assertEquals(name, fundCategory.getName());
     }
 
     @Test
@@ -53,11 +52,11 @@ public class ExpenseCategoryTest {
 
     @Test
     public void testGetAllQueryDefined() {
-        EntityVerifyUtil.getInstance().verifyQueryDefined(ExpenseCategory.class, ExpenseCategory.class.getSimpleName() + "." + "getAll");
+        EntityVerifyUtil.getInstance().verifyQueryDefined(FundCategory.class, FundCategory.class.getSimpleName() + "." + "getAll");
     }
 
     @Test
     public void testGetByIdQueryDefined() {
-        EntityVerifyUtil.getInstance().verifyQueryDefined(ExpenseCategory.class, ExpenseCategory.class.getSimpleName() + "." + "getById");
+        EntityVerifyUtil.getInstance().verifyQueryDefined(FundCategory.class, FundCategory.class.getSimpleName() + "." + "getById");
     }
 }

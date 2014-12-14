@@ -55,9 +55,9 @@
                         <li ng-class="{active: (isActive('/dashboard') || isActive('/'))}">
                             <a href="/dashboard" ng-show="isLoggedIn()">Dashboard</a>
                         </li>
-                        <menuitem entitylabel="Expense Category" ng-show="isLoggedIn()"></menuitem>
+                        <menuitem entitylabel="Fund Category" ng-show="isLoggedIn()"></menuitem>
                         <menuitem entitylabel="Cost Center" ng-show="isLoggedIn()"></menuitem>
-                        <menuitem entitylabel="Expense" ng-show="isLoggedIn()"></menuitem>
+                        <menuitem entitylabel="Fund" ng-show="isLoggedIn()"></menuitem>
                         <li><a href="/login" ng-show="!isLoggedIn()">Login</a></li>
                         <li><a href="/logout" ng-show="isLoggedIn()">Logout</a></li>
                     </ul>
