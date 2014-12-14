@@ -20,14 +20,14 @@ import java.util.Date;
 })
 public class Fund extends BaseObject {
 
-    public void setExpenseCategory(FundCategory fundCategory) {
-        setValue("expenseCategory", fundCategory);
+    public void setFundCategory(FundCategory fundCategory) {
+        setValue("fundCategory", fundCategory);
     }
 
     @ManyToOne
     @Form(RepresentField="name")
-    public FundCategory getExpenseCategory() {
-        return getValue("expenseCategory");
+    public FundCategory getFundCategory() {
+        return getValue("fundCategory");
     }
 
     public void setCostCenter(CostCenter costCenter) {
