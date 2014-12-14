@@ -46,7 +46,9 @@ public class EntityService {
     @Path("/entity/{entityType}")
     @Produces(MediaType.APPLICATION_JSON)
     public String getEntityMeta(@PathParam("entityType") String entityType) throws IOException {
-        logger.debug("Getting entity meta data for " + entityType);
+        if (logger.isTraceEnabled()) {
+            logger.trace("Getting entity meta data for " + entityType);
+        }
         Map<String, Class> meta = ServiceEntityManager.getInstance().getMetaFromEntityType(entityManager, entityType);
         List<Map<String, String>> list = new ArrayList<>(meta.size());
         for (Map.Entry<String, Class> entry : meta.entrySet()) {
