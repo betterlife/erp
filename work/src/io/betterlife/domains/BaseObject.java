@@ -10,6 +10,7 @@ import io.betterlife.util.converter.ConverterFactory;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.text.ParseException;
@@ -23,6 +24,7 @@ import java.util.Objects;
  * Date: 10/31/14
  */
 @MappedSuperclass
+@JsonIgnoreProperties({"creator", "lastModify"})
 public abstract class BaseObject {
 
     private static final Logger logger = LogManager.getLogger(BaseObject.class.getName());
@@ -106,6 +108,10 @@ public abstract class BaseObject {
                 }
             } else if (ClassUtils.isAssignable(value.getClass(), clazz)) {
                 setValue(key, value);
+            } else if (Enum.class.isAssignableFrom(clazz) && value instanceof String) {
+                @SuppressWarnings("unchecked")
+                Enum enumVal = Enum.valueOf((Class<? extends Enum>)clazz, (String) value);
+                setValue(key, enumVal);
             } else {
                 final Converter converter = ConverterFactory.getInstance().getConverter(value.getClass(), clazz);
                 Object convertedValue = null;

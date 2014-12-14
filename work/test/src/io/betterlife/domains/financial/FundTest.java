@@ -24,10 +24,10 @@ public class FundTest {
     @Test
     public void testSetExpenseCategory() throws Exception {
         FundCategory category = mock(FundCategory.class);
-        fund.setExpenseCategory(category);
+        fund.setFundCategory(category);
         FundCategory category1 = mock(FundCategory.class);
-        fund.setExpenseCategory(category1);
-        final FundCategory fundCategory = fund.getExpenseCategory();
+        fund.setFundCategory(category1);
+        final FundCategory fundCategory = fund.getFundCategory();
         assertNotNull(fundCategory);
         assertNotEquals(category, fundCategory);
         assertSame(category1, fundCategory);
@@ -36,8 +36,8 @@ public class FundTest {
     @Test
     public void testGetExpenseCategory() throws Exception {
         FundCategory category = mock(FundCategory.class);
-        fund.setExpenseCategory(category);
-        final FundCategory fundCategory = fund.getExpenseCategory();
+        fund.setFundCategory(category);
+        final FundCategory fundCategory = fund.getFundCategory();
         assertNotNull(fundCategory);
         assertSame(category, fundCategory);
     }
