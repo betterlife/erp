@@ -156,7 +156,8 @@ public class TemplateUtils {
     public String getFieldLabelHtml(String key) {
         final String label = getFieldLabel(key);
         return String.format("<label for='%s' class='col-sm-2 control-label' id='%s-label'>%s</label>%n",
-                             null == key ? BLStringUtils.EMPTY : key, key, label);
+                             null == key ? BLStringUtils.EMPTY : key,
+                             null == key ? BLStringUtils.EMPTY : key, label);
     }
 
     public String getFieldLabel(String key) {

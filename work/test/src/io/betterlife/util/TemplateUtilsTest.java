@@ -128,15 +128,15 @@ public class TemplateUtilsTest {
 
     @Test
     public void testGetFieldLabelHtml() throws Exception {
-        assertEquals("<label for='user' class='col-sm-2 control-label'>User</label>\n",
+        assertEquals("<label for='user' class='col-sm-2 control-label' id='user-label'>User</label>\n",
                      templateUtils.getFieldLabelHtml("user"));
-        assertEquals("<label for='expense' class='col-sm-2 control-label'>Expense</label>\n",
+        assertEquals("<label for='expense' class='col-sm-2 control-label' id='expense-label'>Expense</label>\n",
                      templateUtils.getFieldLabelHtml("expense"));
-        assertEquals("<label for='expenseCategory' class='col-sm-2 control-label'>ExpenseCategory</label>\n",
+        assertEquals("<label for='expenseCategory' class='col-sm-2 control-label' id='expenseCategory-label'>ExpenseCategory</label>\n",
                      templateUtils.getFieldLabelHtml("expenseCategory"));
-        assertEquals("<label for='' class='col-sm-2 control-label'></label>\n",
+        assertEquals("<label for='' class='col-sm-2 control-label' id='-label'></label>\n",
                      templateUtils.getFieldLabelHtml(null));
-        assertEquals("<label for='' class='col-sm-2 control-label'></label>\n",
+        assertEquals("<label for='' class='col-sm-2 control-label' id='-label'></label>\n",
                      templateUtils.getFieldLabelHtml(""));
     }
 
