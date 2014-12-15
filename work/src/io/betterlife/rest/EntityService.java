@@ -52,7 +52,7 @@ public class EntityService {
         Map<String, Class> meta = ServiceEntityManager.getInstance().getMetaFromEntityType(entityManager, entityType);
         List<Map<String, String>> list = new ArrayList<>(meta.size());
         for (Map.Entry<String, Class> entry : meta.entrySet()) {
-            if (FormConfig.getInstance().getFormIgnoreFields().contains(entry.getKey())){
+            if (FormConfig.getInstance().getListFormIgnoreFields().contains(entry.getKey())){
                 continue;
             }
             String field = entry.getKey();

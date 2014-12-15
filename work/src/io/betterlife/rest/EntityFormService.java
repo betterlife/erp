@@ -53,7 +53,7 @@ public class EntityFormService {
         for (Map.Entry<String, Class> entry : meta.entrySet()) {
             final Class clazz = entry.getValue();
             final String key = entry.getKey();
-            if (FormConfig.getInstance().getFormIgnoreFields().contains(key)) {
+            if (FormConfig.getInstance().getCreateFormIgnoreFields().contains(key)) {
                 continue;
             }
             form.append("<div class='form-group'>\n");
@@ -70,9 +70,11 @@ public class EntityFormService {
         return form.toString();
     }
 
-    @GET @Path("/{entityType}/edit")
+    @GET @Path("/{entityType}/edit/{id}")
     @Produces(MediaType.TEXT_HTML)
-    public String getEditForm(@PathParam("entityType") String entityType) {
+    public String getEditForm(@PathParam("entityType") String entityType,
+                              @Context ServletContext context,
+                              @PathParam("id") int id) {
         return "Edit Form";
     }
 

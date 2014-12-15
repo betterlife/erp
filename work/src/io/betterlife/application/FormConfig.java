@@ -19,10 +19,22 @@ public class FormConfig {
     private FormConfig() {
     }
 
-    public List<String> getFormIgnoreFields() {
+    public List<String> getCreateFormIgnoreFields() {
         if (null == FormIgnoreFields) {
             FormIgnoreFields = new ArrayList<>(8);
             FormIgnoreFields.add("id");
+            FormIgnoreFields.add("lastModifyDate");
+            FormIgnoreFields.add("lastModify");
+            FormIgnoreFields.add("createDate");
+            FormIgnoreFields.add("creator");
+        }
+        return FormIgnoreFields;
+    }
+
+
+    public List<String> getListFormIgnoreFields() {
+        if (null == FormIgnoreFields) {
+            FormIgnoreFields = new ArrayList<>(4);
             FormIgnoreFields.add("lastModifyDate");
             FormIgnoreFields.add("lastModify");
             FormIgnoreFields.add("createDate");
