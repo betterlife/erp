@@ -47,6 +47,7 @@ public class BaseOperator {
             }
             bo.setLastModifyDate(new Date());
             em.persist(obj);
+            em.flush();
         }
     }
 

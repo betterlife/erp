@@ -112,6 +112,7 @@ public class EntityService {
         if (null != existingObj) {
             existingObj.setValues(entityManager, entityParams);
         }
+        getOperator().save(entityManager, existingObj);
         return new ExecuteResult<String>().getRestString("SUCCESS");
     }
 

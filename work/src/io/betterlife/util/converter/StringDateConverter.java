@@ -20,6 +20,11 @@ public class StringDateConverter<F, T> implements Converter<F, T> {
     public T convert(F sourceStr) throws ParseException {
         String s = (String) sourceStr;
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX");
-        return (T) dateFormat.parse(s);
+        try {
+            return (T) dateFormat.parse(s);
+        } catch (Exception e) {
+            dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+            return (T) dateFormat.parse(s);
+        }
     }
 }

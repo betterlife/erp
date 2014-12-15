@@ -92,7 +92,7 @@ public class EntityFormService {
                         ));
             form.append("</div>");
         }
-        form.append(getTemplateUtils().getButtonsController(context, entityType, "Edit"));
+        form.append(getTemplateUtils().getButtonsController(context, entityType, "Update"));
         form.append("</div>");
         form.append("<br/>");
         return form.toString();

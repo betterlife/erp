@@ -14,10 +14,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.text.ParseException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Author: Lawrence Liu(lawrence@betterlife.io)
@@ -99,10 +96,16 @@ public abstract class BaseObject {
             }
             if (EntityUtils.getInstance().isBaseObject(clazz)) {
                 final String idQueryForEntity = NamedQueryRules.getInstance().getIdQueryForEntity(clazz.getSimpleName());
-                BaseObject baseObj = BaseOperator.getInstance().getBaseObjectById(
-                    entityManager, Long.parseLong((String) value),
-                    idQueryForEntity
-                );
+                if (value instanceof LinkedHashMap) {
+                    value = ((LinkedHashMap) value).get("id");
+                }
+                if (value instanceof String) {
+                    value = Long.parseLong((String) value);
+                }
+                if (value instanceof Integer) {
+                    value = (long) ((Integer) value);
+                }
+                BaseObject baseObj = BaseOperator.getInstance().getBaseObjectById(entityManager, (Long) value, idQueryForEntity);
                 if (null != baseObj) {
                     setValue(key, baseObj);
                 }

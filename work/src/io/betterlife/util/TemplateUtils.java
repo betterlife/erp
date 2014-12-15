@@ -150,6 +150,7 @@ public class TemplateUtils {
         String template = getHtmlTemplate(context, "templates/fields/buttons.tpl.html");
         return template
             .replaceAll("\\$operationType", operationType)
+            .replaceAll("\\$operation", BLStringUtils.uncapitalize(operationType))
             .replaceAll("\\$entityType", entityType);
     }
 
