@@ -6,7 +6,7 @@ import io.betterlife.domains.financial.FundCategory;
 import io.betterlife.domains.security.User;
 
 /**
- * Author: Lawrence Liu(xqinliu@cn.ibm.com)
+ * Author: Lawrence Liu(lawrence@betterlife.io)
  * Date: 10/31/14
  * Application config
  */

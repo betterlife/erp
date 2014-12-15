@@ -8,7 +8,7 @@ import javax.persistence.EntityManager;
 import java.util.*;
 
 /**
- * Author: Lawrence Liu(xqinliu@cn.ibm.com)
+ * Author: Lawrence Liu(lawrence@betterlife.io)
  * Date: 10/31/14
  */
 public class BaseOperator {

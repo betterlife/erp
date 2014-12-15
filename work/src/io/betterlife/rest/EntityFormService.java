@@ -64,7 +64,7 @@ public class EntityFormService {
                         ));
             form.append("</div>");
         }
-        form.append(getTemplateUtils().getButtonsController(context, entityType));
+        form.append(getTemplateUtils().getButtonsController(context, entityType, "Create"));
         form.append("</div>");
         form.append("<br/>");
         return form.toString();
@@ -75,7 +75,27 @@ public class EntityFormService {
     public String getEditForm(@PathParam("entityType") String entityType,
                               @Context ServletContext context,
                               @PathParam("id") int id) {
-        return "Edit Form";
+        Map<String, Class> meta = ServiceEntityManager.getInstance().getMetaFromEntityType(entityManager, entityType);
+        StringBuilder form = new StringBuilder();
+        form.append("<div class='form-group form-horizontal'>");
+        for (Map.Entry<String, Class> entry : meta.entrySet()) {
+            final Class clazz = entry.getValue();
+            final String key = entry.getKey();
+            if (FormConfig.getInstance().getEditFormIgnoreFields().contains(key)) {
+                continue;
+            }
+            form.append("<div class='form-group'>\n");
+            form.append(getTemplateUtils().getFieldLabelHtml(key));
+            form.append(getTemplateUtils().getFieldController(
+                            context, entityManager, entityType, key,
+                            clazz, getTemplateUtils().getFieldLabel(key)
+                        ));
+            form.append("</div>");
+        }
+        form.append(getTemplateUtils().getButtonsController(context, entityType, "Edit"));
+        form.append("</div>");
+        form.append("<br/>");
+        return form.toString();
     }
 
     @GET @Path("/{entityType}/list")

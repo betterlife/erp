@@ -60,4 +60,8 @@ public class EntityUtils {
         }
         return ApplicationConfig.getDefaultRepresentField();
     }
+
+    public boolean isIdField(String key) {
+        return "id".equals(key);
+    }
 }

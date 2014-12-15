@@ -5,6 +5,7 @@
 var createCtrl = function ($scope, $http, $location, loginService, $routeParams) {
     "use strict";
     $scope.entityType = $routeParams.entityType;
+    $scope.captalizedEntityType = $scope.entityType.charAt(0).toUpperCase() + $scope.entityType.substr(1);
     $scope.entity = {
     };
 
@@ -15,7 +16,7 @@ var createCtrl = function ($scope, $http, $location, loginService, $routeParams)
     };
 
     $scope.create = function () {
-        $http.post("/rest/" + $scope.entityType, {
+        $http.post("/rest/" + $scope.captalizedEntityType, {
             'entity' : $scope.entity
         },{}).success(function (data) {
             console.log(data);

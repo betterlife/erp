@@ -5,6 +5,7 @@
 var editCtrl = function ($scope, $http, $location, loginService, $routeParams) {
     "use strict";
     $scope.entityType = $routeParams.entityType;
+    $scope.captalizedEntityType = $scope.entityType.charAt(0).toUpperCase() + $scope.entityType.substr(1);
     $scope.id = $routeParams.id;
     $scope.entity = {};
 
@@ -13,6 +14,11 @@ var editCtrl = function ($scope, $http, $location, loginService, $routeParams) {
         $event.stopPropagation();
         $scope.opened = true;
     };
+
+    $http.get("/rest/" + $scope.captalizedEntityType + "/" + $scope.id, {}).success(function (data) {
+        console.log(data);
+        $scope.entity = data.result;
+    });
 
     $scope.update = function () {
         $http.put("/rest/" + $scope.entityType + "/" + $scope.id, {

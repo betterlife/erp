@@ -5,7 +5,7 @@ import io.betterlife.domains.BaseObject;
 import javax.persistence.*;
 
 /**
- * Author: Lawrence Liu(xqinliu@cn.ibm.com)
+ * Author: Lawrence Liu(lawrence@betterlife.io)
  * Date: 10/31/14
  */
 

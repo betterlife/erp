@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Author: Lawrence Liu(xqinliu@cn.ibm.com)
+ * Author: Lawrence Liu(lawrence@betterlife.io)
  * Date: 10/28/14
  */
 public class TemplateUtils {
@@ -46,7 +46,9 @@ public class TemplateUtils {
                                      String entityType, String key, Class clazz, String label) {
         StringBuilder form = new StringBuilder();
         form.append("<div class='col-sm-4'>");
-        if (String.class.equals(clazz)) {
+        if (EntityUtils.getInstance().isIdField(key)) {
+            form.append(getIdController(context, key, label));
+        }  else if (String.class.equals(clazz)) {
             form.append(getStringController(context, key, label));
         } else if (Date.class.equals(clazz)) {
             form.append(getDateController(context, key));
@@ -63,6 +65,15 @@ public class TemplateUtils {
         }
         form.append("</div>");
         return form.toString();
+    }
+
+    private String getIdController(ServletContext context, String key, String label) {
+        String template = getHtmlTemplate(context, "templates/fields/string.tpl.html");
+        return template
+            .replaceAll("\\$name", key)
+            .replaceAll("\\$ngModel", getNgModelNameForField(key))
+            .replaceAll("\\$placeholder", label)
+            .replaceAll("\\$type", "hidden");
     }
 
     private String getEnumController(ServletContext context, String key, Class clazz) {
@@ -92,7 +103,7 @@ public class TemplateUtils {
         String template = getHtmlTemplate(context, "templates/fields/baseobject.tpl.html");
         return template
             .replaceAll("\\$name", key)
-            .replaceAll("\\$ngModel", getNgModelNameForField(key))
+            .replaceAll("\\$ngModel", getNgModelNameForField(key) + ".id")
             .replaceAll("\\$options", sb.toString());
     }
 
@@ -135,15 +146,17 @@ public class TemplateUtils {
             .replaceAll("\\$placeholder", label);
     }
 
-    public String getButtonsController(ServletContext context, String entityType) {
+    public String getButtonsController(ServletContext context, String entityType, final String operationType) {
         String template = getHtmlTemplate(context, "templates/fields/buttons.tpl.html");
-        return template.replaceAll("\\$entityType", entityType);
+        return template
+            .replaceAll("\\$operationType", operationType)
+            .replaceAll("\\$entityType", entityType);
     }
 
     public String getFieldLabelHtml(String key) {
         final String label = getFieldLabel(key);
-        return String.format("<label for='%s' class='col-sm-2 control-label'>%s</label>%n",
-                             null == key ? BLStringUtils.EMPTY : key, label);
+        return String.format("<label for='%s' class='col-sm-2 control-label' id='%s-label'>%s</label>%n",
+                             null == key ? BLStringUtils.EMPTY : key, key, label);
     }
 
     public String getFieldLabel(String key) {

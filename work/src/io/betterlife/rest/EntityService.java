@@ -27,7 +27,7 @@ import java.io.InputStream;
 import java.util.*;
 
 /**
- * Author: Lawrence Liu(xqinliu@cn.ibm.com)
+ * Author: Lawrence Liu(lawrence@betterlife.io)
  * Date: 11/2/14
  */
 @Path("/")
@@ -78,11 +78,10 @@ public class EntityService {
     @Produces(MediaType.APPLICATION_JSON)
     public String getObjectByTypeAndId(@PathParam("id") long id,
                                        @PathParam("entityType") String entityType) throws IOException {
-        return new ExecuteResult<>().getRestString(
-            getOperator().getBaseObjectById(
-                entityManager, id, getNamedQueryRule().getIdQueryForEntity(entityType)
-            )
-        );
+        final String idQueryForEntity = getNamedQueryRule().getIdQueryForEntity(entityType);
+        final BaseObject entity = getOperator().getBaseObjectById(entityManager, id, idQueryForEntity);
+        final String restString = new ExecuteResult<BaseObject>().getRestString(entity);
+        return restString;
     }
 
     @GET
