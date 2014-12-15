@@ -24,7 +24,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 /**
- * Author: Lawrence Liu(xqinliu@cn.ibm.com)
+ * Author: Lawrence Liu(lawrence@betterlife.io)
  * Date: 10/31/14
  */
 public class EntityServiceTest {
