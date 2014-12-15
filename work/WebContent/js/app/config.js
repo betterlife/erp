@@ -35,9 +35,9 @@
                         controller: createCtrl,
                         authenticate: true
                     })
-                    .when('/:entityType/edit', {
+                    .when('/:entityType/edit/:id', {
                         templateUrl: function ($routeParams){
-                            return '/rest/form/' + $routeParams.entityType + '/edit';
+                            return '/rest/form/' + $routeParams.entityType + '/edit/' + $routeParams.id;
                         },
                         controller: editCtrl,
                         authenticate: true

@@ -27,6 +27,10 @@ var listCtrl = function ($scope, $http, $location, loginService, $routeParams) {
     };
     $http.get("/rest/entity/" + $scope.captalizedEntityType, {}).success(function (metaData) {
         $scope.gridOptions.columnDefs = metaData.result;
+        $scope.gridOptions.columnDefs.push({
+            name : "operation", displayName : "Operation", enableCellEdit : false,
+            cellTemplate : '<div class="ui-grid-cell-contents"><a href="/' + $scope.entityType + '/edit/{{row.entity.id}}" class="glyphicon glyphicon-edit"></a></div>'
+        });
         $http.get("/rest/" + $scope.captalizedEntityType, {}).success(function (entityData) {
             $scope.gridOptions.data = entityData.result;
         })
