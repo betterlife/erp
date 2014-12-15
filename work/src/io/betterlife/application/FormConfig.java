@@ -8,7 +8,9 @@ import java.util.List;
  * Date: 12/9/14
  */
 public class FormConfig {
-    private List<String> FormIgnoreFields;
+    private List<String> createFormIgnoreFields;
+    private List<String> listFormIgnoreFields;
+    private List<String> editFormIgnoreFields;
 
     private static FormConfig instance = new FormConfig();
 
@@ -20,27 +22,37 @@ public class FormConfig {
     }
 
     public List<String> getCreateFormIgnoreFields() {
-        if (null == FormIgnoreFields) {
-            FormIgnoreFields = new ArrayList<>(8);
-            FormIgnoreFields.add("id");
-            FormIgnoreFields.add("lastModifyDate");
-            FormIgnoreFields.add("lastModify");
-            FormIgnoreFields.add("createDate");
-            FormIgnoreFields.add("creator");
+        if (null == createFormIgnoreFields) {
+            createFormIgnoreFields = new ArrayList<>(8);
+            createFormIgnoreFields.add("id");
+            createFormIgnoreFields.add("lastModifyDate");
+            createFormIgnoreFields.add("lastModify");
+            createFormIgnoreFields.add("createDate");
+            createFormIgnoreFields.add("creator");
         }
-        return FormIgnoreFields;
+        return createFormIgnoreFields;
     }
 
 
     public List<String> getListFormIgnoreFields() {
-        if (null == FormIgnoreFields) {
-            FormIgnoreFields = new ArrayList<>(4);
-            FormIgnoreFields.add("lastModifyDate");
-            FormIgnoreFields.add("lastModify");
-            FormIgnoreFields.add("createDate");
-            FormIgnoreFields.add("creator");
+        if (null == listFormIgnoreFields) {
+            listFormIgnoreFields = new ArrayList<>(4);
+            listFormIgnoreFields.add("lastModifyDate");
+            listFormIgnoreFields.add("lastModify");
+            listFormIgnoreFields.add("createDate");
+            listFormIgnoreFields.add("creator");
         }
-        return FormIgnoreFields;
+        return listFormIgnoreFields;
     }
 
+    public List<String> getEditFormIgnoreFields() {
+        if (null == editFormIgnoreFields) {
+            editFormIgnoreFields = new ArrayList<>(4);
+            editFormIgnoreFields.add("lastModifyDate");
+            editFormIgnoreFields.add("lastModify");
+            editFormIgnoreFields.add("createDate");
+            editFormIgnoreFields.add("creator");
+        }
+        return editFormIgnoreFields;
+    }
 }
