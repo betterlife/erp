@@ -1,11 +1,11 @@
 package io.betterlife.application;
 
+import io.betterlife.application.config.FormConfig;
 import org.junit.Test;
 
 import java.util.List;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
 public class FormConfigTest {
 

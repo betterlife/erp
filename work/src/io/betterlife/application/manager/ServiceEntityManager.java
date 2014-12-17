@@ -44,7 +44,7 @@ public class ServiceEntityManager {
     }
 
     public Map<String, Class> getMetaFromEntityType(String entityType) {
-        final Class<? extends BaseObject> entityClass = getServiceEntityClass(entityType);
+        final Class<? extends BaseObject> entityClass = getServiceEntityClass(BLStringUtils.capitalize(entityType));
         return MetaDataManager.getInstance().getMetaDataOfClass(entityClass);
     }
 

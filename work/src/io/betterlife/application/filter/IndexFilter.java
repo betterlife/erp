@@ -1,4 +1,4 @@
-package io.betterlife.application;
+package io.betterlife.application.filter;
 
 import io.betterlife.util.BLStringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -49,16 +49,18 @@ public class IndexFilter implements Filter {
             logger.trace("Request path info: " + pathInfo);
         }
         String redirectResult = redirectCache.get(pathInfo);
-        if (null == redirectResult) {
-            if (BLStringUtils.getInstance().startWithAnyPattern(patterns, pathInfo)) {
-                redirectResult = "/#" + pathInfo.substring(1, pathInfo.length());
-            } else {
-                redirectResult = pathInfo;
+        if (null != pathInfo) {
+            if (null == redirectResult) {
+                if (BLStringUtils.getInstance().startWithAnyPattern(patterns, pathInfo)) {
+                    redirectResult = "/#" + pathInfo.substring(1, pathInfo.length());
+                } else {
+                    redirectResult = pathInfo;
+                }
+                redirectCache.put(pathInfo, redirectResult);
             }
-            redirectCache.put(pathInfo, redirectResult);
-        }
-        if (!redirectResult.equals(pathInfo)) {
-            response.sendRedirect(redirectResult);
+            if (!redirectResult.equals(pathInfo)) {
+                response.sendRedirect(redirectResult);
+            }
         }
         filterChain.doFilter(request, response);
     }

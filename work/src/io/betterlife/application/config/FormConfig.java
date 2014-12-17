@@ -1,4 +1,4 @@
-package io.betterlife.application;
+package io.betterlife.application.config;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,14 +1,13 @@
 package io.betterlife.util;
 
-import io.betterlife.application.ApplicationConfig;
-import io.betterlife.application.ServiceEntityManager;
+import io.betterlife.application.config.ApplicationConfig;
+import io.betterlife.application.manager.ServiceEntityManager;
 import io.betterlife.domains.BaseObject;
 import io.betterlife.rest.Form;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.persistence.EntityManager;
 import java.lang.reflect.Method;
 import java.util.Map;
 
@@ -29,8 +28,8 @@ public class EntityUtils {
     private EntityUtils() {
     }
 
-    public void mapToBaseObject(EntityManager entityManager, BaseObject obj, Map<String, Object> parameters) {
-        obj.setValues(entityManager, parameters);
+    public void mapToBaseObject(BaseObject obj, Map<String, Object> parameters) {
+        obj.setValues(parameters);
     }
 
     public boolean isBaseObject(Class clazz) {
@@ -47,7 +46,7 @@ public class EntityUtils {
     }
 
     public String getRepresentField(String entityType, String field) {
-        Class entityClass = ServiceEntityManager.getInstance().getServiceEntityClass(BLStringUtils.uncapitalize(entityType));
+        Class entityClass = ServiceEntityManager.getInstance().getServiceEntityClass(BLStringUtils.capitalize(entityType));
         final String methodName = "get" + BLStringUtils.capitalize(field);
         try {
             Method method = entityClass.getDeclaredMethod(methodName);

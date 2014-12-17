@@ -1,5 +1,6 @@
-package io.betterlife.application;
+package io.betterlife.application.config;
 
+import io.betterlife.application.manager.ServiceEntityManager;
 import io.betterlife.domains.financial.CostCenter;
 import io.betterlife.domains.financial.Fund;
 import io.betterlife.domains.financial.FundCategory;
@@ -21,22 +22,12 @@ public class ApplicationConfig {
      * Application persistence unit name
      */
     public static final String PersistenceUnitName = "betterlife";
+	
 
     /**
      * Table name prefix
      */
     public static final String TableNamePrefix = "BL_";
-
-    /** Register all entities, this registry will be used for
-     *  Generate Entity CRUD rest services
-     *  Generate meta data for creation of front end CRUD UI.
-     */
-    public static void registerEntities(){
-        ServiceEntityManager.getInstance().registerServiceEntity("fundCategory", FundCategory.class);
-        ServiceEntityManager.getInstance().registerServiceEntity("user", User.class);
-        ServiceEntityManager.getInstance().registerServiceEntity("costCenter", CostCenter.class);
-        ServiceEntityManager.getInstance().registerServiceEntity("fund", Fund.class);
-    }
 
     public static String getDefaultRepresentField(){
         return "name";

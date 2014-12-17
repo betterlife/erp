@@ -1,5 +1,6 @@
 package io.betterlife.application;
 
+import io.betterlife.application.config.ApplicationConfig;
 import io.betterlife.rest.EntityFormService;
 import io.betterlife.rest.EntityService;
 import io.betterlife.rest.security.SecurityService;

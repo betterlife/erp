@@ -42,8 +42,8 @@ public class TemplateUtils {
     }
 
     @SuppressWarnings("unchecked")
-    public String getFieldController(ServletContext context, EntityManager entityManager,
-                                     String entityType, String key, Class clazz, String label) {
+    public String getFieldController(ServletContext context, String entityType,
+                                     String key, Class clazz, String label) {
         StringBuilder form = new StringBuilder();
         form.append("<div class='col-sm-4'>");
         if (EntityUtils.getInstance().isIdField(key)) {
@@ -59,7 +59,7 @@ public class TemplateUtils {
         } else if (Boolean.class.equals(clazz)) {
             form.append(getBooleanController(key));
         } else if (ClassUtils.getAllSuperclasses(clazz).contains(BaseObject.class)) {
-            form.append(getBaseObjectController(context, entityManager, entityType, key, clazz));
+            form.append(getBaseObjectController(context, entityType, key, clazz));
         } else if (Enum.class.isAssignableFrom(clazz)){
             form.append(getEnumController(context, key, clazz));
         }
@@ -89,10 +89,9 @@ public class TemplateUtils {
             .replaceAll("\\$options", sb.toString());
     }
 
-    public String getBaseObjectController(ServletContext context, EntityManager entityManager,
-                                          String entityType, String key, Class<? extends BaseObject> clazz) {
+    public String getBaseObjectController(ServletContext context, String entityType,
+                                          String key, Class<? extends BaseObject> clazz) {
         List<BaseObject> objects = BaseOperator.getInstance().getBaseObjects(
-            entityManager,
             NamedQueryRules.getInstance().getAllQueryForEntity(clazz.getSimpleName())
         );
         String representField = EntityUtils.getInstance().getRepresentField(entityType, key);

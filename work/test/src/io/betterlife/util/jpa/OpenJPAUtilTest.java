@@ -4,7 +4,6 @@ import org.apache.openjpa.persistence.OpenJPAQuery;
 import org.junit.Test;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -22,7 +21,9 @@ public class OpenJPAUtilTest {
         OpenJPAQuery query = mock(OpenJPAQuery.class);
         final String queryName = "User.getAll";
         when(entityManager.createNamedQuery(queryName)).thenReturn(query);
-        assertEquals(query, OpenJPAUtil.getInstance().getOpenJPAQuery(entityManager, queryName));
+        final OpenJPAUtil openJPAUtil = OpenJPAUtil.getInstance();
+        openJPAUtil.setEntityManager(entityManager);
+        assertEquals(query, openJPAUtil.getOpenJPAQuery(queryName));
     }
 
     @Test

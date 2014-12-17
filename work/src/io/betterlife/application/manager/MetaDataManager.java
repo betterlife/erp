@@ -1,5 +1,6 @@
-package io.betterlife.persistence;
+package io.betterlife.application.manager;
 
+import io.betterlife.application.EntityManagerConsumer;
 import io.betterlife.domains.BaseObject;
 import org.apache.commons.lang3.ClassUtils;
 
@@ -14,7 +15,7 @@ import java.util.*;
  * Date: 11/7/14
  */
 
-public class MetaDataManager {
+public class MetaDataManager extends EntityManagerConsumer {
     private Map<String, Map<String, Class>> _fieldsMetaData = new HashMap<>();
     private boolean hasMetaData = false;
     private static MetaDataManager instance = new MetaDataManager();
@@ -26,10 +27,9 @@ public class MetaDataManager {
         return meta.get(fieldName);
     }
 
-    public Map<String, Class> getMetaDataOfClass(EntityManager entityManager,
-                                                 Class<? extends BaseObject> clazz) {
-        if (entityManager != null && (null == _fieldsMetaData || _fieldsMetaData.size() == 0)) {
-            setAllFieldMetaData(entityManager);
+    public Map<String, Class> getMetaDataOfClass(Class<? extends BaseObject> clazz) {
+        if (getEntityManager() != null && (null == _fieldsMetaData || _fieldsMetaData.size() == 0)) {
+            setAllFieldMetaData();
         }
         return _fieldsMetaData.get(clazz.getName());
     }
@@ -55,10 +55,10 @@ public class MetaDataManager {
         this.hasMetaData = hasMetaData;
     }
 
-    public void setAllFieldMetaData(EntityManager entityManager) {
+    public void setAllFieldMetaData() {
         if (!hasMetaData()) {
             synchronized (this) {
-                Metamodel metaModel = entityManager.getMetamodel();
+                Metamodel metaModel = getEntityManager().getMetamodel();
                 Set<ManagedType<?>> managedTypes = metaModel.getManagedTypes();
                 for (ManagedType managedType : managedTypes) {
                     @SuppressWarnings("unchecked")

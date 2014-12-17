@@ -1,6 +1,6 @@
 package io.betterlife.io.betterlife.application;
 
-import io.betterlife.application.IndexFilter;
+import io.betterlife.application.filter.IndexFilter;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -88,5 +88,13 @@ public class IndexFilterTest {
         filter.doFilter(request, response, filterChain);
         verify(response,times(1)).sendRedirect("/#user/list");
         verify(filterChain,times(1)).doFilter(request, response);
+    }
+
+    @Test
+    public void testNullPathInfo() throws IOException, ServletException {
+        when(request.getPathInfo()).thenReturn(null);
+        filter.doFilter(request, response, filterChain);
+        verify(response, times(0)).sendRedirect("/");
+        verify(filterChain, times(1)).doFilter(request, response);
     }
 }

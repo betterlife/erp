@@ -23,7 +23,7 @@
    	</servlet>
 	<filter>
 		<filter-name>IndexFilter</filter-name>
-		<filter-class>io.betterlife.application.IndexFilter</filter-class>
+		<filter-class>io.betterlife.application.filter.IndexFilter</filter-class>
 		<init-param>
 			<param-name>url-pattern</param-name>
 			<param-value>/dashboard,/user/*,/login/*,/logout/*,/fund/*,/fundCategory/*,/costCenter/*</param-value>

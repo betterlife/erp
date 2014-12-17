@@ -2,7 +2,7 @@ package io.betterlife.domains;
 
 import io.betterlife.domains.security.User;
 import io.betterlife.persistence.BaseOperator;
-import io.betterlife.persistence.MetaDataManager;
+import io.betterlife.application.manager.MetaDataManager;
 import io.betterlife.persistence.NamedQueryRules;
 import io.betterlife.util.EntityUtils;
 import io.betterlife.util.converter.Converter;
@@ -85,8 +85,8 @@ public abstract class BaseObject {
         return getValue("creator");
     }
 
-    public void setValues(EntityManager entityManager, Map<String, Object> parameters) {
-        MetaDataManager.getInstance().setAllFieldMetaData(entityManager);
+    public void setValues(Map<String, Object> parameters) {
+        MetaDataManager.getInstance().setAllFieldMetaData();
         for (Map.Entry<String, Object> entry : parameters.entrySet()) {
             String key = entry.getKey();
             Object value = entry.getValue();
@@ -105,7 +105,7 @@ public abstract class BaseObject {
                 if (value instanceof Integer) {
                     value = (long) ((Integer) value);
                 }
-                BaseObject baseObj = BaseOperator.getInstance().getBaseObjectById(entityManager, (Long) value, idQueryForEntity);
+                BaseObject baseObj = BaseOperator.getInstance().getBaseObjectById((Long) value, idQueryForEntity);
                 if (null != baseObj) {
                     setValue(key, baseObj);
                 }

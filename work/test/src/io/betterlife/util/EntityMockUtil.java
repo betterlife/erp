@@ -27,13 +27,11 @@ public class EntityMockUtil {
         return instance;
     }
 
-    public EntityManager mockObjectsForEntityService(EntityService service) {
+    public EntityManager mockEntityManagerAndMeta() {
         Set<Attribute> attributes = mockAttributes();
         ManagedType type = mockManagedType(attributes);
         Metamodel model = mockMetamodel(type);
-        EntityManager manager = mockEntityManager(model);
-        service.setEntityManager(manager);
-        return manager;
+        return mockEntityManager(model);
     }
 
     private EntityManager mockEntityManager(Metamodel model) {
