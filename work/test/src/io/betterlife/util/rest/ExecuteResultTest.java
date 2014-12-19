@@ -2,7 +2,6 @@ package io.betterlife.util.rest;
 
 import io.betterlife.util.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.wink.json4j.JSONObject;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
@@ -10,7 +9,8 @@ import org.junit.Test;
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Author: Lawrence Liu(lawrence@betterlife.io)
