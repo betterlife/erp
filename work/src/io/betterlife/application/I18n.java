@@ -35,7 +35,7 @@ public class I18n {
             loaded = true;
         }
         String result =  translations.get(locale).get(key);
-        return (null == result) ? key : result;
+        return (null == result) ? BLStringUtils.capitalize(key) : result;
     }
 
     private void loadTranslations(String locale) {
@@ -76,6 +76,6 @@ public class I18n {
                 result = get(key, locale);
             }
         }
-        return null == result ? key : result;
+        return null == result ? BLStringUtils.capitalize(key) : result;
     }
 }

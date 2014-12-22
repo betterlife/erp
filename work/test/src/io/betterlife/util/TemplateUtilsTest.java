@@ -129,7 +129,7 @@ public class TemplateUtilsTest {
     @Test
     public void testGetFieldLabelHtml() throws Exception {
         String entityType = "Fund";
-        assertEquals("<label for='user' class='col-sm-2 control-label' id='user-label'>User</label>\n",
+        assertEquals("<label for='user' class='col-sm-2 control-label' id='user-label'>用户</label>\n",
                      templateUtils.getFieldLabelHtml(entityType, "user"));
         assertEquals("<label for='expense' class='col-sm-2 control-label' id='expense-label'>Expense</label>\n",
                      templateUtils.getFieldLabelHtml(entityType, "expense"));
@@ -144,7 +144,7 @@ public class TemplateUtilsTest {
     @Test
     public void testGetFieldLabel() throws Exception {
         String entityType = "Fund";
-        assertEquals("User", templateUtils.getFieldLabel(entityType, "user"));
+        assertEquals("用户", templateUtils.getFieldLabel(entityType, "user"));
         assertEquals("Expense", templateUtils.getFieldLabel(entityType, "expense"));
         assertEquals("", templateUtils.getFieldLabel(entityType, ""));
         assertEquals("", templateUtils.getFieldLabel(entityType, null));

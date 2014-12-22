@@ -88,7 +88,7 @@ public class EntityServiceTest {
         EntityManager manager = EntityMockUtil.getInstance().mockEntityManagerAndMeta();
         MetaDataManager.getInstance().setEntityManager(manager);
         String userMeta = service.getEntityMeta("User");
-        JsonNode expect = JsonUtils.getInstance().stringToJsonNode("{\"success\":true,\"successMessage\":null,\"errorMessages\":[],\"result\":[{\"field\":\"id\",\"name\":\"Id\"},{\"field\":\"username\",\"name\":\"Username\"},{\"field\":\"password\",\"name\":\"Password\"}]}");
+        JsonNode expect = JsonUtils.getInstance().stringToJsonNode("{\"success\":true,\"successMessage\":null,\"errorMessages\":[],\"result\":[{\"field\":\"id\",\"name\":\"编号\"},{\"field\":\"username\",\"name\":\"Username\"},{\"field\":\"password\",\"name\":\"Password\"}]}");
         JsonNode node = JsonUtils.getInstance().stringToJsonNode(userMeta);
         assertEquals(expect, node);
     }
