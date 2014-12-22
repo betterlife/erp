@@ -13,18 +13,13 @@ import io.betterlife.util.rest.ExecuteResult;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Author: Lawrence Liu(lawrence@betterlife.io)
@@ -46,7 +41,7 @@ public class EntityService {
             logger.trace("Getting entity meta data for " + entityType);
         }
         Map<String, Class> meta = ServiceEntityManager.getInstance().getMetaFromEntityType(entityType);
-        List<Map<String, String>> list = new ArrayList<>(meta.size());
+        List<Map<String, Object>> list = new ArrayList<>(meta.size());
         for (Map.Entry<String, Class> entry : meta.entrySet()) {
             if (FormConfig.getInstance().getListFormIgnoreFields().contains(entry.getKey())) {
                 continue;
@@ -55,12 +50,15 @@ public class EntityService {
             if (EntityUtils.getInstance().isBaseObject(entry.getValue())) {
                 field = EntityUtils.getInstance().getRepresentFieldWithDot(entityType, field);
             }
-            Map<String, String> map = new HashMap<>();
+            Map<String, Object> map = new HashMap<>();
             map.put("field", field);
+            if (Objects.equals(field, "amount")) {
+                map.put("aggregationType", 2);
+            }
             map.put("name", I18n.getInstance().getFieldLabel(entityType, entry.getKey(), ApplicationConfig.getLocale()));
             list.add(map);
         }
-        String result = new ExecuteResult<List<Map<String, String>>>().getRestString(list);
+        String result = new ExecuteResult<List<Map<String, Object>>>().getRestString(list);
         if (logger.isTraceEnabled()) {
             logger.trace("Entity[%s]'s meta: \n\t%s", entityType, result);
         }
@@ -91,7 +89,6 @@ public class EntityService {
     @PUT
     @Path("/{entityType}/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public String update(@PathParam("entityType") String entityType,
                          @PathParam("id") int id,
                          @Context HttpServletRequest request,
