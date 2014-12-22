@@ -19,7 +19,7 @@
 
             $scope.isLoggedIn = function () {
                 return loginService.isLoggedIn();
-            }
+            };
         })
         .config(['$routeProvider', '$locationProvider',
             function ($routeProvider, $locationProvider) {
