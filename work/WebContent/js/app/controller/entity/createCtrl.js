@@ -9,6 +9,10 @@ var createCtrl = function ($scope, $http, $location, loginService, $routeParams)
     $scope.entity = {
     };
 
+    $scope.reset = function(){
+        $scope.entity = {};
+    };
+
     $scope.open = function($event) {
       $event.preventDefault();
       $event.stopPropagation();

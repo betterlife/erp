@@ -15,9 +15,14 @@ var editCtrl = function ($scope, $http, $location, loginService, $routeParams) {
         $scope.opened = true;
     };
 
+    $scope.reset = function () {
+        $scope.entity = $scope.originalEntity;
+    };
+
     $http.get("/rest/" + $scope.captalizedEntityType + "/" + $scope.id, {}).success(function (data) {
         console.log(data);
         $scope.entity = data.result;
+        $scope.originalEntity = data.result;
     });
 
     $scope.update = function () {
