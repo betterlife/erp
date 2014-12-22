@@ -71,7 +71,7 @@ public class BaseOperator {
         }
     }
 
-    public <T> T getBaseObject(EntityManager em, String queryName, Map<String, ?> queryParams) {
+    public <T> T getBaseObject(String queryName, Map<String, ?> queryParams) {
         OpenJPAQuery q = getOpenJPAUtil().getOpenJPAQuery(queryName);
         for (Map.Entry<String, ?> entry : queryParams.entrySet()){
             q.setParameter(entry.getKey(), entry.getValue());
