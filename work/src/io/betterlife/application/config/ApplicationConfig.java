@@ -32,4 +32,10 @@ public class ApplicationConfig {
     public static String getDefaultRepresentField(){
         return "name";
     }
+
+    public static String getLocale() {return "zh_CN";}
+
+    public static boolean isDevelopmentMode() {
+        return true;
+    }
 }

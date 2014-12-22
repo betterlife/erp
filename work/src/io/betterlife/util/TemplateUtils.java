@@ -1,5 +1,7 @@
 package io.betterlife.util;
 
+import io.betterlife.application.I18n;
+import io.betterlife.application.config.ApplicationConfig;
 import io.betterlife.domains.BaseObject;
 import io.betterlife.persistence.BaseOperator;
 import io.betterlife.persistence.NamedQueryRules;
@@ -9,7 +11,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.persistence.EntityManager;
 import javax.servlet.ServletContext;
 import java.io.File;
 import java.math.BigDecimal;
@@ -80,7 +81,8 @@ public class TemplateUtils {
         Object[] enumArray = clazz.getEnumConstants();
         StringBuilder sb = new StringBuilder();
         for (Object enumVal : enumArray) {
-            sb.append(String.format("<option value='%s'>%s</option>%n", enumVal.toString(), enumVal.toString()));
+            sb.append(String.format("<option value='%s'>%s</option>%n", enumVal.toString(),
+                                    I18n.getInstance().get(enumVal.toString(), ApplicationConfig.getLocale())));
         }
         String template = getHtmlTemplate(context, "templates/fields/enum.tpl.html");
         return template
@@ -147,24 +149,23 @@ public class TemplateUtils {
 
     public String getButtonsController(ServletContext context, String entityType, final String operationType) {
         String template = getHtmlTemplate(context, "templates/fields/buttons.tpl.html");
+        final String locale = ApplicationConfig.getLocale();
         return template
-            .replaceAll("\\$operationType", operationType)
+            .replaceAll("\\$operationType", I18n.getInstance().get(operationType, locale))
             .replaceAll("\\$operation", BLStringUtils.uncapitalize(operationType))
-            .replaceAll("\\$entityType", entityType);
+            .replaceAll("\\$reset", I18n.getInstance().get("Reset", locale))
+            .replaceAll("\\$entityType", I18n.getInstance().get(BLStringUtils.capitalize(entityType), locale));
     }
 
-    public String getFieldLabelHtml(String key) {
-        final String label = getFieldLabel(key);
+    public String getFieldLabelHtml(String entityType, String key) {
+        final String label = getFieldLabel(entityType, key);
         return String.format("<label for='%s' class='col-sm-2 control-label' id='%s-label'>%s</label>%n",
                              null == key ? BLStringUtils.EMPTY : key,
                              null == key ? BLStringUtils.EMPTY : key, label);
     }
 
-    public String getFieldLabel(String key) {
-        if (null == key) {
-            return BLStringUtils.EMPTY;
-        }
-        return BLStringUtils.capitalize(key);
+    public String getFieldLabel(String entityType, String key) {
+        return I18n.getInstance().getFieldLabel(entityType, key, ApplicationConfig.getLocale());
     }
 
     public String getListController(ServletContext context, String entityType) {

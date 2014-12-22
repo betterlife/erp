@@ -128,24 +128,26 @@ public class TemplateUtilsTest {
 
     @Test
     public void testGetFieldLabelHtml() throws Exception {
+        String entityType = "Fund";
         assertEquals("<label for='user' class='col-sm-2 control-label' id='user-label'>User</label>\n",
-                     templateUtils.getFieldLabelHtml("user"));
+                     templateUtils.getFieldLabelHtml(entityType, "user"));
         assertEquals("<label for='expense' class='col-sm-2 control-label' id='expense-label'>Expense</label>\n",
-                     templateUtils.getFieldLabelHtml("expense"));
+                     templateUtils.getFieldLabelHtml(entityType, "expense"));
         assertEquals("<label for='expenseCategory' class='col-sm-2 control-label' id='expenseCategory-label'>ExpenseCategory</label>\n",
-                     templateUtils.getFieldLabelHtml("expenseCategory"));
+                     templateUtils.getFieldLabelHtml(entityType, "expenseCategory"));
         assertEquals("<label for='' class='col-sm-2 control-label' id='-label'></label>\n",
-                     templateUtils.getFieldLabelHtml(null));
+                     templateUtils.getFieldLabelHtml(entityType, null));
         assertEquals("<label for='' class='col-sm-2 control-label' id='-label'></label>\n",
-                     templateUtils.getFieldLabelHtml(""));
+                     templateUtils.getFieldLabelHtml(entityType, ""));
     }
 
     @Test
     public void testGetFieldLabel() throws Exception {
-        assertEquals("User", templateUtils.getFieldLabel("user"));
-        assertEquals("Expense", templateUtils.getFieldLabel("expense"));
-        assertEquals("", templateUtils.getFieldLabel(""));
-        assertEquals("", templateUtils.getFieldLabel(null));
+        String entityType = "Fund";
+        assertEquals("User", templateUtils.getFieldLabel(entityType, "user"));
+        assertEquals("Expense", templateUtils.getFieldLabel(entityType, "expense"));
+        assertEquals("", templateUtils.getFieldLabel(entityType, ""));
+        assertEquals("", templateUtils.getFieldLabel(entityType, null));
     }
 
     @Test

@@ -1,11 +1,12 @@
 package io.betterlife.rest;
 
+import io.betterlife.application.I18n;
+import io.betterlife.application.config.ApplicationConfig;
 import io.betterlife.application.config.FormConfig;
 import io.betterlife.application.manager.ServiceEntityManager;
 import io.betterlife.domains.BaseObject;
 import io.betterlife.persistence.BaseOperator;
 import io.betterlife.persistence.NamedQueryRules;
-import io.betterlife.util.BLStringUtils;
 import io.betterlife.util.EntityUtils;
 import io.betterlife.util.IOUtil;
 import io.betterlife.util.rest.ExecuteResult;
@@ -47,25 +48,24 @@ public class EntityService {
         Map<String, Class> meta = ServiceEntityManager.getInstance().getMetaFromEntityType(entityType);
         List<Map<String, String>> list = new ArrayList<>(meta.size());
         for (Map.Entry<String, Class> entry : meta.entrySet()) {
-            if (FormConfig.getInstance().getListFormIgnoreFields().contains(entry.getKey())){
+            if (FormConfig.getInstance().getListFormIgnoreFields().contains(entry.getKey())) {
                 continue;
             }
             String field = entry.getKey();
-            if (EntityUtils.getInstance().isBaseObject(entry.getValue())){
+            if (EntityUtils.getInstance().isBaseObject(entry.getValue())) {
                 field = EntityUtils.getInstance().getRepresentFieldWithDot(entityType, field);
             }
             Map<String, String> map = new HashMap<>();
             map.put("field", field);
-            map.put("name", BLStringUtils.capitalize(entry.getKey()));
+            map.put("name", I18n.getInstance().getFieldLabel(entityType, entry.getKey(), ApplicationConfig.getLocale()));
             list.add(map);
         }
         String result = new ExecuteResult<List<Map<String, String>>>().getRestString(list);
-        if (logger.isTraceEnabled()){
+        if (logger.isTraceEnabled()) {
             logger.trace("Entity[%s]'s meta: \n\t%s", entityType, result);
         }
         return result;
     }
-
 
 
     @GET
@@ -118,12 +118,12 @@ public class EntityService {
         throws ClassNotFoundException, IllegalAccessException, InstantiationException, IOException {
         Map<String, Object> parameters = IOUtil.getInstance().inputStreamToJson(requestBody);
         BaseObject obj = ServiceEntityManager.getInstance().entityObjectFromType(entityType);
-        EntityUtils.getInstance().mapToBaseObject(obj, (Map<String, Object>)parameters.get("entity"));
+        EntityUtils.getInstance().mapToBaseObject(obj, (Map<String, Object>) parameters.get("entity"));
         getOperator().save(obj);
         return new ExecuteResult<String>().getRestString("SUCCESS");
     }
 
-    public NamedQueryRules getNamedQueryRule(){
+    public NamedQueryRules getNamedQueryRule() {
         if (null == this.namedQueryRule) {
             setNamedQueryRule(NamedQueryRules.getInstance());
         }

@@ -7,6 +7,10 @@ import org.apache.commons.lang3.StringUtils;
  * Date: 11/14/14
  */
 public class BLStringUtils extends org.apache.commons.lang3.StringUtils {
+
+    public static final String ENCODING_UTF8 = "UTF-8";
+    public static final String COMMA = ",";
+
     private static BLStringUtils ourInstance = new BLStringUtils();
 
     public static BLStringUtils getInstance() {

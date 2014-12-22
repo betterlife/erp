@@ -50,10 +50,10 @@ public class EntityFormService {
                 continue;
             }
             form.append("<div class='form-group'>\n");
-            form.append(getTemplateUtils().getFieldLabelHtml(key));
+            form.append(getTemplateUtils().getFieldLabelHtml(entityType, key));
             form.append(getTemplateUtils().getFieldController(
                             context, entityType, key,
-                            clazz, getTemplateUtils().getFieldLabel(key)
+                            clazz, getTemplateUtils().getFieldLabel(entityType, key)
                         ));
             form.append("</div>");
         }
@@ -82,10 +82,10 @@ public class EntityFormService {
                 continue;
             }
             form.append("<div class='form-group'>\n");
-            form.append(getTemplateUtils().getFieldLabelHtml(key));
+            form.append(getTemplateUtils().getFieldLabelHtml(entityType, key));
             form.append(getTemplateUtils().getFieldController(
                             context, entityType, key,
-                            clazz, getTemplateUtils().getFieldLabel(key)
+                            clazz, getTemplateUtils().getFieldLabel(entityType, key)
                         ));
             form.append("</div>");
         }
