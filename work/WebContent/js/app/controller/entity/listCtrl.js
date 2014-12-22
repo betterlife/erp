@@ -16,14 +16,16 @@
         }
         ]
  */
-var listCtrl = function ($scope, $http, $location, loginService, $routeParams) {
+var listCtrl = function ($scope, $http, $location, loginService, i18nService, $routeParams) {
     "use strict";
+    i18nService.setCurrentLang('zh-cn');
     $scope.entityType = $routeParams.entityType;
     $scope.captalizedEntityType = $scope.entityType.charAt(0).toUpperCase() + $scope.entityType.substr(1);
     $scope.gridOptions = {
         enableSorting: true,
         enableColumnResizing: true,
-        enableGridMenu: true
+        enableGridMenu: true,
+        showFooter: true
     };
     $http.get("/rest/entity/" + $scope.captalizedEntityType, {}).success(function (metaData) {
         $scope.gridOptions.columnDefs = metaData.result;
@@ -37,6 +39,6 @@ var listCtrl = function ($scope, $http, $location, loginService, $routeParams) {
     });
 };
 
-listCtrl.$inject = ['$scope', '$http', '$location', 'loginService', '$routeParams'];
+listCtrl.$inject = ['$scope', '$http', '$location', 'loginService', 'i18nService', '$routeParams'];
 
 angular.module('mainApp').controller('listCtrl', listCtrl);
