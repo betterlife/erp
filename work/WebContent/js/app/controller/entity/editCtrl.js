@@ -16,13 +16,13 @@ var editCtrl = function ($scope, $http, $location, loginService, $routeParams) {
     };
 
     $scope.reset = function () {
-        $scope.entity = $scope.originalEntity;
+        $scope.entity = angular.copy($scope.originalEntity);
     };
 
     $http.get("/rest/" + $scope.captalizedEntityType + "/" + $scope.id, {}).success(function (data) {
         console.log(data);
         $scope.entity = data.result;
-        $scope.originalEntity = data.result;
+        $scope.originalEntity = angular.copy(data.result);
     });
 
     $scope.update = function () {
