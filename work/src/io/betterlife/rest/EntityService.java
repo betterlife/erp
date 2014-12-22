@@ -41,8 +41,9 @@ public class EntityService {
             logger.trace("Getting entity meta data for " + entityType);
         }
         Map<String, Class> meta = ServiceEntityManager.getInstance().getMetaFromEntityType(entityType);
-        List<Map<String, Object>> list = new ArrayList<>(meta.size());
-        for (Map.Entry<String, Class> entry : meta.entrySet()) {
+        LinkedHashMap<String, Class> sortedMeta = EntityUtils.getInstance().sortEntityMetaByDisplayRank(entityType, meta);
+        List<Map<String, Object>> list = new ArrayList<>(sortedMeta.size());
+        for (Map.Entry<String, Class> entry : sortedMeta.entrySet()) {
             if (FormConfig.getInstance().getListFormIgnoreFields().contains(entry.getKey())) {
                 continue;
             }

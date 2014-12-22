@@ -2,6 +2,7 @@ package io.betterlife.rest;
 
 import io.betterlife.application.config.FormConfig;
 import io.betterlife.application.manager.ServiceEntityManager;
+import io.betterlife.util.EntityUtils;
 import io.betterlife.util.TemplateUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,6 +14,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -40,31 +43,7 @@ public class EntityFormService {
     @GET @Path("/{entityType}/create")
     @Produces(MediaType.TEXT_HTML)
     public String getCreateForm(@PathParam("entityType") String entityType, @Context ServletContext context) {
-        Map<String, Class> meta = ServiceEntityManager.getInstance().getMetaFromEntityType(entityType);
-        StringBuilder form = new StringBuilder();
-        form.append("<div class='form-group form-horizontal'>");
-        for (Map.Entry<String, Class> entry : meta.entrySet()) {
-            final Class clazz = entry.getValue();
-            final String key = entry.getKey();
-            if (FormConfig.getInstance().getCreateFormIgnoreFields().contains(key)) {
-                continue;
-            }
-            form.append("<div class='form-group'>\n");
-            form.append(getTemplateUtils().getFieldLabelHtml(entityType, key));
-            form.append(getTemplateUtils().getFieldController(
-                            context, entityType, key,
-                            clazz, getTemplateUtils().getFieldLabel(entityType, key)
-                        ));
-            form.append("</div>");
-        }
-        form.append(getTemplateUtils().getButtonsController(context, entityType, "Create"));
-        form.append("</div>");
-        form.append("<br/>");
-        final String formString = form.toString();
-        if (logger.isTraceEnabled()) {
-            logger.trace(String.format("Create form template for EntityType[%s]:\n\t%s", entityType, formString));
-        }
-        return formString;
+        return getForm(entityType, context, FormConfig.getInstance().getCreateFormIgnoreFields(), "Create");
     }
 
     @GET @Path("/{entityType}/edit/{id}")
@@ -72,13 +51,19 @@ public class EntityFormService {
     public String getEditForm(@PathParam("entityType") String entityType,
                               @Context ServletContext context,
                               @PathParam("id") int id) {
+        return getForm(entityType, context, FormConfig.getInstance().getEditFormIgnoreFields(), "Update");
+    }
+
+    public String getForm(String entityType, ServletContext context,
+                          final List<String> ignoreFields, final String operationType) {
         Map<String, Class> meta = ServiceEntityManager.getInstance().getMetaFromEntityType(entityType);
+        LinkedHashMap<String, Class> sortedMeta = EntityUtils.getInstance().sortEntityMetaByDisplayRank(entityType, meta);
         StringBuilder form = new StringBuilder();
         form.append("<div class='form-group form-horizontal'>");
-        for (Map.Entry<String, Class> entry : meta.entrySet()) {
+        for (Map.Entry<String, Class> entry : sortedMeta.entrySet()) {
             final Class clazz = entry.getValue();
             final String key = entry.getKey();
-            if (FormConfig.getInstance().getEditFormIgnoreFields().contains(key)) {
+            if (ignoreFields.contains(key)) {
                 continue;
             }
             form.append("<div class='form-group'>\n");
@@ -89,12 +74,12 @@ public class EntityFormService {
                         ));
             form.append("</div>");
         }
-        form.append(getTemplateUtils().getButtonsController(context, entityType, "Update"));
+        form.append(getTemplateUtils().getButtonsController(context, entityType, operationType));
         form.append("</div>");
         form.append("<br/>");
         final String formString = form.toString();
         if (logger.isTraceEnabled()) {
-            logger.trace(String.format("Edit form template for EntityType[%s]:\n\t%s", entityType, formString));
+            logger.trace(String.format("%s form template for EntityType[%s]:\n\t%s", operationType, entityType, formString));
         }
         return formString;
     }

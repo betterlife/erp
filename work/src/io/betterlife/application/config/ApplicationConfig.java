@@ -1,11 +1,5 @@
 package io.betterlife.application.config;
 
-import io.betterlife.application.manager.ServiceEntityManager;
-import io.betterlife.domains.financial.CostCenter;
-import io.betterlife.domains.financial.Fund;
-import io.betterlife.domains.financial.FundCategory;
-import io.betterlife.domains.security.User;
-
 /**
  * Author: Lawrence Liu(lawrence@betterlife.io)
  * Date: 10/31/14
@@ -28,10 +22,8 @@ public class ApplicationConfig {
      * Table name prefix
      */
     public static final String TableNamePrefix = "BL_";
-
-    public static String getDefaultRepresentField(){
-        return "name";
-    }
+    public static final String DefaultRepresentField = "name";
+    public static final int DefaultFieldRank = 0;
 
     public static String getLocale() {return "zh_CN";}
 

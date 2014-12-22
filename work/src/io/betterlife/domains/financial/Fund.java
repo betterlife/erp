@@ -25,7 +25,7 @@ public class Fund extends BaseObject {
     }
 
     @ManyToOne
-    @Form(RepresentField="name")
+    @Form(RepresentField="name", DisplayRank =10)
     public FundCategory getFundCategory() {
         return getValue("fundCategory");
     }
@@ -35,7 +35,7 @@ public class Fund extends BaseObject {
     }
 
     @ManyToOne
-    @Form(RepresentField="name")
+    @Form(RepresentField="name", DisplayRank =15)
     public CostCenter getCostCenter() {
         return getValue("costCenter");
     }
@@ -45,7 +45,7 @@ public class Fund extends BaseObject {
     }
 
     @ManyToOne
-    @Form(RepresentField="displayName")
+    @Form(RepresentField="displayName", DisplayRank =4)
     public User getUser() {
         return getValue("user");
     }
@@ -54,6 +54,7 @@ public class Fund extends BaseObject {
         setValue("amount", amount);
     }
 
+    @Form(DisplayRank = 3)
     public BigDecimal getAmount() {
         return getValue("amount");
     }
@@ -62,6 +63,7 @@ public class Fund extends BaseObject {
         setValue("remark", remark);
     }
 
+    @Form(DisplayRank = 20)
     public String getRemark() {
         return getValue("remark");
     }
@@ -70,11 +72,13 @@ public class Fund extends BaseObject {
         setValue("date", date);
     }
 
+    @Form(DisplayRank = 2)
     public Date getDate() {
         return getValue("date");
     }
 
     @Enumerated(EnumType.STRING)
+    @Form(DisplayRank = 1)
     public FundType getFundType() {
         return getValue("fundType");
     }

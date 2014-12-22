@@ -9,6 +9,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -47,20 +50,53 @@ public class EntityUtils {
 
     public String getRepresentField(String entityType, String field) {
         Class entityClass = ServiceEntityManager.getInstance().getServiceEntityClass(BLStringUtils.capitalize(entityType));
-        final String methodName = "get" + BLStringUtils.capitalize(field);
+        final String methodName = getGetterMethodForField(field);
         try {
             Method method = entityClass.getDeclaredMethod(methodName);
             if (null != method) {
                 Form form = method.getAnnotation(Form.class);
-                return (null == form) ? ApplicationConfig.getDefaultRepresentField() : form.RepresentField();
+                return (null == form) ? ApplicationConfig.DefaultRepresentField : form.RepresentField();
             }
         } catch (NoSuchMethodException e) {
             logger.warn("Failed to get method definition for " + methodName);
         }
-        return ApplicationConfig.getDefaultRepresentField();
+        return ApplicationConfig.DefaultRepresentField;
+    }
+
+    public String getGetterMethodForField(String field) {
+        return "get" + BLStringUtils.capitalize(field);
     }
 
     public boolean isIdField(String key) {
         return "id".equals(key);
+    }
+
+    public LinkedHashMap<String, Class> sortEntityMetaByDisplayRank(String entityType, Map<String, Class> meta) {
+        LinkedHashMap<String, Class> sortedResult = new LinkedHashMap<>();
+        Class entityClass = ServiceEntityManager.getInstance().getServiceEntityClass(BLStringUtils.capitalize(entityType));
+        String[] fieldNamesInOrder = new String[100];
+        for(Map.Entry<String, Class> entry : meta.entrySet()) {
+            String fieldName = entry.getKey();
+            String getterMethod = getGetterMethodForField(fieldName);
+            try {
+                Method method = entityClass.getMethod(getterMethod);
+                if (null != method) {
+                    Form form = method.getAnnotation(Form.class);
+                    int rank = (null == form) ? ApplicationConfig.DefaultFieldRank : form.DisplayRank();
+                    while (fieldNamesInOrder[rank] != null) {
+                        rank = rank + 1;
+                    }
+                    fieldNamesInOrder[rank] = fieldName;
+                }
+            } catch (NoSuchMethodException e) {
+                logger.warn(String.format("Failed to get method definition[%s.%s]", entityType, getterMethod));
+            }
+        }
+        for (String fieldName : fieldNamesInOrder) {
+            if (fieldName != null) {
+                sortedResult.put(fieldName, meta.get(fieldName));
+            }
+        }
+        return sortedResult;
     }
 }
