@@ -53,13 +53,13 @@
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
                         <li ng-class="{active: (isActive('/dashboard') || isActive('/'))}">
-                            <a href="/dashboard" ng-show="isLoggedIn()">Dashboard</a>
+                            <a href="/dashboard" ng-show="isLoggedIn()">首页</a>
                         </li>
-                        <menuitem entitylabel="Fund Category" ng-show="isLoggedIn()"></menuitem>
-                        <menuitem entitylabel="Cost Center" ng-show="isLoggedIn()"></menuitem>
-                        <menuitem entitylabel="Fund" ng-show="isLoggedIn()"></menuitem>
-                        <li><a href="/login" ng-show="!isLoggedIn()">Login</a></li>
-                        <li><a href="/logout" ng-show="isLoggedIn()">Logout</a></li>
+                        <menuitem entitylabel="分类" entityname="fundCategory" ng-show="isLoggedIn()"></menuitem>
+                        <menuitem entitylabel="部门/项目" entityname="costCenter" ng-show="isLoggedIn()"></menuitem>
+                        <menuitem entitylabel="资金往来" entityname="fund" ng-show="isLoggedIn()"></menuitem>
+                        <li><a href="/login" ng-show="!isLoggedIn()">登陆</a></li>
+                        <li><a href="/logout" ng-show="isLoggedIn()">退出登陆</a></li>
                     </ul>
                 </div>
             </div>
