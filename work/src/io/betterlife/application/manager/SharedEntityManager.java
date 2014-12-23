@@ -25,7 +25,7 @@ public class SharedEntityManager {
         instance.manager = getFactory().createEntityManager();
     }
 
-    public EntityManagerFactory getFactory() {
+    public synchronized EntityManagerFactory getFactory() {
         return instance.factory;
     }
 

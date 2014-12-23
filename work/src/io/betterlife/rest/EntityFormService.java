@@ -79,7 +79,7 @@ public class EntityFormService {
         form.append("<br/>");
         final String formString = form.toString();
         if (logger.isTraceEnabled()) {
-            logger.trace(String.format("%s form template for EntityType[%s]:\n\t%s", operationType, entityType, formString));
+            logger.trace(String.format("%s form template for EntityType[%s]:%n\t%s", operationType, entityType, formString));
         }
         return formString;
     }
@@ -89,7 +89,7 @@ public class EntityFormService {
     public String getListForm(@PathParam("entityType") String entityType, @Context ServletContext context) {
         final String formString = getTemplateUtils().getListController(context, entityType);
         if (logger.isTraceEnabled()) {
-            logger.trace(String.format("List template for EntityType[%s]:\n\t%s", entityType, formString));
+            logger.trace(String.format("List template for EntityType[%s]:%n\t%s", entityType, formString));
         }
         return formString;
     }
