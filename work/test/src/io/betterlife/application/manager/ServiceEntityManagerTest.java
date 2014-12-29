@@ -2,8 +2,8 @@ package io.betterlife.application.manager;
 
 import io.betterlife.domains.BaseObject;
 import io.betterlife.domains.financial.CostCenter;
-import io.betterlife.domains.financial.Fund;
-import io.betterlife.domains.financial.FundCategory;
+import io.betterlife.domains.financial.Expense;
+import io.betterlife.domains.financial.ExpenseCategory;
 import io.betterlife.domains.security.User;
 import io.betterlife.util.EntityMockUtil;
 import org.junit.Before;
@@ -31,8 +31,8 @@ public class ServiceEntityManagerTest {
 
     @Test
     public void testGetServiceEntityClass() throws Exception {
-        assertEquals(FundCategory.class, serviceEntityManager.getServiceEntityClass("FundCategory"));
-        assertEquals(Fund.class, serviceEntityManager.getServiceEntityClass("Fund"));
+        assertEquals(ExpenseCategory.class, serviceEntityManager.getServiceEntityClass("ExpenseCategory"));
+        assertEquals(Expense.class, serviceEntityManager.getServiceEntityClass("Expense"));
         assertEquals(CostCenter.class, serviceEntityManager.getServiceEntityClass("CostCenter"));
         assertEquals(User.class, serviceEntityManager.getServiceEntityClass("User"));
     }

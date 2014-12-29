@@ -1,10 +1,7 @@
 package io.betterlife.application.manager;
 
-import io.betterlife.application.config.ApplicationConfig;
 import io.betterlife.domains.BaseObject;
-import io.betterlife.domains.financial.CostCenter;
-import io.betterlife.domains.financial.Fund;
-import io.betterlife.domains.financial.FundCategory;
+import io.betterlife.domains.financial.*;
 import io.betterlife.domains.security.User;
 import io.betterlife.util.BLStringUtils;
 
@@ -53,10 +50,12 @@ public class ServiceEntityManager {
      *  Generate meta data for creation of front end CRUD UI.
      */
     public static void registerEntities(){
-        ServiceEntityManager.getInstance().registerServiceEntity("FundCategory", FundCategory.class);
+        ServiceEntityManager.getInstance().registerServiceEntity("ExpenseCategory", ExpenseCategory.class);
+        ServiceEntityManager.getInstance().registerServiceEntity("Expense", Expense.class);
+        ServiceEntityManager.getInstance().registerServiceEntity("IncomingCategory", IncomingCategory.class);
+        ServiceEntityManager.getInstance().registerServiceEntity("Incoming", Incoming.class);
         ServiceEntityManager.getInstance().registerServiceEntity("User", User.class);
         ServiceEntityManager.getInstance().registerServiceEntity("CostCenter", CostCenter.class);
-        ServiceEntityManager.getInstance().registerServiceEntity("Fund", Fund.class);
     }
 
 }

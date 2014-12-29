@@ -34,6 +34,9 @@ public class TemplateUtils {
 
     public String getHtmlTemplate(ServletContext context, String filePath) {
         try {
+            if (!filePath.startsWith("/")) {
+                filePath = "/" + filePath;
+            }
             String realPath = context.getRealPath(filePath);
             return FileUtils.readFileToString(new File(realPath), "UTF-8");
         } catch (Exception e) {

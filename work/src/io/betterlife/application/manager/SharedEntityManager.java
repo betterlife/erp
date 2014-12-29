@@ -1,7 +1,10 @@
 package io.betterlife.application.manager;
 
+import io.betterlife.application.config.ApplicationConfig;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 /**
  * Author: Lawrence Liu(xqinliu@cn.ibm.com)
@@ -11,7 +14,6 @@ public class SharedEntityManager {
 
     private static SharedEntityManager instance = new SharedEntityManager();
     private EntityManager manager;
-
     private EntityManagerFactory factory;
 
     public static SharedEntityManager getInstance() {
@@ -20,13 +22,9 @@ public class SharedEntityManager {
 
     private SharedEntityManager() {}
 
-    public synchronized void setFactory(EntityManagerFactory factory) {
-        instance.factory = factory;
-        instance.manager = getFactory().createEntityManager();
-    }
-
-    public EntityManagerFactory getFactory() {
-        return instance.factory;
+    public synchronized void initEntityManager() {
+        instance.factory = Persistence.createEntityManagerFactory(ApplicationConfig.PersistenceUnitName);
+        instance.manager = instance.factory.createEntityManager();
     }
 
     public EntityManager getEntityManager() {

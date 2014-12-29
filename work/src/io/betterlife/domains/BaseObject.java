@@ -1,8 +1,9 @@
 package io.betterlife.domains;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.betterlife.application.manager.MetaDataManager;
 import io.betterlife.domains.security.User;
 import io.betterlife.persistence.BaseOperator;
-import io.betterlife.application.manager.MetaDataManager;
 import io.betterlife.persistence.NamedQueryRules;
 import io.betterlife.util.EntityUtils;
 import io.betterlife.util.converter.Converter;
@@ -10,11 +11,13 @@ import io.betterlife.util.converter.ConverterFactory;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.text.ParseException;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Author: Lawrence Liu(lawrence@betterlife.io)
@@ -123,7 +126,7 @@ public abstract class BaseObject {
                         convertedValue = converter.convert(value);
                         setValue(key, convertedValue);
                     } else {
-                        logger.warn(String.format("Failed to get converter[%s->%s] for value[%s]", value.getClass(), clazz, value));
+                        logger.error(String.format("Failed to get converter[%s->%s] for value[%s]", value.getClass(), clazz, value));
                     }
                 } catch (ParseException e) {
                     logger.error(String.format(

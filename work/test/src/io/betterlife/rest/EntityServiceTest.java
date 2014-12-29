@@ -1,5 +1,6 @@
 package io.betterlife.rest;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import io.betterlife.application.manager.MetaDataManager;
 import io.betterlife.domains.security.User;
 import io.betterlife.persistence.BaseOperator;
@@ -9,7 +10,6 @@ import io.betterlife.util.jpa.OpenJPAUtil;
 import io.betterlife.util.rest.ExecuteResult;
 import org.apache.commons.io.IOUtils;
 import org.apache.openjpa.persistence.OpenJPAQuery;
-import org.codehaus.jackson.JsonNode;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -56,9 +56,9 @@ public class EntityServiceTest {
         entityService.setOperator(operator);
         final String userFromDB = entityService.getObjectByTypeAndId(1, "User");
         final JsonNode node = JsonUtils.getInstance().stringToJsonNode(userFromDB);
-        final String username = node.get("result").get("username").getTextValue();
+        final String username = node.get("result").get("username").textValue();
         assertEquals("username", username);
-        final String password = node.get("result").get("password").getTextValue();
+        final String password = node.get("result").get("password").textValue();
         assertEquals("password", password);
         verify(operator, times(1)).getBaseObjectById(1, "User.getById");
     }
@@ -88,7 +88,7 @@ public class EntityServiceTest {
         EntityManager manager = EntityMockUtil.getInstance().mockEntityManagerAndMeta();
         MetaDataManager.getInstance().setEntityManager(manager);
         String userMeta = service.getEntityMeta("User");
-        JsonNode expect = JsonUtils.getInstance().stringToJsonNode("{\"success\":true,\"successMessage\":null,\"errorMessages\":[],\"result\":[{\"field\":\"id\",\"name\":\"编号\"},{\"field\":\"username\",\"name\":\"Username\"},{\"field\":\"password\",\"name\":\"Password\"}]}");
+        JsonNode expect = JsonUtils.getInstance().stringToJsonNode("{\"success\":true,\"successMessage\":null,\"errorMessages\":[],\"result\":[{\"field\":\"id\",\"name\":\"Id\"},{\"field\":\"username\",\"name\":\"Username\"},{\"field\":\"password\",\"name\":\"Password\"}]}");
         JsonNode node = JsonUtils.getInstance().stringToJsonNode(userMeta);
         assertEquals(expect, node);
     }
