@@ -4,11 +4,13 @@ import io.betterlife.application.EntityManagerConsumer;
 import io.betterlife.domains.BaseObject;
 import org.apache.commons.lang3.ClassUtils;
 
-import javax.persistence.EntityManager;
 import javax.persistence.metamodel.Attribute;
 import javax.persistence.metamodel.ManagedType;
 import javax.persistence.metamodel.Metamodel;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Author: Lawrence Liu(lawrence@betterlife.io)

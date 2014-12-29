@@ -1,9 +1,10 @@
 package io.betterlife.util.rest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.Serializable;
 import java.text.DateFormat;
@@ -63,8 +64,6 @@ public class ExecuteResult<T> implements Serializable {
         setResult(object);
         String resultStr = StringUtils.EMPTY;
         try {
-            final DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
-            objectMapper.getSerializationConfig().setDateFormat(df);
             resultStr = objectMapper.writeValueAsString(this);
         } catch (Exception e) {
             logWriteValueAsStringError(object, e);

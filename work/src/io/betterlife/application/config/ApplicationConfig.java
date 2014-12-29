@@ -10,7 +10,7 @@ public class ApplicationConfig {
     /**
      * Application data source name
      */
-    public static final String DataSourceName = "jdbc/betterlife-sqld";
+    public static final String DataSourceName = "jdbc/PostgreSQLDS";
 
     /**
      * Application persistence unit name

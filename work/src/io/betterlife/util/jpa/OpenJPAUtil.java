@@ -1,11 +1,8 @@
 package io.betterlife.util.jpa;
 
 import io.betterlife.application.EntityManagerConsumer;
-import io.betterlife.application.manager.SharedEntityManager;
 import org.apache.openjpa.persistence.OpenJPAPersistence;
 import org.apache.openjpa.persistence.OpenJPAQuery;
-
-import javax.persistence.EntityManager;
 
 /**
  * Author: Lawrence Liu(lawrence@betterlife.io)

@@ -44,22 +44,25 @@ public class IndexFilter implements Filter {
                          FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
-        String pathInfo =  request.getPathInfo();
-        if (logger.isTraceEnabled()) {
-            logger.trace("Request path info: " + pathInfo);
-        }
-        String redirectResult = redirectCache.get(pathInfo);
-        if (null != pathInfo) {
-            if (null == redirectResult) {
-                if (BLStringUtils.getInstance().startWithAnyPattern(patterns, pathInfo)) {
-                    redirectResult = "/#" + pathInfo.substring(1, pathInfo.length());
-                } else {
-                    redirectResult = pathInfo;
-                }
-                redirectCache.put(pathInfo, redirectResult);
+        final String requestURI = request.getRequestURI();
+        if (null != requestURI) {
+            String pathInfo = requestURI.substring(request.getContextPath().length());
+            if (logger.isTraceEnabled()) {
+                logger.trace("Request path info: " + pathInfo);
             }
-            if (!redirectResult.equals(pathInfo)) {
-                response.sendRedirect(redirectResult);
+            String redirectResult = redirectCache.get(pathInfo);
+            if (null != pathInfo) {
+                if (null == redirectResult) {
+                    if (BLStringUtils.getInstance().startWithAnyPattern(patterns, pathInfo)) {
+                        redirectResult = "/#" + pathInfo.substring(1, pathInfo.length());
+                    } else {
+                        redirectResult = pathInfo;
+                    }
+                    redirectCache.put(pathInfo, redirectResult);
+                }
+                if (!redirectResult.equals(pathInfo)) {
+                    response.sendRedirect(redirectResult);
+                }
             }
         }
         filterChain.doFilter(request, response);

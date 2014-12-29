@@ -1,5 +1,6 @@
 package io.betterlife.util;
 
+import io.betterlife.application.I18n;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
@@ -20,6 +21,13 @@ public class TemplateUtilsTest {
     @Before
     public void setUp() throws Exception {
         templateUtils = TemplateUtils.getInstance();
+        I18n i18n = mock(I18n.class);
+        when(i18n.getFieldLabel("Expense", "user", "zh_CN")).thenReturn("用户");
+        when(i18n.getFieldLabel("Expense", "expense", "zh_CN")).thenReturn("Expense");
+        when(i18n.getFieldLabel("Expense", "", "zh_CN")).thenReturn("");
+        when(i18n.getFieldLabel("Expense", null, "zh_CN")).thenReturn("");
+        when(i18n.getFieldLabel("Expense", "expenseCategory", "zh_CN")).thenReturn("支出分类");
+        I18n.setInstance(i18n);
     }
 
     @Test
@@ -128,12 +136,12 @@ public class TemplateUtilsTest {
 
     @Test
     public void testGetFieldLabelHtml() throws Exception {
-        String entityType = "Fund";
+        String entityType = "Expense";
         assertEquals("<label for='user' class='col-sm-2 control-label' id='user-label'>用户</label>\n",
                      templateUtils.getFieldLabelHtml(entityType, "user"));
         assertEquals("<label for='expense' class='col-sm-2 control-label' id='expense-label'>Expense</label>\n",
                      templateUtils.getFieldLabelHtml(entityType, "expense"));
-        assertEquals("<label for='expenseCategory' class='col-sm-2 control-label' id='expenseCategory-label'>ExpenseCategory</label>\n",
+        assertEquals("<label for='expenseCategory' class='col-sm-2 control-label' id='expenseCategory-label'>支出分类</label>\n",
                      templateUtils.getFieldLabelHtml(entityType, "expenseCategory"));
         assertEquals("<label for='' class='col-sm-2 control-label' id='-label'></label>\n",
                      templateUtils.getFieldLabelHtml(entityType, null));
@@ -143,7 +151,7 @@ public class TemplateUtilsTest {
 
     @Test
     public void testGetFieldLabel() throws Exception {
-        String entityType = "Fund";
+        String entityType = "Expense";
         assertEquals("用户", templateUtils.getFieldLabel(entityType, "user"));
         assertEquals("Expense", templateUtils.getFieldLabel(entityType, "expense"));
         assertEquals("", templateUtils.getFieldLabel(entityType, ""));

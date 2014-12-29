@@ -1,11 +1,14 @@
 package io.betterlife.application;
 
 import io.betterlife.application.config.ApplicationConfig;
+import io.betterlife.application.manager.SharedEntityManager;
 import io.betterlife.rest.EntityFormService;
 import io.betterlife.rest.EntityService;
 import io.betterlife.rest.security.SecurityService;
 
+import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,6 +17,7 @@ import java.util.Set;
  * Author: Lawrence Liu(lawrence@betterlife.io)
  * Date: 11/1/14
  */
+@ApplicationPath("rest")
 public class RestApplication extends Application {
 
     public Set<Class<?>> getClasses() {
@@ -25,15 +29,7 @@ public class RestApplication extends Application {
     }
 
     public Set<Object> getSingletons() {
-         HashSet<Object> set = new HashSet<>();
-         try {
-             InitialContext ctx = new InitialContext();
-             Object obj = ctx.lookup(ApplicationConfig.DataSourceName);
-             set.add(obj);
-         } catch (Exception ex) {
-             throw new RuntimeException(ex);
-         }
-         return set;
-      }
+        return new HashSet<>();
+    }
 
 }

@@ -8,6 +8,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletContext;
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -42,15 +45,19 @@ public class EntityFormService {
 
     @GET @Path("/{entityType}/create")
     @Produces(MediaType.TEXT_HTML)
-    public String getCreateForm(@PathParam("entityType") String entityType, @Context ServletContext context) {
+    public String getCreateForm(@PathParam("entityType") String entityType, @Context HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        ServletContext context = session.getServletContext();
         return getForm(entityType, context, FormConfig.getInstance().getCreateFormIgnoreFields(), "Create");
     }
 
     @GET @Path("/{entityType}/edit/{id}")
     @Produces(MediaType.TEXT_HTML)
     public String getEditForm(@PathParam("entityType") String entityType,
-                              @Context ServletContext context,
+                              @Context HttpServletRequest request,
                               @PathParam("id") int id) {
+        HttpSession session = request.getSession();
+        ServletContext context = session.getServletContext();
         return getForm(entityType, context, FormConfig.getInstance().getEditFormIgnoreFields(), "Update");
     }
 
@@ -86,7 +93,9 @@ public class EntityFormService {
 
     @GET @Path("/{entityType}/list")
     @Produces(MediaType.TEXT_HTML)
-    public String getListForm(@PathParam("entityType") String entityType, @Context ServletContext context) {
+    public String getListForm(@PathParam("entityType") String entityType, @Context HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        ServletContext context = session.getServletContext();
         final String formString = getTemplateUtils().getListController(context, entityType);
         if (logger.isTraceEnabled()) {
             logger.trace(String.format("List template for EntityType[%s]:%n\t%s", entityType, formString));

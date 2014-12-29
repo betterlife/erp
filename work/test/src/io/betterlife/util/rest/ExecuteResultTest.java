@@ -1,9 +1,9 @@
 package io.betterlife.util.rest;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.betterlife.util.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -34,17 +34,6 @@ public class ExecuteResultTest {
         assertEquals(true, result.isSuccess());
         assertEquals(expectObj, actualObj);
         assertEquals(0, result.getErrorMessages().size());
-    }
-
-    @Test
-    public void testReturnEmptyStringUponException() throws IOException {
-        ObjectMapper mapper = mock(ObjectMapper.class);
-        Object obj = new Object();
-        ExecuteResult<Object> result = new ExecuteResult<>();
-        when(mapper.writeValueAsString(result)).thenThrow(new IOException());
-        result.setObjectMapper(mapper);
-        String resultStr = result.getRestString(obj);
-        assertEquals(StringUtils.EMPTY,  resultStr);
     }
 
     @Test

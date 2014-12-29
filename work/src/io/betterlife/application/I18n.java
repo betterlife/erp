@@ -6,6 +6,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.servlet.ServletContext;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -19,14 +20,20 @@ import java.util.Map;
  */
 public class I18n {
 
-    private static final Logger logger = LogManager.getLogger(I18n.class.getName());
-    private static boolean loaded = false;
-    private static Map<String, Map<String, String>> translations = new HashMap<>();
+    private final Logger logger = LogManager.getLogger(I18n.class.getName());
+    private boolean loaded = false;
+    private String i18nPath;
+    private Map<String, Map<String, String>> translations = new HashMap<>();
+
     private static I18n instance = new I18n();
     private I18n(){}
 
     public static I18n getInstance() {
-        return instance;
+        return I18n.instance;
+    }
+
+    public static void setInstance(I18n instance) {
+        I18n.instance = instance;
     }
 
     public String get(String key, String locale) {
@@ -42,7 +49,7 @@ public class I18n {
         String i18nPath = getI18nPath();
         File i18nFileForLocale = new File(i18nPath + File.separator + locale + ".csv");
         final HashMap<String, String> localeTrans = new HashMap<>();
-        I18n.translations.put(locale, localeTrans);
+        translations.put(locale, localeTrans);
         if (i18nFileForLocale.exists()) {
             try {
                 final FileInputStream input = new FileInputStream(i18nFileForLocale);
@@ -60,9 +67,8 @@ public class I18n {
         }
     }
 
-    //TODO: Change to dynamic way.
     private String getI18nPath() {
-        return "/Users/larry/Projects/betterlife/ERP/target/artifact/flat/WEB-INF/resources/i18n";
+        return i18nPath;
     }
 
     public String getFieldLabel(String entityType, String key, String locale) {
@@ -77,5 +83,9 @@ public class I18n {
             }
         }
         return null == result ? BLStringUtils.capitalize(key) : result;
+    }
+
+    public void initResources(ServletContext servletContext) {
+        i18nPath = servletContext.getRealPath("/WEB-INF/classes/resources/i18n");
     }
 }
