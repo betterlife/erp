@@ -10,14 +10,14 @@ import javax.persistence.*;
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name = "FundCategory.getById", query = "SELECT e FROM FundCategory e WHERE e.id = :id "),
-    @NamedQuery(name = "FundCategory.getAll",  query = "SELECT e FROM FundCategory e")
+    @NamedQuery(name = "ExpenseCategory.getById", query = "SELECT e FROM ExpenseCategory e WHERE e.id = :id "),
+    @NamedQuery(name = "ExpenseCategory.getAll",  query = "SELECT e FROM ExpenseCategory e")
 })
-public class FundCategory extends BaseObject {
+public class ExpenseCategory extends BaseObject {
 
-    public FundCategory() {}
+    public ExpenseCategory() {}
 
-    public FundCategory(String name) {
+    public ExpenseCategory(String name) {
         this();
         setName(name);
     }

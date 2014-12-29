@@ -1,5 +1,6 @@
 package io.betterlife.domains.financial;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.betterlife.domains.BaseObject;
 import io.betterlife.domains.security.User;
 import io.betterlife.rest.Form;
@@ -15,19 +16,19 @@ import java.util.Date;
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name = "Fund.getById", query = "SELECT e FROM Fund e WHERE e.id = :id "),
-    @NamedQuery(name = "Fund.getAll",  query = "SELECT e FROM Fund e")
+    @NamedQuery(name = "Expense.getById", query = "SELECT e FROM Expense e WHERE e.id = :id "),
+    @NamedQuery(name = "Expense.getAll",  query = "SELECT e FROM Expense e")
 })
-public class Fund extends BaseObject {
+public class Expense extends BaseObject {
 
-    public void setFundCategory(FundCategory fundCategory) {
-        setValue("fundCategory", fundCategory);
+    public void setExpenseCategory(ExpenseCategory expenseCategory) {
+        setValue("expenseCategory", expenseCategory);
     }
 
     @ManyToOne
     @Form(RepresentField="name", DisplayRank =10)
-    public FundCategory getFundCategory() {
-        return getValue("fundCategory");
+    public ExpenseCategory getExpenseCategory() {
+        return getValue("expenseCategory");
     }
 
     public void setCostCenter(CostCenter costCenter) {
@@ -73,17 +74,9 @@ public class Fund extends BaseObject {
     }
 
     @Form(DisplayRank = 2)
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy/MM/dd", timezone="CST")
     public Date getDate() {
         return getValue("date");
     }
 
-    @Enumerated(EnumType.STRING)
-    @Form(DisplayRank = 1)
-    public FundType getFundType() {
-        return getValue("fundType");
-    }
-
-    public void setFundType(FundType fundType) {
-        setValue("fundType", fundType);
-    }
 }
