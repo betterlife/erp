@@ -7,7 +7,6 @@ import org.junit.Test;
 import javax.persistence.Entity;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
 public class ExpenseCategoryTest {
 
@@ -47,7 +46,7 @@ public class ExpenseCategoryTest {
 
     @Test
     public void testEntityAnnotationDefined() {
-        Entity entity = CostCenter.class.getAnnotation(Entity.class);
+        Entity entity = ExpenseCategory.class.getAnnotation(Entity.class);
         assertNotNull(entity);
     }
 

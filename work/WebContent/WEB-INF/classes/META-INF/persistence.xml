@@ -2,14 +2,26 @@
 <persistence xmlns="http://java.sun.com/xml/ns/persistence"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
-	<persistence-unit name="betterlife" transaction-type="JTA">
-		<jta-data-source>jdbc/betterlife-sqld</jta-data-source>
+	<persistence-unit name="betterlife" transaction-type="RESOURCE_LOCAL">
+		<provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
+		<!--<non-jta-data-source>java:comp/env/jdbc/PostgreSQLDS</non-jta-data-source>-->
+		<class>io.betterlife.domains.BaseObject</class>
+		<class>io.betterlife.domains.security.User</class>
+		<class>io.betterlife.domains.financial.Incoming</class>
+		<class>io.betterlife.domains.financial.CostCenter</class>
+		<class>io.betterlife.domains.financial.Expense</class>
+		<class>io.betterlife.domains.financial.ExpenseCategory</class>
+		<class>io.betterlife.domains.financial.IncomingCategory</class>
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 		<properties>
+			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+	        <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/betterlife"/>
+	        <property name="javax.persistence.jdbc.user" value="betterlife"/>
+	        <property name="javax.persistence.jdbc.password" value="password"/>
 			<property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema(foreignKeys=true,schemaAction='add')"   />
 		    <property name="openjpa.LockTimeout" value="30000" />
 			<property name="openjpa.jdbc.TransactionIsolation" value="read-committed" />
-			<property name="openjpa.Log" value="DefaultLevel=TRACE, Runtime=TRACE, Tool=TRACE, SQL=TRACE"/>
+			<property name="openjpa.Log" value="DefaultLevel=INFO, Runtime=INFO, Tool=INFO, SQL=INFO"/>
 			<property name="openjpa.jdbc.UpdateManager" value="operation-order" />
 		</properties>
 	</persistence-unit>

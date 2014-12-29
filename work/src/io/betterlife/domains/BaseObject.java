@@ -1,8 +1,9 @@
 package io.betterlife.domains;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.betterlife.application.manager.MetaDataManager;
 import io.betterlife.domains.security.User;
 import io.betterlife.persistence.BaseOperator;
-import io.betterlife.persistence.MetaDataManager;
 import io.betterlife.persistence.NamedQueryRules;
 import io.betterlife.util.EntityUtils;
 import io.betterlife.util.converter.Converter;
@@ -15,13 +16,15 @@ import javax.persistence.*;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Author: Lawrence Liu(xqinliu@cn.ibm.com)
+ * Author: Lawrence Liu(lawrence@betterlife.io)
  * Date: 10/31/14
  */
 @MappedSuperclass
+@JsonIgnoreProperties({"creator", "lastModify"})
 public abstract class BaseObject {
 
     private static final Logger logger = LogManager.getLogger(BaseObject.class.getName());
@@ -85,9 +88,9 @@ public abstract class BaseObject {
         return getValue("creator");
     }
 
-    public void setValues(EntityManager entityManager, Map<String, String> parameters) {
-        MetaDataManager.getInstance().setAllFieldMetaData(entityManager);
-        for (Map.Entry<String, String> entry : parameters.entrySet()) {
+    public void setValues(Map<String, Object> parameters) {
+        MetaDataManager.getInstance().setAllFieldMetaData();
+        for (Map.Entry<String, Object> entry : parameters.entrySet()) {
             String key = entry.getKey();
             Object value = entry.getValue();
             Class clazz = MetaDataManager.getInstance().getFieldMetaData(this.getClass(), key);
@@ -96,15 +99,25 @@ public abstract class BaseObject {
             }
             if (EntityUtils.getInstance().isBaseObject(clazz)) {
                 final String idQueryForEntity = NamedQueryRules.getInstance().getIdQueryForEntity(clazz.getSimpleName());
-                BaseObject baseObj = BaseOperator.getInstance().getBaseObjectById(
-                    entityManager, Long.parseLong((String) value),
-                    idQueryForEntity
-                );
+                if (value instanceof LinkedHashMap) {
+                    value = ((LinkedHashMap) value).get("id");
+                }
+                if (value instanceof String) {
+                    value = Long.parseLong((String) value);
+                }
+                if (value instanceof Integer) {
+                    value = (long) ((Integer) value);
+                }
+                BaseObject baseObj = BaseOperator.getInstance().getBaseObjectById((Long) value, idQueryForEntity);
                 if (null != baseObj) {
                     setValue(key, baseObj);
                 }
             } else if (ClassUtils.isAssignable(value.getClass(), clazz)) {
                 setValue(key, value);
+            } else if (Enum.class.isAssignableFrom(clazz) && value instanceof String) {
+                @SuppressWarnings("unchecked")
+                Enum enumVal = Enum.valueOf((Class<? extends Enum>)clazz, (String) value);
+                setValue(key, enumVal);
             } else {
                 final Converter converter = ConverterFactory.getInstance().getConverter(value.getClass(), clazz);
                 Object convertedValue = null;
@@ -113,7 +126,7 @@ public abstract class BaseObject {
                         convertedValue = converter.convert(value);
                         setValue(key, convertedValue);
                     } else {
-                        logger.warn(String.format("Failed to get converter[%s->%s] for value[%s]", value.getClass(), clazz, value));
+                        logger.error(String.format("Failed to get converter[%s->%s] for value[%s]", value.getClass(), clazz, value));
                     }
                 } catch (ParseException e) {
                     logger.error(String.format(

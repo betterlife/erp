@@ -1,9 +1,5 @@
 package io.betterlife.rest.security;
 
-import io.betterlife.application.ApplicationConfig;
-import io.betterlife.domains.BaseObject;
-import io.betterlife.domains.security.User;
-import io.betterlife.persistence.BaseOperator;
 import io.betterlife.util.IOUtil;
 import io.betterlife.util.rest.ExecuteResult;
 import io.betterlife.util.security.LoginUtil;
@@ -11,10 +7,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.*;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
@@ -29,9 +26,6 @@ import java.util.Map;
 @Path("/security")
 @Stateless
 public class SecurityService {
-
-    @PersistenceContext(unitName = ApplicationConfig.PersistenceUnitName)
-    private EntityManager entityManager;
 
     private static final Logger logger = LogManager.getLogger(SecurityService.class.getName());
 
@@ -52,6 +46,6 @@ public class SecurityService {
          Map<String, Object> params = IOUtil.getInstance().inputStreamToJson(requestBody);
         final String username = (String) params.get("username");
         final String password = (String) params.get("password");
-        return LoginUtil.getInstance().login(entityManager, params, username, password);
+        return LoginUtil.getInstance().login(params, username, password);
     }
 }

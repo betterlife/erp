@@ -1,6 +1,5 @@
 package io.betterlife.domains;
 
-import io.betterlife.domains.financial.Expense;
 import io.betterlife.domains.security.User;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,7 +7,6 @@ import org.junit.Test;
 import java.util.Date;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
 class MockBaseObject extends BaseObject {
 

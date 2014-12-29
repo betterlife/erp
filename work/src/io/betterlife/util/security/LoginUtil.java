@@ -7,7 +7,6 @@ import io.betterlife.util.rest.ExecuteResult;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.persistence.EntityManager;
 import java.util.Map;
 
 /**
@@ -25,13 +24,13 @@ public class LoginUtil {
     private LoginUtil() {
     }
 
-    public String login(EntityManager entityManager, Map<String, Object> params, String username, String password) {
+    public String login(Map<String, Object> params, String username, String password) {
         User user;
         try {
             if (logger.isDebugEnabled()) {
                 logger.debug(String.format("Login request, [%s:%s]",username, password));
             }
-            user = BaseOperator.getInstance().getBaseObject(entityManager, User.GetByUserNameAndPasswordQuery, params);
+            user = BaseOperator.getInstance().getBaseObject(User.GetByUserNameAndPasswordQuery, params);
         } catch (Exception e) {
             logger.error(String.format("Exception during login of user[%s], password[%s]", username, password), e);
             logger.warn(String.format("Error to get user username[%s], password[%s]", username, password));

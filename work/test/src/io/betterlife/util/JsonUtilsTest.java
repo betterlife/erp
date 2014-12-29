@@ -1,6 +1,5 @@
 package io.betterlife.util;
 
-import org.codehaus.jackson.JsonNode;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

@@ -1,22 +1,24 @@
 package io.betterlife.rest;
 
-import io.betterlife.application.ApplicationConfig;
-import io.betterlife.application.FormConfig;
-import io.betterlife.application.ServiceEntityManager;
+import io.betterlife.application.config.FormConfig;
+import io.betterlife.application.manager.ServiceEntityManager;
+import io.betterlife.util.EntityUtils;
 import io.betterlife.util.TemplateUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,10 +26,7 @@ import java.util.Map;
  * Date: 11/25/14
  */
 @Path("/form")
-@Stateless
 public class EntityFormService {
-    @PersistenceContext(unitName = ApplicationConfig.PersistenceUnitName)
-    private EntityManager entityManager;
 
     private static final Logger logger = LogManager.getLogger(EntityFormService.class.getName());
 
@@ -46,40 +45,62 @@ public class EntityFormService {
 
     @GET @Path("/{entityType}/create")
     @Produces(MediaType.TEXT_HTML)
-    public String getCreateForm(@PathParam("entityType") String entityType, @Context ServletContext context) {
-        Map<String, Class> meta = ServiceEntityManager.getInstance().getMetaFromEntityType(entityManager, entityType);
+    public String getCreateForm(@PathParam("entityType") String entityType, @Context HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        ServletContext context = session.getServletContext();
+        return getForm(entityType, context, FormConfig.getInstance().getCreateFormIgnoreFields(), "Create");
+    }
+
+    @GET @Path("/{entityType}/edit/{id}")
+    @Produces(MediaType.TEXT_HTML)
+    public String getEditForm(@PathParam("entityType") String entityType,
+                              @Context HttpServletRequest request,
+                              @PathParam("id") int id) {
+        HttpSession session = request.getSession();
+        ServletContext context = session.getServletContext();
+        return getForm(entityType, context, FormConfig.getInstance().getEditFormIgnoreFields(), "Update");
+    }
+
+    public String getForm(String entityType, ServletContext context,
+                          final List<String> ignoreFields, final String operationType) {
+        Map<String, Class> meta = ServiceEntityManager.getInstance().getMetaFromEntityType(entityType);
+        LinkedHashMap<String, Class> sortedMeta = EntityUtils.getInstance().sortEntityMetaByDisplayRank(entityType, meta);
         StringBuilder form = new StringBuilder();
         form.append("<div class='form-group form-horizontal'>");
-        for (Map.Entry<String, Class> entry : meta.entrySet()) {
+        for (Map.Entry<String, Class> entry : sortedMeta.entrySet()) {
             final Class clazz = entry.getValue();
             final String key = entry.getKey();
-            if (FormConfig.getInstance().getFormIgnoreFields().contains(key)) {
+            if (ignoreFields.contains(key)) {
                 continue;
             }
             form.append("<div class='form-group'>\n");
-            form.append(getTemplateUtils().getFieldLabelHtml(key));
+            form.append(getTemplateUtils().getFieldLabelHtml(entityType, key));
             form.append(getTemplateUtils().getFieldController(
-                            context, entityManager, entityType, key,
-                            clazz, getTemplateUtils().getFieldLabel(key)
+                            context, entityType, key,
+                            clazz, getTemplateUtils().getFieldLabel(entityType, key)
                         ));
             form.append("</div>");
         }
-        form.append(getTemplateUtils().getButtonsController(context, entityType));
+        form.append(getTemplateUtils().getButtonsController(context, entityType, operationType));
         form.append("</div>");
         form.append("<br/>");
-        return form.toString();
-    }
-
-    @GET @Path("/{entityType}/edit")
-    @Produces(MediaType.TEXT_HTML)
-    public String getEditForm(@PathParam("entityType") String entityType) {
-        return "Edit Form";
+        final String formString = form.toString();
+        if (logger.isTraceEnabled()) {
+            logger.trace(String.format("%s form template for EntityType[%s]:%n\t%s", operationType, entityType, formString));
+        }
+        return formString;
     }
 
     @GET @Path("/{entityType}/list")
     @Produces(MediaType.TEXT_HTML)
-    public String getListForm(@PathParam("entityType") String entityType, @Context ServletContext context) {
-        return getTemplateUtils().getListController(context, entityType);
+    public String getListForm(@PathParam("entityType") String entityType, @Context HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        ServletContext context = session.getServletContext();
+        final String formString = getTemplateUtils().getListController(context, entityType);
+        if (logger.isTraceEnabled()) {
+            logger.trace(String.format("List template for EntityType[%s]:%n\t%s", entityType, formString));
+        }
+        return formString;
     }
 
     @GET @Path("/{entityName}/detail")

@@ -1,5 +1,7 @@
 package io.betterlife.util;
 
+import io.betterlife.application.I18n;
+import io.betterlife.application.config.ApplicationConfig;
 import io.betterlife.domains.BaseObject;
 import io.betterlife.persistence.BaseOperator;
 import io.betterlife.persistence.NamedQueryRules;
@@ -9,7 +11,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.persistence.EntityManager;
 import javax.servlet.ServletContext;
 import java.io.File;
 import java.math.BigDecimal;
@@ -18,7 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Author: Lawrence Liu(xqinliu@cn.ibm.com)
+ * Author: Lawrence Liu(lawrence@betterlife.io)
  * Date: 10/28/14
  */
 public class TemplateUtils {
@@ -33,6 +34,9 @@ public class TemplateUtils {
 
     public String getHtmlTemplate(ServletContext context, String filePath) {
         try {
+            if (!filePath.startsWith("/")) {
+                filePath = "/" + filePath;
+            }
             String realPath = context.getRealPath(filePath);
             return FileUtils.readFileToString(new File(realPath), "UTF-8");
         } catch (Exception e) {
@@ -42,11 +46,13 @@ public class TemplateUtils {
     }
 
     @SuppressWarnings("unchecked")
-    public String getFieldController(ServletContext context, EntityManager entityManager,
-                                     String entityType, String key, Class clazz, String label) {
+    public String getFieldController(ServletContext context, String entityType,
+                                     String key, Class clazz, String label) {
         StringBuilder form = new StringBuilder();
         form.append("<div class='col-sm-4'>");
-        if (String.class.equals(clazz)) {
+        if (EntityUtils.getInstance().isIdField(key)) {
+            form.append(getIdController(context, key, label));
+        }  else if (String.class.equals(clazz)) {
             form.append(getStringController(context, key, label));
         } else if (Date.class.equals(clazz)) {
             form.append(getDateController(context, key));
@@ -57,16 +63,40 @@ public class TemplateUtils {
         } else if (Boolean.class.equals(clazz)) {
             form.append(getBooleanController(key));
         } else if (ClassUtils.getAllSuperclasses(clazz).contains(BaseObject.class)) {
-            form.append(getBaseObjectController(context, entityManager, entityType, key, clazz));
+            form.append(getBaseObjectController(context, entityType, key, clazz));
+        } else if (Enum.class.isAssignableFrom(clazz)){
+            form.append(getEnumController(context, key, clazz));
         }
         form.append("</div>");
         return form.toString();
     }
 
-    public String getBaseObjectController(ServletContext context, EntityManager entityManager,
-                                          String entityType, String key, Class<? extends BaseObject> clazz) {
+    private String getIdController(ServletContext context, String key, String label) {
+        String template = getHtmlTemplate(context, "templates/fields/string.tpl.html");
+        return template
+            .replaceAll("\\$name", key)
+            .replaceAll("\\$ngModel", getNgModelNameForField(key))
+            .replaceAll("\\$placeholder", label)
+            .replaceAll("\\$type", "hidden");
+    }
+
+    private String getEnumController(ServletContext context, String key, Class clazz) {
+        Object[] enumArray = clazz.getEnumConstants();
+        StringBuilder sb = new StringBuilder();
+        for (Object enumVal : enumArray) {
+            sb.append(String.format("<option value='%s'>%s</option>%n", enumVal.toString(),
+                                    I18n.getInstance().get(enumVal.toString(), ApplicationConfig.getLocale())));
+        }
+        String template = getHtmlTemplate(context, "templates/fields/enum.tpl.html");
+        return template
+            .replaceAll("\\$name", key)
+            .replaceAll("\\$ngModel", getNgModelNameForField(key))
+            .replaceAll("\\$options", sb.toString());
+    }
+
+    public String getBaseObjectController(ServletContext context, String entityType,
+                                          String key, Class<? extends BaseObject> clazz) {
         List<BaseObject> objects = BaseOperator.getInstance().getBaseObjects(
-            entityManager,
             NamedQueryRules.getInstance().getAllQueryForEntity(clazz.getSimpleName())
         );
         String representField = EntityUtils.getInstance().getRepresentField(entityType, key);
@@ -77,7 +107,7 @@ public class TemplateUtils {
         String template = getHtmlTemplate(context, "templates/fields/baseobject.tpl.html");
         return template
             .replaceAll("\\$name", key)
-            .replaceAll("\\$ngModel", getNgModelNameForField(key))
+            .replaceAll("\\$ngModel", getNgModelNameForField(key) + ".id")
             .replaceAll("\\$options", sb.toString());
     }
 
@@ -120,22 +150,25 @@ public class TemplateUtils {
             .replaceAll("\\$placeholder", label);
     }
 
-    public String getButtonsController(ServletContext context, String entityType) {
+    public String getButtonsController(ServletContext context, String entityType, final String operationType) {
         String template = getHtmlTemplate(context, "templates/fields/buttons.tpl.html");
-        return template.replaceAll("\\$entityType", entityType);
+        final String locale = ApplicationConfig.getLocale();
+        return template
+            .replaceAll("\\$operationType", I18n.getInstance().get(operationType, locale))
+            .replaceAll("\\$operation", BLStringUtils.uncapitalize(operationType))
+            .replaceAll("\\$reset", I18n.getInstance().get("Reset", locale))
+            .replaceAll("\\$entityType", I18n.getInstance().get(BLStringUtils.capitalize(entityType), locale));
     }
 
-    public String getFieldLabelHtml(String key) {
-        final String label = getFieldLabel(key);
-        return String.format("<label for='%s' class='col-sm-2 control-label'>%s</label>%n",
+    public String getFieldLabelHtml(String entityType, String key) {
+        final String label = getFieldLabel(entityType, key);
+        return String.format("<label for='%s' class='col-sm-2 control-label' id='%s-label'>%s</label>%n",
+                             null == key ? BLStringUtils.EMPTY : key,
                              null == key ? BLStringUtils.EMPTY : key, label);
     }
 
-    public String getFieldLabel(String key) {
-        if (null == key) {
-            return BLStringUtils.EMPTY;
-        }
-        return BLStringUtils.capitalize(key);
+    public String getFieldLabel(String entityType, String key) {
+        return I18n.getInstance().getFieldLabel(entityType, key, ApplicationConfig.getLocale());
     }
 
     public String getListController(ServletContext context, String entityType) {

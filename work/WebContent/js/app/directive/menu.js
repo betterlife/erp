@@ -8,7 +8,8 @@
         templateUrl: '/templates/menuItem.html',
         replace: true,
         scope: {
-            entitylabel : '@entitylabel'
+            entitylabel : '@entitylabel',
+            entityname  : '@entityname'
         }
     }
 };

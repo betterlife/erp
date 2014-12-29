@@ -1,15 +1,14 @@
 package io.betterlife.util.jpa;
 
+import io.betterlife.application.EntityManagerConsumer;
 import org.apache.openjpa.persistence.OpenJPAPersistence;
 import org.apache.openjpa.persistence.OpenJPAQuery;
-
-import javax.persistence.EntityManager;
 
 /**
  * Author: Lawrence Liu(lawrence@betterlife.io)
  * Date: 11/7/14
  */
-public class OpenJPAUtil {
+public class OpenJPAUtil extends EntityManagerConsumer {
     private static OpenJPAUtil ourInstance = new OpenJPAUtil();
 
     public static OpenJPAUtil getInstance() {
@@ -19,8 +18,8 @@ public class OpenJPAUtil {
     private OpenJPAUtil() {
     }
 
-    public OpenJPAQuery getOpenJPAQuery(EntityManager em, String queryName) {
-        return OpenJPAPersistence.cast(em.createNamedQuery(queryName));
+    public OpenJPAQuery getOpenJPAQuery(String queryName) {
+        return OpenJPAPersistence.cast(getEntityManager().createNamedQuery(queryName));
     }
 
     public <T> T getSingleResult(OpenJPAQuery q) {
