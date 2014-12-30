@@ -61,7 +61,7 @@ public class EntityService {
         }
         String result = new ExecuteResult<List<Map<String, Object>>>().getRestString(list);
         if (logger.isTraceEnabled()) {
-            logger.trace(String.format("Entity[%s]'s meta: \n\t%s", entityType, result));
+            logger.trace(String.format("Entity[%s]'s meta: %n\t%s", entityType, result));
         }
         return result;
     }
