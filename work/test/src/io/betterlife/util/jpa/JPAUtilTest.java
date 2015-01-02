@@ -8,11 +8,11 @@ import javax.persistence.EntityManager;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-public class OpenJPAUtilTest {
+public class JPAUtilTest {
 
     @Test
     public void testGetInstance() throws Exception {
-        assertNotNull(OpenJPAUtil.getInstance());
+        assertNotNull(JPAUtil.getInstance());
     }
 
     @Test
@@ -21,9 +21,9 @@ public class OpenJPAUtilTest {
         OpenJPAQuery query = mock(OpenJPAQuery.class);
         final String queryName = "User.getAll";
         when(entityManager.createNamedQuery(queryName)).thenReturn(query);
-        final OpenJPAUtil openJPAUtil = OpenJPAUtil.getInstance();
-        openJPAUtil.setEntityManager(entityManager);
-        assertEquals(query, openJPAUtil.getOpenJPAQuery(queryName));
+        final JPAUtil JPAUtil = JPAUtil.getInstance();
+        JPAUtil.setEntityManager(entityManager);
+        assertEquals(query, JPAUtil.getOpenJPAQuery(queryName));
     }
 
     @Test
@@ -39,7 +39,7 @@ public class OpenJPAUtilTest {
     private <T> void internalGetSingleResultTest(T expect) {
         OpenJPAQuery query = mock(OpenJPAQuery.class);
         when(query.getSingleResult()).thenReturn(expect);
-        T result = OpenJPAUtil.getInstance().getSingleResult(query);
+        T result = JPAUtil.getInstance().getSingleResult(query);
         assertEquals(expect, result);
     }
 }

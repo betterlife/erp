@@ -1,3 +1,3 @@
 [submodule ".builder"]
 	path = .builder
-	url = ssh://git@stash:7999/jbs/source.git
+	url = https://github.com/betterlife/Java-Build-System

@@ -8,14 +8,14 @@ import org.apache.openjpa.persistence.OpenJPAQuery;
  * Author: Lawrence Liu(lawrence@betterlife.io)
  * Date: 11/7/14
  */
-public class OpenJPAUtil extends EntityManagerConsumer {
-    private static OpenJPAUtil ourInstance = new OpenJPAUtil();
+public class JPAUtil extends EntityManagerConsumer {
+    private static JPAUtil ourInstance = new JPAUtil();
 
-    public static OpenJPAUtil getInstance() {
+    public static JPAUtil getInstance() {
         return ourInstance;
     }
 
-    private OpenJPAUtil() {
+    private JPAUtil() {
     }
 
     public OpenJPAQuery getOpenJPAQuery(String queryName) {
