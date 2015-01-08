@@ -29,6 +29,7 @@ public class FormConfig {
             createFormIgnoreFields.add("lastModify");
             createFormIgnoreFields.add("createDate");
             createFormIgnoreFields.add("creator");
+            createFormIgnoreFields.add("active");
         }
         return createFormIgnoreFields;
     }
@@ -41,6 +42,7 @@ public class FormConfig {
             listFormIgnoreFields.add("lastModify");
             listFormIgnoreFields.add("createDate");
             listFormIgnoreFields.add("creator");
+            listFormIgnoreFields.add("active");
         }
         return listFormIgnoreFields;
     }
@@ -52,6 +54,7 @@ public class FormConfig {
             editFormIgnoreFields.add("lastModify");
             editFormIgnoreFields.add("createDate");
             editFormIgnoreFields.add("creator");
+            editFormIgnoreFields.add("active");
         }
         return editFormIgnoreFields;
     }

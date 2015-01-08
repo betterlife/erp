@@ -5,10 +5,7 @@ import io.betterlife.domains.BaseObject;
 import io.betterlife.domains.security.User;
 import io.betterlife.rest.Form;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -19,8 +16,8 @@ import java.util.Date;
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name = "Incoming.getById", query = "SELECT e FROM Incoming e WHERE e.id = :id "),
-    @NamedQuery(name = "Incoming.getAll",  query = "SELECT e FROM Incoming e")
+    @NamedQuery(name = "Incoming.getById", query = "SELECT e FROM Incoming e WHERE e.id = :id AND e.active = TRUE"),
+    @NamedQuery(name = "Incoming.getAll",  query = "SELECT e FROM Incoming e WHERE e.active = TRUE")
 })
 public class Incoming extends BaseObject {
 
@@ -58,6 +55,7 @@ public class Incoming extends BaseObject {
 
     @Form(DisplayRank = 2)
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy/MM/dd", timezone="CST")
+    @Temporal(value= TemporalType.DATE)
     public Date getDate() {
         return getValue("date");
     }
