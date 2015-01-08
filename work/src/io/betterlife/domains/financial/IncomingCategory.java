@@ -12,8 +12,8 @@ import javax.persistence.NamedQuery;
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name = "IncomingCategory.getById", query = "SELECT e FROM IncomingCategory e WHERE e.id = :id "),
-    @NamedQuery(name = "IncomingCategory.getAll",  query = "SELECT e FROM IncomingCategory e")
+    @NamedQuery(name = "IncomingCategory.getById", query = "SELECT e FROM IncomingCategory e WHERE e.id = :id AND e.active = TRUE"),
+    @NamedQuery(name = "IncomingCategory.getAll",  query = "SELECT e FROM IncomingCategory e WHERE e.active = TRUE")
 })
 public class IncomingCategory extends BaseObject {
 
