@@ -1,9 +1,9 @@
 package io.betterlife.util.jpa;
 
-import org.apache.openjpa.persistence.OpenJPAQuery;
 import org.junit.Test;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -16,14 +16,14 @@ public class JPAUtilTest {
     }
 
     @Test
-    public void testGetOpenJPAQuery() throws Exception {
+    public void testGetJPAQuery() throws Exception {
         EntityManager entityManager = mock(EntityManager.class);
-        OpenJPAQuery query = mock(OpenJPAQuery.class);
+        Query query = mock(Query.class);
         final String queryName = "User.getAll";
         when(entityManager.createNamedQuery(queryName)).thenReturn(query);
-        final JPAUtil JPAUtil = JPAUtil.getInstance();
-        JPAUtil.setEntityManager(entityManager);
-        assertEquals(query, JPAUtil.getOpenJPAQuery(queryName));
+        final JPAUtil util = JPAUtil.getInstance();
+        util.setEntityManager(entityManager);
+        assertEquals(query, util.getQuery(queryName));
     }
 
     @Test
@@ -37,7 +37,7 @@ public class JPAUtilTest {
     }
 
     private <T> void internalGetSingleResultTest(T expect) {
-        OpenJPAQuery query = mock(OpenJPAQuery.class);
+        Query query = mock(Query.class);
         when(query.getSingleResult()).thenReturn(expect);
         T result = JPAUtil.getInstance().getSingleResult(query);
         assertEquals(expect, result);

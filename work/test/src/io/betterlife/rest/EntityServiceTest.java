@@ -6,15 +6,15 @@ import io.betterlife.domains.security.User;
 import io.betterlife.persistence.BaseOperator;
 import io.betterlife.util.EntityMockUtil;
 import io.betterlife.util.JsonUtils;
-import io.betterlife.util.jpa.OpenJPAUtil;
+import io.betterlife.util.jpa.JPAUtil;
 import io.betterlife.util.rest.ExecuteResult;
 import org.apache.commons.io.IOUtils;
-import org.apache.openjpa.persistence.OpenJPAQuery;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,8 +31,8 @@ import static org.mockito.Mockito.*;
 public class EntityServiceTest {
 
     private BaseOperator operator;
-    private OpenJPAUtil openJPAUtil;
-    private OpenJPAQuery openJPAQuery;
+    private JPAUtil JPAUtil;
+    private Query openJPAQuery;
     private User existingUser = new User();
     private User newUser = new User();
 
@@ -44,14 +44,14 @@ public class EntityServiceTest {
         newUser.setUsername("username");
         newUser.setPassword("password");
         operator = mock(BaseOperator.class);
-        openJPAUtil = mock(OpenJPAUtil.class);
-        openJPAQuery = mock(OpenJPAQuery.class);
+        JPAUtil = mock(JPAUtil.class);
+        openJPAQuery = mock(Query.class);
     }
 
     @Test
     public void testGetUser() throws IOException {
         when(operator.getBaseObjectById(1, "User.getById")).thenReturn(existingUser);
-        when(openJPAUtil.getOpenJPAQuery("User.getById")).thenReturn(openJPAQuery);
+        when(JPAUtil.getQuery("User.getById")).thenReturn(openJPAQuery);
         EntityService entityService = new EntityService();
         entityService.setOperator(operator);
         final String userFromDB = entityService.getObjectByTypeAndId(1, "User");

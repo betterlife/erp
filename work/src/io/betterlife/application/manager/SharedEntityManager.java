@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.FlushModeType;
 import javax.persistence.Persistence;
 
 /**
@@ -38,6 +39,7 @@ public class SharedEntityManager {
             try {
                 instance.factory = Persistence.createEntityManagerFactory(ApplicationConfig.PersistenceUnitName);
                 instance.manager = instance.factory.createEntityManager();
+                instance.manager.setFlushMode(FlushModeType.COMMIT);
             } catch (Throwable t) {
                 logger.error("Error init Entity manager", t);
             }

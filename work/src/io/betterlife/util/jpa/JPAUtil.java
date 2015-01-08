@@ -1,8 +1,9 @@
 package io.betterlife.util.jpa;
 
 import io.betterlife.application.EntityManagerConsumer;
-import org.apache.openjpa.persistence.OpenJPAPersistence;
-import org.apache.openjpa.persistence.OpenJPAQuery;
+
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 /**
  * Author: Lawrence Liu(lawrence@betterlife.io)
@@ -18,11 +19,11 @@ public class JPAUtil extends EntityManagerConsumer {
     private JPAUtil() {
     }
 
-    public OpenJPAQuery getOpenJPAQuery(String queryName) {
-        return OpenJPAPersistence.cast(getEntityManager().createNamedQuery(queryName));
+    public Query getQuery(String queryName) {
+        return getEntityManager().createNamedQuery(queryName);
     }
 
-    public <T> T getSingleResult(OpenJPAQuery q) {
+    public <T> T getSingleResult(Query q) {
         @SuppressWarnings("unchecked")
         final T singleResult = (T) q.getSingleResult();
         return singleResult;
