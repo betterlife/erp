@@ -7,7 +7,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 import java.util.*;
 
 /**
