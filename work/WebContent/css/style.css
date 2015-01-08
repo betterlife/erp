@@ -17,3 +17,9 @@ body {
 #id-label {
     display:none;
 }
+
+#footer {
+    margin:auto;
+    text-align:center;
+    margin-top:20px;
+}
