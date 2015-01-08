@@ -1,6 +1,5 @@
 package io.betterlife.persistence;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -15,6 +14,6 @@ public class BaseOperatorTest {
     public void testInit(){
         BaseOperator operator = BaseOperator.getInstance();
         assertNotNull(operator);
-        assertNotNull(operator.getOpenJPAUtil());
+        assertNotNull(operator.getJPAUtil());
     }
 }
