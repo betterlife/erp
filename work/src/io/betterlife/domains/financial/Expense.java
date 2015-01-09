@@ -16,8 +16,8 @@ import java.util.Date;
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name = "Expense.getById", query = "SELECT e FROM Expense e WHERE e.id = :id "),
-    @NamedQuery(name = "Expense.getAll",  query = "SELECT e FROM Expense e")
+    @NamedQuery(name = "Expense.getById", query = "SELECT e FROM Expense e WHERE e.id = :id AND e.active = TRUE"),
+    @NamedQuery(name = "Expense.getAll",  query = "SELECT e FROM Expense e WHERE e.active = TRUE")
 })
 public class Expense extends BaseObject {
 
@@ -75,6 +75,7 @@ public class Expense extends BaseObject {
 
     @Form(DisplayRank = 2)
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy/MM/dd", timezone="CST")
+    @Temporal(value=TemporalType.DATE)
     public Date getDate() {
         return getValue("date");
     }
