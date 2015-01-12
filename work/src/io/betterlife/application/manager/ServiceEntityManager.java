@@ -1,7 +1,11 @@
 package io.betterlife.application.manager;
 
 import io.betterlife.domains.BaseObject;
+import io.betterlife.domains.catalog.Product;
+import io.betterlife.domains.common.Supplier;
 import io.betterlife.domains.financial.*;
+import io.betterlife.domains.order.PurchaseOrder;
+import io.betterlife.domains.order.SalesOrder;
 import io.betterlife.domains.security.User;
 import io.betterlife.util.BLStringUtils;
 
@@ -56,6 +60,10 @@ public class ServiceEntityManager {
         ServiceEntityManager.getInstance().registerServiceEntity("Incoming", Incoming.class);
         ServiceEntityManager.getInstance().registerServiceEntity("User", User.class);
         ServiceEntityManager.getInstance().registerServiceEntity("CostCenter", CostCenter.class);
+        ServiceEntityManager.getInstance().registerServiceEntity("Product", Product.class);
+        ServiceEntityManager.getInstance().registerServiceEntity("Supplier", Supplier.class);
+        ServiceEntityManager.getInstance().registerServiceEntity("PurchaseOrder", PurchaseOrder.class);
+        ServiceEntityManager.getInstance().registerServiceEntity("SalesOrder", SalesOrder.class);
     }
 
 }

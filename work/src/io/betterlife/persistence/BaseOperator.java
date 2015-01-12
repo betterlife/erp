@@ -6,6 +6,7 @@ import io.betterlife.util.jpa.JPAUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.*;
 
@@ -14,29 +15,38 @@ import java.util.*;
  * Date: 10/31/14
  */
 public class BaseOperator extends EntityManagerConsumer {
-    private static BaseOperator instance = new BaseOperator();
-    private JPAUtil JPAUtil;
-
     private static final Logger logger = LogManager.getLogger(BaseOperator.class.getName());
+    private static BaseOperator instance = new BaseOperator();
+
+    private JPAUtil jPAUtil;
     public static final int UPDATE_OPERA = 1;
     public static final int CREATE_OPERA = 0;
+    private EntityManager entityManager;
 
     public void setJPAUtil(JPAUtil util) {
-        this.JPAUtil = util;
+        this.jPAUtil = util;
     }
 
     public JPAUtil getJPAUtil() {
-        if (null == JPAUtil) {
-            this.JPAUtil = JPAUtil.getInstance();
+        if (null == jPAUtil) {
+            jPAUtil = jPAUtil.getInstance();
         }
-        return this.JPAUtil;
+        if (entityManager == null || !entityManager.isOpen()) {
+            entityManager = newEntityManager();
+        }
+        jPAUtil.setEntityManager(entityManager);
+        return this.jPAUtil;
     }
 
     public static BaseOperator getInstance() {
+        if (instance.entityManager == null || !instance.entityManager.isOpen()) {
+            instance.entityManager = instance.newEntityManager();
+        }
         return instance;
     }
 
-    private BaseOperator() {}
+    private BaseOperator() {
+    }
 
     public <T> T getBaseObjectById(long id, String queryName) {
         Query q = getJPAUtil().getQuery(queryName);
@@ -59,30 +69,31 @@ public class BaseOperator extends EntityManagerConsumer {
 
     public <T> void saveBaseObjectWithTransaction(T obj, int operation) {
         try {
-            getEntityManager().getTransaction().begin();
-            getEntityManager().joinTransaction();
+            entityManager.getTransaction().begin();
             if (UPDATE_OPERA == operation) {
-                obj = getEntityManager().merge(obj);
+                obj = entityManager.merge(obj);
             } else {
-                getEntityManager().persist(obj);
+                entityManager.persist(obj);
             }
             if (logger.isTraceEnabled()) {
                 logger.trace(String.format("Saving Object: [%s]", obj));
             }
-            getEntityManager().flush();
-            getEntityManager().getTransaction().commit();
+            entityManager.flush();
+            entityManager.getTransaction().commit();
         } catch (Exception e) {
             logger.error("Error to save object " + obj);
             logger.error(e);
-            if (getEntityManager().getTransaction().isActive()) {
-                getEntityManager().getTransaction().rollback();
+            if (entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
             }
+        } finally {
+            close(entityManager);
         }
     }
 
     public <T> T getBaseObject(String queryName, Map<String, ?> queryParams) {
         Query q = getJPAUtil().getQuery(queryName);
-        for (Map.Entry<String, ?> entry : queryParams.entrySet()){
+        for (Map.Entry<String, ?> entry : queryParams.entrySet()) {
             q.setParameter(entry.getKey(), entry.getValue());
         }
         return getJPAUtil().getSingleResult(q);

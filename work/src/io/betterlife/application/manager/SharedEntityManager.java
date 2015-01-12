@@ -10,13 +10,12 @@ import javax.persistence.FlushModeType;
 import javax.persistence.Persistence;
 
 /**
- * Author: Lawrence Liu(xqinliu@cn.ibm.com)
+ * Author: Lawrence Liu(lawrence@betterlife.io)
  * Date: 10/23/14
  */
 public class SharedEntityManager {
     private static final Logger logger = LogManager.getLogger(SharedEntityManager.class.getName());
     private static SharedEntityManager instance = new SharedEntityManager();
-    private EntityManager manager;
     private EntityManagerFactory factory;
     private static volatile boolean initialized = false;
     private static final Boolean lock = true;
@@ -27,7 +26,7 @@ public class SharedEntityManager {
 
     private SharedEntityManager() {}
 
-    public synchronized void initEntityManager() {
+    public synchronized void initEntityManagerFactory() {
         if (initialized) {
             return;
         }
@@ -38,8 +37,6 @@ public class SharedEntityManager {
             initialized = true;
             try {
                 instance.factory = Persistence.createEntityManagerFactory(ApplicationConfig.PersistenceUnitName);
-                instance.manager = instance.factory.createEntityManager();
-                instance.manager.setFlushMode(FlushModeType.COMMIT);
             } catch (Throwable t) {
                 logger.error("Error init Entity manager", t);
             }
@@ -47,6 +44,19 @@ public class SharedEntityManager {
     }
 
     public EntityManager getEntityManager() {
+        EntityManager manager = null;
+        if (null == factory) {
+            logger.error("Entity Manager Factory is not set");
+        } else {
+            manager  = instance.factory.createEntityManager();
+            manager.setFlushMode(FlushModeType.COMMIT);
+        }
         return manager;
+    }
+
+    public void close(EntityManager entityManager) {
+        if (null != entityManager && entityManager.isOpen()) {
+            entityManager.close();
+        }
     }
 }
