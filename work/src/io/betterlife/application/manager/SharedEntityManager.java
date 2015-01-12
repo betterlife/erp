@@ -19,6 +19,11 @@ public class SharedEntityManager {
     private EntityManagerFactory factory;
     private static volatile boolean initialized = false;
     private static final Boolean lock = true;
+    private static final ThreadLocal<EntityManager> threadLocal;
+
+    static {
+        threadLocal = new ThreadLocal<>();
+    }
 
     public static SharedEntityManager getInstance() {
         return instance;
@@ -44,19 +49,24 @@ public class SharedEntityManager {
     }
 
     public EntityManager getEntityManager() {
-        EntityManager manager = null;
+        EntityManager em = threadLocal.get();
         if (null == factory) {
             logger.error("Entity Manager Factory is not set");
         } else {
-            manager  = instance.factory.createEntityManager();
-            manager.setFlushMode(FlushModeType.COMMIT);
+            if (em == null) {
+                em = instance.factory.createEntityManager();
+                em.setFlushMode(FlushModeType.COMMIT);
+                threadLocal.set(em);
+            }
         }
-        return manager;
+        return em;
     }
 
-    public void close(EntityManager entityManager) {
-        if (null != entityManager && entityManager.isOpen()) {
-            entityManager.close();
+    public void close() {
+        EntityManager em = threadLocal.get();
+        if (em != null && em.isOpen()) {
+            em.close();
+            threadLocal.set(null);
         }
     }
 }

@@ -87,7 +87,7 @@ public class BaseOperator extends EntityManagerConsumer {
                 entityManager.getTransaction().rollback();
             }
         } finally {
-            close(entityManager);
+            closeEntityManager();
         }
     }
 

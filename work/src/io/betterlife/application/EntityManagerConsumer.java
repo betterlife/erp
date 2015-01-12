@@ -18,10 +18,8 @@ public class EntityManagerConsumer {
         return SharedEntityManager.getInstance().getEntityManager();
     }
 
-    public void close(EntityManager manager) {
-        if (null != manager) {
-            SharedEntityManager.getInstance().close(manager);
-        }
+    public void closeEntityManager() {
+        SharedEntityManager.getInstance().close();
     }
 
     public void setEntityManager(EntityManager entityManager) {

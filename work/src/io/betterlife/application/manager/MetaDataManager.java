@@ -86,7 +86,7 @@ public class MetaDataManager extends EntityManagerConsumer {
                     }
                     setHasMetaData(true);
                 } finally {
-                    close(entityManager);
+                    closeEntityManager();
                 }
             }
         }
