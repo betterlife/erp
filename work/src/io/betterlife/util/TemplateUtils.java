@@ -60,8 +60,8 @@ public class TemplateUtils {
             form.append(getBigDecimalController(context, key, label));
         } else if (Integer.class.equals(clazz)) {
             form.append(getIntegerController(key));
-        } else if (Boolean.class.equals(clazz)) {
-            form.append(getBooleanController(key));
+        } else if (Boolean.class.equals(clazz) || "boolean".equals(clazz.getSimpleName())) {
+            form.append(getBooleanController(context, key));
         } else if (ClassUtils.getAllSuperclasses(clazz).contains(BaseObject.class)) {
             form.append(getBaseObjectController(context, entityType, key, clazz));
         } else if (Enum.class.isAssignableFrom(clazz)){
@@ -111,8 +111,11 @@ public class TemplateUtils {
             .replaceAll("\\$options", sb.toString());
     }
 
-    public String getBooleanController(String key) {
-        return key + " is a boolean";
+    public String getBooleanController(ServletContext context, String key) {
+        String template = getHtmlTemplate(context, "templates/fields/boolean.tpl.html");
+        return template
+            .replaceAll("\\$ngModel", getNgModelNameForField(key))
+            .replaceAll("\\$name", key);
     }
 
     public String getIntegerController(String key) {

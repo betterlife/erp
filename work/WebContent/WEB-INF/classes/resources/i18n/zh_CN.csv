@@ -20,3 +20,11 @@ EXPEND,支出
 Create,创建
 Update,更新
 Reset,重置
+Supplier,供应商
+Supplier.contact,联系人
+Supplier.email,Email
+Supplier.phone,电话
+Supplier.qq,QQ号
+Supplier.website,网站
+Supplier.wholesaleRequirement,起批要求
+Supplier.canMixedWholesale,是否可混批

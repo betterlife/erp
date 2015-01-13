@@ -112,7 +112,7 @@ public abstract class BaseObject {
             Object value = entry.getValue();
             Class clazz = MetaDataManager.getInstance().getFieldMetaData(this.getClass(), key);
             if (logger.isTraceEnabled()) {
-                logger.trace(String.format("Setting [%s, %s] to type [%s]", value, value.getClass().getName(), clazz));
+                logger.trace(String.format("Setting [%s, %s, %s] to type [%s]", key, value, value.getClass().getName(), clazz));
             }
             if (EntityUtils.getInstance().isBaseObject(clazz)) {
                 final String idQueryForEntity = NamedQueryRules.getInstance().getIdQueryForEntity(clazz.getSimpleName());
