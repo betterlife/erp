@@ -58,8 +58,8 @@ public class TemplateUtils {
             form.append(getDateController(context, key));
         } else if (BigDecimal.class.equals(clazz)) {
             form.append(getBigDecimalController(context, key, label));
-        } else if (Integer.class.equals(clazz)) {
-            form.append(getIntegerController(key));
+        } else if (Integer.class.equals(clazz) || "int".equals(clazz.getSimpleName())) {
+            form.append(getIntegerController(context, key, label));
         } else if (Boolean.class.equals(clazz) || "boolean".equals(clazz.getSimpleName())) {
             form.append(getBooleanController(context, key));
         } else if (ClassUtils.getAllSuperclasses(clazz).contains(BaseObject.class)) {
@@ -118,8 +118,14 @@ public class TemplateUtils {
             .replaceAll("\\$name", key);
     }
 
-    public String getIntegerController(String key) {
-        return key + " is a Integer";
+    public String getIntegerController(ServletContext context, String key, String label) {
+        String type="number";
+        String template = getHtmlTemplate(context, "templates/fields/string.tpl.html");
+        return template
+            .replaceAll("\\$type", type)
+            .replaceAll("\\$ngModel", getNgModelNameForField(key))
+            .replaceAll("\\$name", key)
+            .replaceAll("\\$placeholder", label);
     }
 
     public String getBigDecimalController(ServletContext context, String key, String label) {

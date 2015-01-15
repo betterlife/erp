@@ -46,6 +46,6 @@ public class SecurityService {
          Map<String, Object> params = IOUtil.getInstance().inputStreamToJson(requestBody);
         final String username = (String) params.get("username");
         final String password = (String) params.get("password");
-        return LoginUtil.getInstance().login(params, username, password);
+        return LoginUtil.getInstance().login(params);
     }
 }

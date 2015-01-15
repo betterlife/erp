@@ -28,3 +28,15 @@ Supplier.qq,QQ号
 Supplier.website,网站
 Supplier.wholesaleRequirement,起批要求
 Supplier.canMixedWholesale,是否可混批
+ProductCategory,产品分类
+ProductCategory.parentCategory,上级分类
+Product,商品
+Product.code,编码
+Product.category,分类
+Product.supplier,供应商
+Product.purchasePrice,进货价
+Product.retailPrice,零售价
+Product.link,链接
+Product.distinguishingFeature,产品特点
+Product.leadDay,发货提前期
+Product.deliverDay,到货时间

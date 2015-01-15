@@ -36,7 +36,7 @@ public class EntityUtils {
     }
 
     public boolean isBaseObject(Class clazz) {
-        return ClassUtils.isAssignable(clazz, BaseObject.class);
+        return null != clazz && ClassUtils.isAssignable(clazz, BaseObject.class);
     }
 
     public String getRepresentFieldWithDot(String entityType, String field) {

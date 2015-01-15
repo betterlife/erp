@@ -1,7 +1,9 @@
 package io.betterlife.application.manager;
 
+import io.betterlife.application.config.ApplicationConfig;
 import io.betterlife.domains.BaseObject;
 import io.betterlife.domains.catalog.Product;
+import io.betterlife.domains.catalog.ProductCategory;
 import io.betterlife.domains.common.Supplier;
 import io.betterlife.domains.financial.*;
 import io.betterlife.domains.order.PurchaseOrder;
@@ -28,7 +30,7 @@ public class ServiceEntityManager {
     private ServiceEntityManager() {}
 
     public Class<? extends BaseObject> getServiceEntityClass(String name) {
-        if (!serviceEntityRegistered) {
+        if (!serviceEntityRegistered || ApplicationConfig.isDevelopmentMode()) {
             registerEntities();
             serviceEntityRegistered = true;
         }
@@ -61,6 +63,7 @@ public class ServiceEntityManager {
         ServiceEntityManager.getInstance().registerServiceEntity("User", User.class);
         ServiceEntityManager.getInstance().registerServiceEntity("CostCenter", CostCenter.class);
         ServiceEntityManager.getInstance().registerServiceEntity("Product", Product.class);
+        ServiceEntityManager.getInstance().registerServiceEntity("ProductCategory", ProductCategory.class);
         ServiceEntityManager.getInstance().registerServiceEntity("Supplier", Supplier.class);
         ServiceEntityManager.getInstance().registerServiceEntity("PurchaseOrder", PurchaseOrder.class);
         ServiceEntityManager.getInstance().registerServiceEntity("SalesOrder", SalesOrder.class);

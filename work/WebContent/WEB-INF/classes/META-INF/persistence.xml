@@ -12,6 +12,7 @@
 		<class>io.betterlife.domains.financial.ExpenseCategory</class>
 		<class>io.betterlife.domains.financial.IncomingCategory</class>
 		<class>io.betterlife.domains.catalog.Product</class>
+		<class>io.betterlife.domains.catalog.ProductCategory</class>
 		<class>io.betterlife.domains.common.Supplier</class>
 		<class>io.betterlife.domains.order.PurchaseOrder</class>
 		<class>io.betterlife.domains.order.SalesOrder</class>
