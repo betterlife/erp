@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html data-ng-app='mainApp'>
 <head lang="zh_CN">
+    <link rel="stylesheet" type="text/css" href="work/WebContent/css/style.css"/>
     <meta charset="UTF-8">
     <title>Betterlife ERP Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -60,6 +61,7 @@
                         <menuitem entitylabel="收入分类" entityname="incomingCategory" ng-show="isLoggedIn()"></menuitem>
                         <menuitem entitylabel="支出" entityname="expense" ng-show="isLoggedIn()"></menuitem>
                         <menuitem entitylabel="收入" entityname="incoming" ng-show="isLoggedIn()"></menuitem>
+                        <menuitem entitylabel="产品分类" entityname="productCategory" ng-show="isLoggedIn()"></menuitem>
                         <menuitem entitylabel="产品" entityname="product" ng-show="isLoggedIn()"></menuitem>
                         <menuitem entitylabel="供应商" entityname="supplier" ng-show="isLoggedIn()"></menuitem>
                         <menuitem entitylabel="销售订单" entityname="salesOrder" ng-show="isLoggedIn()"></menuitem>
@@ -74,9 +76,11 @@
     <div ng-view>
     </div>
     <div id="footer">
-        &copy; 北南创意文化传播有限公司(<a href="http://www.betterlife.io" target="_blank">betterlife.io</a>) 2014-2015
+        &copy; 2014-2015 北南创意文化传播有限公司版权所有
+        <div class="openshift-logo">
+            <a href="https://www.openshift.com/" target="_blank"></a>
+        </div>
     </div>
-    <hr/>
 </div>
 </body>
 </html>
