@@ -1,36 +1,38 @@
 <div class="col-sm-offset-4">
-    <div class="btn-group" role="group">
-        <button type="button" class="btn btn-default btn-lg"><a href="/incoming/create">新增收入</a></button>
-        <button type="button" class="btn btn-default btn-lg"><a href="/incoming/list">列出现有收入</a></button>
+    <div style="margin-bottom:30px;">
+        <div class="btn-group" role="group" style="margin-right:20px;">
+            <button type="button" class="btn btn-default btn-lg dashboard-button"><span class="glyphicon glyphicon-usd"></span> 收入</button>
+            <button type="button" class="btn btn-default btn-lg"><a href="/incoming/create">新增</a> <span class="glyphicon glyphicon-plus"></span></button>
+            <button type="button" class="btn btn-default btn-lg"><a href="/incoming/list">查看</a> <span class="glyphicon glyphicon-list"></span></button>
+        </div>
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-default btn-lg dashboard-button"><span class="glyphicon glyphicon-minus-sign"></span> 支出</button>
+            <button type="button" class="btn btn-default btn-lg"><a href="/expense/create">新增</a> <span class="glyphicon glyphicon-plus"></span></button>
+            <button type="button" class="btn btn-default btn-lg"><a href="/expense/list">查看</a> <span class="glyphicon glyphicon-list"></span></button>
+        </div>
     </div>
-    <br><br>
-
-    <div class="btn-group" role="group">
-        <button type="button" class="btn btn-default btn-lg"><a href="/expense/create">新增支出</a></button>
-        <button type="button" class="btn btn-default btn-lg"><a href="/expense/list">列出现有支出</a></button>
+    <div style="margin-bottom:30px;">
+        <div class="btn-group" role="group" style="margin-right:20px;">
+            <button type="button" class="btn btn-default btn-lg dashboard-button"><span class="glyphicon glyphicon-user"></span> 供应商</button>
+            <button class="btn btn-default btn-lg" type="button"><a href="/supplier/create">新增</a> <span class="glyphicon glyphicon-plus"></span></button>
+            <button class="btn btn-default btn-lg" type="button"><a href="/supplier/list">查看</a> <span class="glyphicon glyphicon-list"></span></button>
+        </div>
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-default btn-lg dashboard-button"><span class="glyphicon glyphicon-barcode"></span> 产品</button>
+            <button class="btn btn-default btn-lg" type="button"><a href="/product/create">新增</a> <span class="glyphicon glyphicon-plus"></span></button>
+            <button class="btn btn-default btn-lg" type="button"><a href="/product/list">查看</a> <span class="glyphicon glyphicon-list"></span></button>
+        </div>
     </div>
-    <br><br>
-
-    <div class="btn-group" role="group">
-        <button class="btn btn-default btn-lg" type="button"><a href="/supplier/create">新增供应商</a></button>
-        <button class="btn btn-default btn-lg" type="button"><a href="/supplier/list">列出现有供应商</a></button>
-    </div>
-    <br><br>
-
-    <div class="btn-group" role="group">
-        <button class="btn btn-default btn-lg" type="button"><a href="/product/create">新增产品</a></button>
-        <button class="btn btn-default btn-lg" type="button"><a href="/product/list">列出现有产品</a></button>
-    </div>
-    <br><br>
-
-    <div class="btn-group" role="group">
-        <button class="btn btn-default btn-lg" type="button"><a href="/purchaseOrder/create">新增采购进货</a></button>
-        <button class="btn btn-default btn-lg" type="button"><a href="/purchaseOrder/list">查看现有采购单</a></button>
-    </div>
-    <br><br>
-
-    <div class="btn-group" role="group">
-        <button class="btn btn-default btn-lg" type="button"><a href="/salesOrder/create">新增销售出货</a></button>
-        <button class="btn btn-default btn-lg" type="button"><a href="/salesOrder/list">查看现有销售单</a></button>
+    <div style="margin-bottom:30px;">
+        <div class="btn-group" role="group" style="margin-right:20px;">
+            <button type="button" class="btn btn-default btn-lg dashboard-button"><span class="glyphicon glyphicon-shopping-cart"></span> 采购进货</button>
+            <button class="btn btn-default btn-lg" type="button"><a href="/purchaseOrder/create">新增</a> <span class="glyphicon glyphicon-plus"></span></button>
+            <button class="btn btn-default btn-lg" type="button"><a href="/purchaseOrder/list">查看</a> <span class="glyphicon glyphicon-list"></span></button>
+        </div>
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-default btn-lg dashboard-button"><span class="glyphicon glyphicon-send"></span> 销售出货</button>
+            <button class="btn btn-default btn-lg" type="button"><a href="/salesOrder/create">新增</a> <span class="glyphicon glyphicon-plus"></span></button>
+            <button class="btn btn-default btn-lg" type="button"><a href="/salesOrder/list">查看</a> <span class="glyphicon glyphicon-list"></span></button>
+        </div>
     </div>
 </div>

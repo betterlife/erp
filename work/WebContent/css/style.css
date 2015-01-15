@@ -35,3 +35,7 @@ body {
     margin: 10px auto auto;
     width: 180px;
 }
+
+.dashboard-button {
+    width:126px;
+}
