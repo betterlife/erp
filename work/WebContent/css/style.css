@@ -20,9 +20,8 @@ body {
 }
 
 #footer {
-    margin:auto;
     text-align:center;
-    margin-top:20px;
+    margin: 20px auto auto;
 }
 
 .boolean-controller {
@@ -50,7 +49,15 @@ body {
     padding-bottom:10px;
     padding-top:10px;
 }
+.menu-title>span.glyphicon {
+    padding-right:10px;
+}
 .dropdown-menu>li>a {
     line-height:180%;
-    margin-left:23px;
+    padding-left:40px;
+}
+
+.dashboard-container {
+    margin-top:50px;
+    margin-bottom: 60px;
 }

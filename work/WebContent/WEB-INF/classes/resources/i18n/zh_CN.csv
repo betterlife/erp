@@ -30,6 +30,7 @@ Supplier.wholesaleRequirement,起批要求
 Supplier.canMixedWholesale,是否可混批
 ProductCategory,产品分类
 ProductCategory.parentCategory,上级分类
+ProductCategory.code,分类编码
 Product,商品
 Product.code,编码
 Product.category,分类

@@ -14,7 +14,7 @@
             $scope.$routeParams = $routeParams;
 
             $scope.isActive = function (route) {
-                return route === $location.path();
+                return $location.path().indexOf(route) >= 0;
             };
 
             $scope.isLoggedIn = function () {
