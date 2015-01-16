@@ -19,6 +19,13 @@ import javax.persistence.NamedQuery;
 })
 public class ProductCategory extends BaseObject {
 
+    @Form(DisplayRank = 3)
+    public String getCode() {return getValue("code");}
+
+    public void setCode(String code) {
+            setValue("code", code);
+    }
+
     @Form(DisplayRank = 5)
     public String getName() {
             return getValue("name");

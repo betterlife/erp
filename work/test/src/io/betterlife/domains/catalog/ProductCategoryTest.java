@@ -56,6 +56,20 @@ public class ProductCategoryTest {
     }
 
     @Test
+    public void testCode() throws Exception {
+        final String code = "11001100";
+        productCategory.setCode(code);
+        assertNotNull(productCategory.getCode());
+        assertEquals(code, productCategory.getCode());
+        final String newCode = "11001101";
+        productCategory.setCode(newCode);
+        assertNotNull(productCategory.getCode());
+        assertNotEquals(code, productCategory.getCode());
+        assertEquals(newCode, productCategory.getCode());
+    }
+
+
+    @Test
     public void testEntityAnnotationDefined() {
         Entity entity = ProductCategory.class.getAnnotation(Entity.class);
         assertNotNull(entity);
