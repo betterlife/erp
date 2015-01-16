@@ -3,10 +3,12 @@ package io.betterlife.util.security;
 import io.betterlife.domains.BaseObject;
 import io.betterlife.domains.security.User;
 import io.betterlife.persistence.BaseOperator;
+import io.betterlife.util.BLStringUtils;
 import io.betterlife.util.rest.ExecuteResult;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
@@ -30,7 +32,7 @@ public class LoginUtil {
     public String cryptWithMD5(String str) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] passBytes = str.getBytes();
+            byte[] passBytes = str.getBytes(BLStringUtils.ENCODING_UTF8);
               md.reset();
               byte[] digested = md.digest(passBytes);
             StringBuilder sb = new StringBuilder();
@@ -40,6 +42,8 @@ public class LoginUtil {
             return sb.toString();
         } catch (NoSuchAlgorithmException ex) {
             logger.error("Failed to get MD5 crypt algorithm", ex);
+        } catch (UnsupportedEncodingException e) {
+            logger.error("Failed to get UTF-8 Byte array from string " + str);
         }
         return null;
     }
@@ -51,7 +55,7 @@ public class LoginUtil {
         String encryptedPassword = cryptWithMD5(password).toUpperCase();
         try {
             if (logger.isDebugEnabled()) {
-                logger.trace(String.format("Login request, [%s:%s(encrypted)]",username, encryptedPassword));
+                logger.trace(String.format("Login request, [%s:%s(encrypted)]", username, encryptedPassword));
             }
             params.put("password", encryptedPassword);
             user = BaseOperator.getInstance().getBaseObject(User.GetByUserNameAndPasswordQuery, params);

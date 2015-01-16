@@ -17,8 +17,8 @@ public class SharedEntityManager {
     private static final Logger logger = LogManager.getLogger(SharedEntityManager.class.getName());
     private static SharedEntityManager instance = new SharedEntityManager();
     private EntityManagerFactory factory;
-    private static volatile boolean initialized = false;
-    private static final Boolean lock = true;
+    private volatile boolean initialized = false;
+    private static final Object lock = new Object();
     private static final ThreadLocal<EntityManager> threadLocal;
 
     static {

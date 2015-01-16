@@ -171,7 +171,7 @@ public class TemplateUtils {
 
     public String getFieldLabelHtml(String entityType, String key) {
         final String label = getFieldLabel(entityType, key);
-        return String.format("<label for='%s' class='col-sm-2 control-label' id='%s-label'>%s</label>%n",
+        return String.format("<label for='%s' class='col-sm-2 control-label %s-label'>%s</label>%n",
                              null == key ? BLStringUtils.EMPTY : key,
                              null == key ? BLStringUtils.EMPTY : key, label);
     }
