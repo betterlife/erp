@@ -4,6 +4,7 @@
 
 body {
     padding-top: 0;
+    font-family: "Microsoft YaHei";
 }
 
 .navbar-nav {
@@ -38,4 +39,18 @@ body {
 
 .dashboard-button {
     width:126px;
+}
+.menu-title {
+    color: #333;
+    font-size:16px;
+    background-color: #EEE;
+    border: 1px solid #CCC;
+    border-right: 4px #EEE;
+    border-left: 4px #EEE;
+    padding-bottom:10px;
+    padding-top:10px;
+}
+.dropdown-menu>li>a {
+    line-height:180%;
+    margin-left:23px;
 }

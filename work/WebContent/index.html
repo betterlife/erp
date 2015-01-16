@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html data-ng-app='mainApp'>
 <head lang="zh_CN">
-    <link rel="stylesheet" type="text/css" href="work/WebContent/css/style.css"/>
     <meta charset="UTF-8">
     <title>Betterlife ERP Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -57,9 +56,9 @@
                             <a href="/" ng-show="isLoggedIn()">首页</a>
                         </li>
                         <li ng-class="{active: (isActive('/costCenter'))}" ng-show="isLoggedIn()">
-                            <a class="dropdown-toggle ng-binding" data-toggle="dropdown">基础数据<span class="caret"></span></a>
+                            <a class="dropdown-toggle ng-binding" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span> 基础数据<span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li class="dropdown-header">部门/项目</li>
+                                <li class="dropdown-header menu-title"><span class="glyphicon glyphicon-globe"></span> 部门/项目</li>
                                 <li><a href="/costCenter/create" class="ng-binding">创建部门/项目</a></li>
                                 <li><a href="/costCenter/list" class="ng-binding">列出部门/项目</a></li>
                             </ul>
@@ -67,30 +66,30 @@
                         <li ng-class="{active: (isActive('/costCenter') || isActive('/expenseCategory') || isActive('/incomingCategory') || isActive('/incoming') || isActive('/expense'))}" ng-show="isLoggedIn()">
                             <a class="dropdown-toggle ng-binding" data-toggle="dropdown">财务<span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li class="dropdown-header">支出分类</li>
+                                <li class="dropdown-header menu-title"><span class="glyphicon glyphicon-tag"></span> 支出分类</li>
                                 <li><a href="/expenseCategory/create" class="ng-binding">创建支出分类</a></li>
                                 <li><a href="/expenseCategory/list" class="ng-binding">列出支出分类</a></li>
-                                <li class="dropdown-header">收入分类</li>
-                                <li><a href="/incomingCategory/create" class="ng-binding">创建收入分类</a></li>
-                                <li><a href="/incomingCategory/list" class="ng-binding">列出收入分类</a></li>
-                                <li class="dropdown-header">收入</li>
-                                <li><a href="/incoming/create" class="ng-binding">增加收入</a></li>
-                                <li><a href="/incoming/list" class="ng-binding">列出收入</a></li>
-                                <li class="dropdown-header">支出</li>
+                                <li class="dropdown-header menu-title"><span class="glyphicon glyphicon-minus-sign"></span> 支出</li>
                                 <li><a href="/expense/create" class="ng-binding">增加支出</a></li>
                                 <li><a href="/expense/list" class="ng-binding">列出支出</a></li>
+                                <li class="dropdown-header menu-title"><span class="glyphicon glyphicon-tag"></span> 收入分类</li>
+                                <li><a href="/incomingCategory/create" class="ng-binding">创建收入分类</a></li>
+                                <li><a href="/incomingCategory/list" class="ng-binding">列出收入分类</a></li>
+                                <li class="dropdown-header menu-title"><span class="glyphicon glyphicon-usd"></span> 收入</li>
+                                <li><a href="/incoming/create" class="ng-binding">增加收入</a></li>
+                                <li><a href="/incoming/list" class="ng-binding">列出收入</a></li>
                             </ul>
                          </li>
                         <li ng-class="{active: (isActive('/product') || isActive('/productCategory'))}" ng-show="isLoggedIn()">
                             <a class="dropdown-toggle ng-binding" data-toggle="dropdown">产品及供应商<span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li class="dropdown-header">产品分类</li>
+                                <li class="dropdown-header menu-title"><span class="glyphicon glyphicon-tag"></span> 产品分类</li>
                                 <li><a href="/productCategory/create" class="ng-binding">增加产品分类</a></li>
                                 <li><a href="/productCategory/list" class="ng-binding">列出产品分类</a></li>
-                                <li class="dropdown-header">供应商</li>
+                                <li class="dropdown-header menu-title"><span class="glyphicon glyphicon-user"></span> 供应商</li>
                                 <li><a href="/supplier/create" class="ng-binding">增加供应商</a></li>
                                 <li><a href="/supplier/list" class="ng-binding">列出供应商</a></li>
-                                <li class="dropdown-header">产品</li>
+                                <li class="dropdown-header menu-title"><span class="glyphicon glyphicon-barcode"></span> 产品</li>
                                 <li><a href="/product/create" class="ng-binding">增加产品</a></li>
                                 <li><a href="/product/list" class="ng-binding">列出产品</a></li>
                             </ul>
@@ -98,10 +97,10 @@
                         <li ng-class="{active: (isActive('/product') || isActive('/productCategory'))}" ng-show="isLoggedIn()">
                             <a class="dropdown-toggle ng-binding" data-toggle="dropdown">订单<span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li class="dropdown-header">采购订单</li>
+                                <li class="dropdown-header menu-title"><span class="glyphicon glyphicon-shopping-cart"></span> 采购订单</li>
                                 <li><a href="/purchaseOrder/create" class="ng-binding">新增采购订单</a></li>
                                 <li><a href="/purchaseOrder/list" class="ng-binding">列出采购订单</a></li>
-                                <li class="dropdown-header">销售订单</li>
+                                <li class="dropdown-header menu-title"><span class="glyphicon glyphicon-send"></span> 销售订单</li>
                                 <li><a href="/salesOrder/create" class="ng-binding">新增销售订单</a></li>
                                 <li><a href="/salesOrder/list" class="ng-binding">列出销售订单</a></li>
                             </ul>
