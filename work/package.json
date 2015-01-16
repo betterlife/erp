@@ -1,0 +1,21 @@
+{
+  "name": "betterlife-erp",
+  "private": true,
+  "version": "0.3.0",
+  "description": "Betterlife ERP System",
+  "repository": "https://github.com/betterlife/erp",
+  "license": "MIT",
+  "devDependencies": {
+    "karma": "~0.10",
+    "http-server": "^0.6.1",
+    "karma-junit-reporter": "^0.2.2"
+  },
+  "scripts": {
+    "prestart": "npm install",
+    "pretest": "npm install",
+    "test": "karma start karma.conf.js",
+    "test-single-run": "karma start karma.conf.js  --single-run",
+    "preupdate-webdriver": "npm install",
+    "update-webdriver": "webdriver-manager update"
+  }
+}
