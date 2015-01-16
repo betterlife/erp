@@ -7,4 +7,7 @@ ln -s .builder/build.xml build.xml
 cd work/WebContent
 bower install
 cd ../../
-ant build.war junit.run.all 
+ant build.war junit.run.all
+cd work
+npm install
+npm test
