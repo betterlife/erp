@@ -11,3 +11,4 @@ work/WebContent/js/bower_components
 .clover
 .sonar
 rebel*.xml
+node_modules
