@@ -1,9 +1,22 @@
 Better life ERP system
 
-Circle CI Build status
+About this application
 ----------------------
 
-[![Circle CI](https://circleci.com/gh/betterlife/erp/tree/master.png?style=badge)](https://circleci.com/gh/betterlife/erp/tree/master)
+Better life ERP System is developed for the company betterlife.io, and used as it's internal management system, features includes:
+
+Management of
+
+- Sales order
+- Purchase order
+- Supplier
+- Product category
+- Product
+- Expense
+- Incoming
+
+Since it's early development stage of this system, and it is developed according to the exactly requirement of betterlife.io,
+so it might not suitable to be used in other company.
 
 Code Climate Measure
 --------------------

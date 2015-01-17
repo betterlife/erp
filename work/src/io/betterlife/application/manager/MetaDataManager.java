@@ -4,6 +4,7 @@ import io.betterlife.application.EntityManagerConsumer;
 import io.betterlife.domains.BaseObject;
 import org.apache.commons.lang3.ClassUtils;
 
+import javax.persistence.EntityManager;
 import javax.persistence.metamodel.Attribute;
 import javax.persistence.metamodel.ManagedType;
 import javax.persistence.metamodel.Metamodel;
@@ -21,6 +22,7 @@ public class MetaDataManager extends EntityManagerConsumer {
     private Map<String, Map<String, Class>> _fieldsMetaData = new HashMap<>();
     private boolean hasMetaData = false;
     private static MetaDataManager instance = new MetaDataManager();
+    private EntityManager entityManager;
 
     private MetaDataManager(){}
 
@@ -30,7 +32,7 @@ public class MetaDataManager extends EntityManagerConsumer {
     }
 
     public Map<String, Class> getMetaDataOfClass(Class<? extends BaseObject> clazz) {
-        if (getEntityManager() != null && (null == _fieldsMetaData || _fieldsMetaData.size() == 0)) {
+        if (!hasMetaData() || null == _fieldsMetaData || _fieldsMetaData.size() == 0) {
             setAllFieldMetaData();
         }
         return _fieldsMetaData.get(clazz.getName());
@@ -60,24 +62,32 @@ public class MetaDataManager extends EntityManagerConsumer {
     public void setAllFieldMetaData() {
         if (!hasMetaData()) {
             synchronized (this) {
-                Metamodel metaModel = getEntityManager().getMetamodel();
-                Set<ManagedType<?>> managedTypes = metaModel.getManagedTypes();
-                for (ManagedType managedType : managedTypes) {
-                    @SuppressWarnings("unchecked")
-                    Class<? extends BaseObject> clazz = managedType.getJavaType();
-                    List<Class<?>> ignoreClasses = ClassUtils.getAllSuperclasses(BaseObject.class);
-                    if (clazz.equals(BaseObject.class) || (ignoreClasses != null && ignoreClasses.contains(clazz))) {
-                        continue;
-                    }
-                    @SuppressWarnings("unchecked")
-                    Set<Attribute> attributeSet = managedType.getAttributes();
-                    for (Attribute attr : attributeSet) {
-                        Class attrJavaType = attr.getJavaType();
-                        String name = attr.getName();
-                        setFieldMetaData(clazz, name, attrJavaType);
-                    }
+                if (hasMetaData()) {
+                    return;
                 }
-                setHasMetaData(true);
+                try {
+                    entityManager = newEntityManager();
+                    Metamodel metaModel = entityManager.getMetamodel();
+                    Set<ManagedType<?>> managedTypes = metaModel.getManagedTypes();
+                    for (ManagedType managedType : managedTypes) {
+                        @SuppressWarnings("unchecked")
+                        Class<? extends BaseObject> clazz = managedType.getJavaType();
+                        List<Class<?>> ignoreClasses = ClassUtils.getAllSuperclasses(BaseObject.class);
+                        if (clazz.equals(BaseObject.class) || (ignoreClasses != null && ignoreClasses.contains(clazz))) {
+                            continue;
+                        }
+                        @SuppressWarnings("unchecked")
+                        Set<Attribute> attributeSet = managedType.getAttributes();
+                        for (Attribute attr : attributeSet) {
+                            Class attrJavaType = attr.getJavaType();
+                            String name = attr.getName();
+                            setFieldMetaData(clazz, name, attrJavaType);
+                        }
+                    }
+                    setHasMetaData(true);
+                } finally {
+                    closeEntityManager();
+                }
             }
         }
     }

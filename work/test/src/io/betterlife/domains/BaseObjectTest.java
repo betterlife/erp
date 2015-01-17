@@ -71,6 +71,14 @@ public class BaseObjectTest {
     }
 
     @Test
+    public void testGetActive() {
+        baseObject.setActive(true);
+        assertTrue(baseObject.getActive());
+        baseObject.setActive(false);
+        assertFalse(baseObject.getActive());
+    }
+
+    @Test
     public void testSetValues() throws Exception {
 
     }

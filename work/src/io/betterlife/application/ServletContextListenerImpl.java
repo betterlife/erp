@@ -20,15 +20,12 @@ import javax.servlet.annotation.WebListener;
 public class ServletContextListenerImpl implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-        SharedEntityManager.getInstance().initEntityManager();
+        SharedEntityManager.getInstance().initEntityManagerFactory();
         I18n.getInstance().initResources(servletContextEvent.getServletContext());
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
-        final EntityManager entityManager = SharedEntityManager.getInstance().getEntityManager();
-        if (null != entityManager && entityManager.isOpen()) {
-            entityManager.close();
-        }
+        //Do nothing now since all EntityManager should be closed separately.
     }
 }

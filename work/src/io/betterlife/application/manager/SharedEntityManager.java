@@ -6,17 +6,24 @@ import org.apache.logging.log4j.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.FlushModeType;
 import javax.persistence.Persistence;
 
 /**
- * Author: Lawrence Liu(xqinliu@cn.ibm.com)
+ * Author: Lawrence Liu(lawrence@betterlife.io)
  * Date: 10/23/14
  */
 public class SharedEntityManager {
     private static final Logger logger = LogManager.getLogger(SharedEntityManager.class.getName());
     private static SharedEntityManager instance = new SharedEntityManager();
-    private EntityManager manager;
     private EntityManagerFactory factory;
+    private volatile boolean initialized = false;
+    private static final Object lock = new Object();
+    private static final ThreadLocal<EntityManager> threadLocal;
+
+    static {
+        threadLocal = new ThreadLocal<>();
+    }
 
     public static SharedEntityManager getInstance() {
         return instance;
@@ -24,17 +31,42 @@ public class SharedEntityManager {
 
     private SharedEntityManager() {}
 
-    public synchronized void initEntityManager() {
-        try {
-            instance.factory = Persistence.createEntityManagerFactory(ApplicationConfig.PersistenceUnitName);
-            instance.manager = instance.factory.createEntityManager();
-        } catch (Exception e) {
-            logger.error("Error init Entity manager");
-            logger.error(e);
+    public synchronized void initEntityManagerFactory() {
+        if (initialized) {
+            return;
+        }
+        synchronized(lock) {
+            if(initialized){
+                return;
+            }
+            initialized = true;
+            try {
+                instance.factory = Persistence.createEntityManagerFactory(ApplicationConfig.PersistenceUnitName);
+            } catch (Throwable t) {
+                logger.error("Error init Entity manager", t);
+            }
         }
     }
 
     public EntityManager getEntityManager() {
-        return manager;
+        EntityManager em = threadLocal.get();
+        if (null == factory) {
+            logger.error("Entity Manager Factory is not set");
+        } else {
+            if (em == null) {
+                em = instance.factory.createEntityManager();
+                em.setFlushMode(FlushModeType.COMMIT);
+                threadLocal.set(em);
+            }
+        }
+        return em;
+    }
+
+    public void close() {
+        EntityManager em = threadLocal.get();
+        if (em != null && em.isOpen()) {
+            em.close();
+            threadLocal.set(null);
+        }
     }
 }

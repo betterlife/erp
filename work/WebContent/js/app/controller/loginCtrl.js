@@ -1,6 +1,5 @@
 var loginCtrl = function ($scope, $http, loginService, $location, $routeParams) {
     "use strict";
-    console.log("Login Ctrl Invoked");
 
     var redirect = function($location) {
         $location.path('/dashboard');
@@ -34,7 +33,9 @@ loginCtrl.routerConfig = {
 
 var logoutCtrl = function ($scope, $http, $location, loginService, $routeParams) {
     "use strict";
-    loginService.logout();
+    if (loginService.isLoggedIn()) {
+        loginService.logout();
+    }
 };
 
 logoutCtrl.$inject = ['$scope', '$http', '$location', 'loginService', '$routeParams'];

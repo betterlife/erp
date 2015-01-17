@@ -84,6 +84,9 @@ public class EntityService {
         List<BaseObject> result = getOperator().getBaseObjects(
             getNamedQueryRule().getAllQueryForEntity(entityType)
         );
+        if (logger.isTraceEnabled()) {
+            logger.trace(String.format("Returning %s list %s", entityType, result));
+        }
         return new ExecuteResult<List<BaseObject>>().getRestString(result);
     }
 
@@ -103,7 +106,7 @@ public class EntityService {
         if (null != existingObj) {
             existingObj.setValues(entityParams);
         }
-        getOperator().save(existingObj);
+        getOperator().save(existingObj, BaseOperator.UPDATE_OPERA);
         return new ExecuteResult<String>().getRestString("SUCCESS");
     }
 
@@ -117,7 +120,7 @@ public class EntityService {
         Map<String, Object> parameters = IOUtil.getInstance().inputStreamToJson(requestBody);
         BaseObject obj = ServiceEntityManager.getInstance().entityObjectFromType(entityType);
         EntityUtils.getInstance().mapToBaseObject(obj, (Map<String, Object>) parameters.get("entity"));
-        getOperator().save(obj);
+        getOperator().save(obj, BaseOperator.CREATE_OPERA);
         return new ExecuteResult<String>().getRestString("SUCCESS");
     }
 

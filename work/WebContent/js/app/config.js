@@ -14,7 +14,7 @@
             $scope.$routeParams = $routeParams;
 
             $scope.isActive = function (route) {
-                return route === $location.path();
+                return $location.path().indexOf(route) >= 0;
             };
 
             $scope.isLoggedIn = function () {
@@ -61,7 +61,6 @@
             }])
         .run(['$rootScope', '$location', 'loginService',
             function ($rootScope, $location, loginService) {
-                console.debug("current $location.path is: %s", $location.path());
                 $rootScope.$on('$routeChangeStart', function (event, next) {
                     console.log("Checking for login: %s", loginService.isLoggedIn());
                     if (next.authenticate && !loginService.isLoggedIn()) {

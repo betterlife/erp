@@ -58,10 +58,10 @@ public class TemplateUtils {
             form.append(getDateController(context, key));
         } else if (BigDecimal.class.equals(clazz)) {
             form.append(getBigDecimalController(context, key, label));
-        } else if (Integer.class.equals(clazz)) {
-            form.append(getIntegerController(key));
-        } else if (Boolean.class.equals(clazz)) {
-            form.append(getBooleanController(key));
+        } else if (Integer.class.equals(clazz) || "int".equals(clazz.getSimpleName())) {
+            form.append(getIntegerController(context, key, label));
+        } else if (Boolean.class.equals(clazz) || "boolean".equals(clazz.getSimpleName())) {
+            form.append(getBooleanController(context, key));
         } else if (ClassUtils.getAllSuperclasses(clazz).contains(BaseObject.class)) {
             form.append(getBaseObjectController(context, entityType, key, clazz));
         } else if (Enum.class.isAssignableFrom(clazz)){
@@ -111,12 +111,21 @@ public class TemplateUtils {
             .replaceAll("\\$options", sb.toString());
     }
 
-    public String getBooleanController(String key) {
-        return key + " is a boolean";
+    public String getBooleanController(ServletContext context, String key) {
+        String template = getHtmlTemplate(context, "templates/fields/boolean.tpl.html");
+        return template
+            .replaceAll("\\$ngModel", getNgModelNameForField(key))
+            .replaceAll("\\$name", key);
     }
 
-    public String getIntegerController(String key) {
-        return key + " is a Integer";
+    public String getIntegerController(ServletContext context, String key, String label) {
+        String type="number";
+        String template = getHtmlTemplate(context, "templates/fields/string.tpl.html");
+        return template
+            .replaceAll("\\$type", type)
+            .replaceAll("\\$ngModel", getNgModelNameForField(key))
+            .replaceAll("\\$name", key)
+            .replaceAll("\\$placeholder", label);
     }
 
     public String getBigDecimalController(ServletContext context, String key, String label) {
@@ -162,7 +171,7 @@ public class TemplateUtils {
 
     public String getFieldLabelHtml(String entityType, String key) {
         final String label = getFieldLabel(entityType, key);
-        return String.format("<label for='%s' class='col-sm-2 control-label' id='%s-label'>%s</label>%n",
+        return String.format("<label for='%s' class='col-sm-2 control-label %s-label'>%s</label>%n",
                              null == key ? BLStringUtils.EMPTY : key,
                              null == key ? BLStringUtils.EMPTY : key, label);
     }

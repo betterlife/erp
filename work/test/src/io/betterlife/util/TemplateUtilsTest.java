@@ -137,15 +137,15 @@ public class TemplateUtilsTest {
     @Test
     public void testGetFieldLabelHtml() throws Exception {
         String entityType = "Expense";
-        assertEquals("<label for='user' class='col-sm-2 control-label' id='user-label'>用户</label>\n",
+        assertEquals("<label for='user' class='col-sm-2 control-label user-label'>用户</label>\n",
                      templateUtils.getFieldLabelHtml(entityType, "user"));
-        assertEquals("<label for='expense' class='col-sm-2 control-label' id='expense-label'>Expense</label>\n",
+        assertEquals("<label for='expense' class='col-sm-2 control-label expense-label'>Expense</label>\n",
                      templateUtils.getFieldLabelHtml(entityType, "expense"));
-        assertEquals("<label for='expenseCategory' class='col-sm-2 control-label' id='expenseCategory-label'>支出分类</label>\n",
+        assertEquals("<label for='expenseCategory' class='col-sm-2 control-label expenseCategory-label'>支出分类</label>\n",
                      templateUtils.getFieldLabelHtml(entityType, "expenseCategory"));
-        assertEquals("<label for='' class='col-sm-2 control-label' id='-label'></label>\n",
+        assertEquals("<label for='' class='col-sm-2 control-label -label'></label>\n",
                      templateUtils.getFieldLabelHtml(entityType, null));
-        assertEquals("<label for='' class='col-sm-2 control-label' id='-label'></label>\n",
+        assertEquals("<label for='' class='col-sm-2 control-label -label'></label>\n",
                      templateUtils.getFieldLabelHtml(entityType, ""));
     }
 

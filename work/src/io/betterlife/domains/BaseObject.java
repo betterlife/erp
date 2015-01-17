@@ -5,6 +5,7 @@ import io.betterlife.application.manager.MetaDataManager;
 import io.betterlife.domains.security.User;
 import io.betterlife.persistence.BaseOperator;
 import io.betterlife.persistence.NamedQueryRules;
+import io.betterlife.rest.Form;
 import io.betterlife.util.EntityUtils;
 import io.betterlife.util.converter.Converter;
 import io.betterlife.util.converter.ConverterFactory;
@@ -24,7 +25,7 @@ import java.util.Map;
  * Date: 10/31/14
  */
 @MappedSuperclass
-@JsonIgnoreProperties({"creator", "lastModify"})
+@JsonIgnoreProperties({"creator", "lastModify", "active"})
 public abstract class BaseObject {
 
     private static final Logger logger = LogManager.getLogger(BaseObject.class.getName());
@@ -35,6 +36,7 @@ public abstract class BaseObject {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Form(DisplayRank = 0)
     public long getId() {
         return this.id;
     }
@@ -58,6 +60,7 @@ public abstract class BaseObject {
         setValue("lastModifyDate", lastModifyDate);
     }
 
+    @Temporal(value=TemporalType.DATE)
     public Date getLastModifyDate() {
         return getValue("lastModifyDate");
     }
@@ -75,6 +78,7 @@ public abstract class BaseObject {
         setValue("createDate", createDate);
     }
 
+    @Temporal(value=TemporalType.DATE)
     public Date getCreateDate() {
         return getValue("createDate");
     }
@@ -88,6 +92,21 @@ public abstract class BaseObject {
         return getValue("creator");
     }
 
+    public boolean getActive() { return getValue("active");}
+
+    public void setActive(boolean active) {setValue("active", active);}
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n{Type : ").append(getClass().getName());
+        for (Map.Entry<String, Object> entry : _map.entrySet()) {
+            sb.append("\n\t[").append(entry.getKey()).append(" : ").append(entry.getValue()).append("]");
+        }
+        sb.append("\n}");
+        return sb.toString();
+    }
+
     public void setValues(Map<String, Object> parameters) {
         MetaDataManager.getInstance().setAllFieldMetaData();
         for (Map.Entry<String, Object> entry : parameters.entrySet()) {
@@ -95,7 +114,10 @@ public abstract class BaseObject {
             Object value = entry.getValue();
             Class clazz = MetaDataManager.getInstance().getFieldMetaData(this.getClass(), key);
             if (logger.isTraceEnabled()) {
-                logger.trace(String.format("Setting [%s, %s] to type [%s]", value, value.getClass().getName(), clazz));
+                logger.trace(String.format("Setting [%s, %s, %s] to type [%s]", key, value, value.getClass().getName(), clazz));
+            }
+            if (null == clazz) {
+                continue;
             }
             if (EntityUtils.getInstance().isBaseObject(clazz)) {
                 final String idQueryForEntity = NamedQueryRules.getInstance().getIdQueryForEntity(clazz.getSimpleName());
