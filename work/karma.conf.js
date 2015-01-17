@@ -25,7 +25,7 @@ module.exports = function(config){
         singleRun: true,
         frameworks: ['jasmine'],
         browsers : ['Chrome'],
-        reporters : ['progress', 'junit',  'coverage'],
+        reporters : ['progress', 'junit', 'coverage'],
         plugins : [
             'karma-chrome-launcher',
             'karma-jasmine',
