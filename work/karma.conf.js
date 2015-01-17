@@ -3,6 +3,13 @@ module.exports = function(config){
 
         basePath : '.',
 
+        preprocessors: {
+            // source files, that you wanna generate coverage for
+            // do not include tests or libraries
+            // (these files will be instrumented by Istanbul)
+            'WebContent/js/app/**/*.js': ['coverage']
+          },
+
         files : [
             'WebContent/js/bower_components/angular/angular.js',
             'WebContent/js/bower_components/angular-route/angular-route.js',
@@ -14,20 +21,27 @@ module.exports = function(config){
             'test/js/app/**/*.js'
         ],
 
-        autoWatch : true,
+        //autoWatch : true,
         singleRun: true,
         frameworks: ['jasmine'],
         browsers : ['Chrome'],
-
+        reporters : ['progress', 'junit',  'coverage'],
         plugins : [
             'karma-chrome-launcher',
             'karma-jasmine',
-            'karma-junit-reporter'
+            'karma-junit-reporter',
+            'karma-coverage'
         ],
 
         junitReporter : {
-            outputFile: '../target/data/junit/js.xml',
-            suite: 'unit'
+            outputFile: '../target/data/test/javascript/js.xml'
+        },
+
+        coverageReporter: {
+            reporters : [
+                {type : 'lcovonly', dir : '../target/data/coverage/javascript', file : 'lcov.info'},
+                {type : 'html',     dir : '../target/reports/coverage/javascript'}
+            ]
         }
 
     });

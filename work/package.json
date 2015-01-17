@@ -8,7 +8,8 @@
   "devDependencies": {
     "karma": "~0.10",
     "http-server": "^0.6.1",
-    "karma-junit-reporter": "^0.2.2"
+    "karma-junit-reporter": "^0.2.2",
+    "karma-coverage": "~0.2.7"
   },
   "scripts": {
     "prestart": "npm install",
