@@ -1,0 +1,13 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h4 class="modal-title" id="modalLabel" style="margin:auto;text-align:center">{{modalData.title}}</h4>
+    <div class="modal-body" style="line-height: 180%;font-size:120%">
+        {{modalData.body | to_trusted}}
+        <textarea id='{{modalData.inputId}}' name='{{modalData.inputName}}' style="width:550px;height:140px;"
+                  ng-show="modalData.inputId && modalData.inputName">{{modalData.textData}}</textarea>
+    </div>
+    <div class="modal-footer" style="margin:auto;text-align:center">
+        <button type="button" class="btn btn-default" ng-click="cancel()">{{modalData.noLabel}}</button>
+        <button type="button" class="btn btn-default" ng-click="ok(modalData.data)">{{modalData.yesLabel}}</button>
+    </div>
+</div>
