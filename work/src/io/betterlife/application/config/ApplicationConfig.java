@@ -1,11 +1,19 @@
 package io.betterlife.application.config;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Author: Lawrence Liu(lawrence@betterlife.io)
  * Date: 10/31/14
  * Application config
  */
 public class ApplicationConfig {
+
+    /**
+     * Ignore field when output toString.
+     */
+    public static List<String> ToStringIgnoreFields;
 
     /**
      * Application data source name
@@ -29,5 +37,14 @@ public class ApplicationConfig {
 
     public static boolean isDevelopmentMode() {
         return true;
+    }
+
+    public static List<String> getToStringIgnoreFields() {
+        if (null == ToStringIgnoreFields) {
+            ToStringIgnoreFields = new ArrayList<>();
+            ToStringIgnoreFields.add("lastModify");
+            ToStringIgnoreFields.add("creator");
+        }
+        return ToStringIgnoreFields;
     }
 }

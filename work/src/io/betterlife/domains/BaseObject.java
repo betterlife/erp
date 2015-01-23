@@ -1,6 +1,8 @@
 package io.betterlife.domains;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.betterlife.application.config.ApplicationConfig;
+import io.betterlife.application.manager.FieldMeta;
 import io.betterlife.application.manager.MetaDataManager;
 import io.betterlife.domains.security.User;
 import io.betterlife.persistence.BaseOperator;
@@ -101,25 +103,31 @@ public abstract class BaseObject {
         StringBuilder sb = new StringBuilder();
         sb.append("\n{Type : ").append(getClass().getName());
         for (Map.Entry<String, Object> entry : _map.entrySet()) {
+            if (ApplicationConfig.getToStringIgnoreFields().contains(entry.getKey())) {
+                continue;
+            }
             sb.append("\n\t[").append(entry.getKey()).append(" : ").append(entry.getValue()).append("]");
         }
         sb.append("\n}");
         return sb.toString();
     }
 
+    @SuppressWarnings("unchecked")
     public void setValues(Map<String, Object> parameters) {
         MetaDataManager.getInstance().setAllFieldMetaData();
         for (Map.Entry<String, Object> entry : parameters.entrySet()) {
             String key = entry.getKey();
             Object value = entry.getValue();
-            Class clazz = MetaDataManager.getInstance().getFieldMetaData(this.getClass(), key);
+            FieldMeta fieldMeta = MetaDataManager.getInstance().getFieldMetaData(this.getClass(), key);
+            Class clazz = fieldMeta.getType();
             if (logger.isTraceEnabled()) {
-                logger.trace(String.format("Setting [%s, %s, %s] to type [%s]", key, value, value.getClass().getName(), clazz));
+                logger.trace(String.format("Setting [%s, %s, %s] to type [%s]",
+                                           key, value, (value == null) ? null : value.getClass().getName(), clazz));
             }
             if (null == clazz) {
                 continue;
             }
-            if (EntityUtils.getInstance().isBaseObject(clazz)) {
+            if (null != value && EntityUtils.getInstance().isBaseObject(clazz)) {
                 final String idQueryForEntity = NamedQueryRules.getInstance().getIdQueryForEntity(clazz.getSimpleName());
                 if (value instanceof LinkedHashMap) {
                     value = ((LinkedHashMap) value).get("id");
@@ -134,10 +142,9 @@ public abstract class BaseObject {
                 if (null != baseObj) {
                     setValue(key, baseObj);
                 }
-            } else if (ClassUtils.isAssignable(value.getClass(), clazz)) {
+            } else if (null == value || ClassUtils.isAssignable(value.getClass(), clazz)) {
                 setValue(key, value);
             } else if (Enum.class.isAssignableFrom(clazz) && value instanceof String) {
-                @SuppressWarnings("unchecked")
                 Enum enumVal = Enum.valueOf((Class<? extends Enum>)clazz, (String) value);
                 setValue(key, enumVal);
             } else {
