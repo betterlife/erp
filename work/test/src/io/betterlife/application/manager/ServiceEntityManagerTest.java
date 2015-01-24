@@ -8,12 +8,15 @@ import io.betterlife.domains.security.User;
 import io.betterlife.util.EntityMockUtil;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import javax.persistence.EntityManager;
 
 import java.util.Map;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class ServiceEntityManagerTest {
 
@@ -53,9 +56,12 @@ public class ServiceEntityManagerTest {
 
     @Test
     public void testGetMetaFromEntityType() throws Exception {
+        SharedEntityManager sharedEntityManager = mock(SharedEntityManager.class);
         EntityManager manager = EntityMockUtil.getInstance().mockEntityManagerAndMeta();
-        MetaDataManager.getInstance().setEntityManager(manager);
-        Map<String, Class> result = serviceEntityManager.getMetaFromEntityType("User");
+        when(sharedEntityManager.getEntityManager()).thenReturn(manager);
+        Mockito.doNothing().when(sharedEntityManager).close();
+        MetaDataManager.getInstance().setSharedEntityManager(sharedEntityManager);
+        Map<String, FieldMeta> result = serviceEntityManager.getMetaFromEntityType("User");
         assertNotNull(result);
         assertEquals(3, result.size());
         verifyFieldMeta(result, "id", Long.class);
@@ -63,9 +69,9 @@ public class ServiceEntityManagerTest {
         verifyFieldMeta(result, "password", String.class);
     }
 
-    public void verifyFieldMeta(Map<String, Class> result, final String fieldName, final Class fieldType) {
+    public void verifyFieldMeta(Map<String, FieldMeta> result, final String fieldName, final Class fieldType) {
         assertTrue(result.containsKey(fieldName));
-        assertEquals(fieldType, result.get(fieldName));
+        assertEquals(fieldType, result.get(fieldName).getType());
     }
 }
 

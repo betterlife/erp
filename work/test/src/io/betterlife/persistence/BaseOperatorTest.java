@@ -14,6 +14,5 @@ public class BaseOperatorTest {
     public void testInit(){
         BaseOperator operator = BaseOperator.getInstance();
         assertNotNull(operator);
-        assertNotNull(operator.getJPAUtil());
     }
 }

@@ -9,21 +9,19 @@ import javax.persistence.EntityManager;
  * Date: 12/17/14
  */
 public class EntityManagerConsumer {
-    private EntityManager dummyEntityManager;
+
+    private SharedEntityManager sharedEntityManager = SharedEntityManager.getInstance();
+
+    public void setSharedEntityManager(SharedEntityManager manager) {
+        sharedEntityManager = manager;
+    }
 
     public EntityManager newEntityManager() {
-        if (null != dummyEntityManager) {
-            return dummyEntityManager;
-        }
-        return SharedEntityManager.getInstance().getEntityManager();
+        return sharedEntityManager.getEntityManager();
     }
 
     public void closeEntityManager() {
-        SharedEntityManager.getInstance().close();
-    }
-
-    public void setEntityManager(EntityManager entityManager) {
-        this.dummyEntityManager = entityManager;
+        sharedEntityManager.close();
     }
 
 }

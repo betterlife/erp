@@ -2,7 +2,6 @@ package io.betterlife.persistence;
 
 import io.betterlife.application.EntityManagerConsumer;
 import io.betterlife.domains.BaseObject;
-import io.betterlife.util.jpa.JPAUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,25 +17,9 @@ public class BaseOperator extends EntityManagerConsumer {
     private static final Logger logger = LogManager.getLogger(BaseOperator.class.getName());
     private static BaseOperator instance = new BaseOperator();
 
-    private JPAUtil jPAUtil;
     public static final int UPDATE_OPERA = 1;
     public static final int CREATE_OPERA = 0;
     private EntityManager entityManager;
-
-    public void setJPAUtil(JPAUtil util) {
-        this.jPAUtil = util;
-    }
-
-    public JPAUtil getJPAUtil() {
-        if (null == jPAUtil) {
-            jPAUtil = jPAUtil.getInstance();
-        }
-        if (entityManager == null || !entityManager.isOpen()) {
-            entityManager = newEntityManager();
-        }
-        jPAUtil.setEntityManager(entityManager);
-        return this.jPAUtil;
-    }
 
     public static BaseOperator getInstance() {
         if (instance.entityManager == null || !instance.entityManager.isOpen()) {
@@ -49,9 +32,9 @@ public class BaseOperator extends EntityManagerConsumer {
     }
 
     public <T> T getBaseObjectById(long id, String queryName) {
-        Query q = getJPAUtil().getQuery(queryName);
+        Query q = getQuery(queryName);
         q.setParameter("id", id);
-        return getJPAUtil().getSingleResult(q);
+        return getSingleResult(q);
     }
 
     public <T> void save(T obj, int operation) {
@@ -92,16 +75,16 @@ public class BaseOperator extends EntityManagerConsumer {
     }
 
     public <T> T getBaseObject(String queryName, Map<String, ?> queryParams) {
-        Query q = getJPAUtil().getQuery(queryName);
+        Query q = getQuery(queryName);
         for (Map.Entry<String, ?> entry : queryParams.entrySet()) {
             q.setParameter(entry.getKey(), entry.getValue());
         }
-        return getJPAUtil().getSingleResult(q);
+        return getSingleResult(q);
     }
 
     public <T> List<T> getBaseObjects(String queryName) {
         List<T> result = new ArrayList<>();
-        Query q = getJPAUtil().getQuery(queryName);
+        Query q = getQuery(queryName);
         Collection coll = q.getResultList();
         if (coll != null) {
             @SuppressWarnings("unchecked")
@@ -111,5 +94,15 @@ public class BaseOperator extends EntityManagerConsumer {
             }
         }
         return result;
+    }
+
+    public Query getQuery(String queryName) {
+        return entityManager.createNamedQuery(queryName);
+    }
+
+    public <T> T getSingleResult(Query q) {
+        @SuppressWarnings("unchecked")
+        final T singleResult = (T) q.getSingleResult();
+        return singleResult;
     }
 }

@@ -1,6 +1,7 @@
 package io.betterlife.util;
 
 import io.betterlife.application.config.ApplicationConfig;
+import io.betterlife.application.manager.FieldMeta;
 import io.betterlife.application.manager.ServiceEntityManager;
 import io.betterlife.domains.BaseObject;
 import io.betterlife.rest.Form;
@@ -71,11 +72,11 @@ public class EntityUtils {
         return "id".equals(key);
     }
 
-    public LinkedHashMap<String, Class> sortEntityMetaByDisplayRank(String entityType, Map<String, Class> meta) {
-        LinkedHashMap<String, Class> sortedResult = new LinkedHashMap<>();
+    public LinkedHashMap<String, FieldMeta> sortEntityMetaByDisplayRank(String entityType, Map<String, FieldMeta> meta) {
+        LinkedHashMap<String, FieldMeta> sortedResult = new LinkedHashMap<>();
         Class entityClass = ServiceEntityManager.getInstance().getServiceEntityClass(BLStringUtils.capitalize(entityType));
         String[] fieldNamesInOrder = new String[100];
-        for(Map.Entry<String, Class> entry : meta.entrySet()) {
+        for(Map.Entry<String, FieldMeta> entry : meta.entrySet()) {
             String fieldName = entry.getKey();
             String getterMethod = getGetterMethodForField(fieldName);
             try {

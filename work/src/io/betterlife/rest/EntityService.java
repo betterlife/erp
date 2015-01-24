@@ -3,6 +3,7 @@ package io.betterlife.rest;
 import io.betterlife.application.I18n;
 import io.betterlife.application.config.ApplicationConfig;
 import io.betterlife.application.config.FormConfig;
+import io.betterlife.application.manager.FieldMeta;
 import io.betterlife.application.manager.ServiceEntityManager;
 import io.betterlife.domains.BaseObject;
 import io.betterlife.persistence.BaseOperator;
@@ -40,15 +41,15 @@ public class EntityService {
         if (logger.isTraceEnabled()) {
             logger.trace("Getting entity meta data for " + entityType);
         }
-        Map<String, Class> meta = ServiceEntityManager.getInstance().getMetaFromEntityType(entityType);
-        LinkedHashMap<String, Class> sortedMeta = EntityUtils.getInstance().sortEntityMetaByDisplayRank(entityType, meta);
+        Map<String, FieldMeta> meta = ServiceEntityManager.getInstance().getMetaFromEntityType(entityType);
+        LinkedHashMap<String, FieldMeta> sortedMeta = EntityUtils.getInstance().sortEntityMetaByDisplayRank(entityType, meta);
         List<Map<String, Object>> list = new ArrayList<>(sortedMeta.size());
-        for (Map.Entry<String, Class> entry : sortedMeta.entrySet()) {
+        for (Map.Entry<String, FieldMeta> entry : sortedMeta.entrySet()) {
             if (FormConfig.getInstance().getListFormIgnoreFields().contains(entry.getKey())) {
                 continue;
             }
             String field = entry.getKey();
-            if (EntityUtils.getInstance().isBaseObject(entry.getValue())) {
+            if (EntityUtils.getInstance().isBaseObject(entry.getValue().getType())) {
                 field = EntityUtils.getInstance().getRepresentFieldWithDot(entityType, field);
             }
             Map<String, Object> map = new HashMap<>();

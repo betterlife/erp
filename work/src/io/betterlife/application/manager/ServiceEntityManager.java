@@ -46,7 +46,7 @@ public class ServiceEntityManager {
         return clazz.newInstance();
     }
 
-    public Map<String, Class> getMetaFromEntityType(String entityType) {
+    public Map<String, FieldMeta> getMetaFromEntityType(String entityType) {
         final Class<? extends BaseObject> entityClass = getServiceEntityClass(BLStringUtils.capitalize(entityType));
         return MetaDataManager.getInstance().getMetaDataOfClass(entityClass);
     }

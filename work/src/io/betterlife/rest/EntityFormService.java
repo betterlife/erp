@@ -1,6 +1,7 @@
 package io.betterlife.rest;
 
 import io.betterlife.application.config.FormConfig;
+import io.betterlife.application.manager.FieldMeta;
 import io.betterlife.application.manager.ServiceEntityManager;
 import io.betterlife.util.EntityUtils;
 import io.betterlife.util.TemplateUtils;
@@ -63,12 +64,12 @@ public class EntityFormService {
 
     public String getForm(String entityType, ServletContext context,
                           final List<String> ignoreFields, final String operationType) {
-        Map<String, Class> meta = ServiceEntityManager.getInstance().getMetaFromEntityType(entityType);
-        LinkedHashMap<String, Class> sortedMeta = EntityUtils.getInstance().sortEntityMetaByDisplayRank(entityType, meta);
+        Map<String, FieldMeta> meta = ServiceEntityManager.getInstance().getMetaFromEntityType(entityType);
+        LinkedHashMap<String, FieldMeta> sortedMeta = EntityUtils.getInstance().sortEntityMetaByDisplayRank(entityType, meta);
         StringBuilder form = new StringBuilder();
         form.append("<div class='form-group form-horizontal'>");
-        for (Map.Entry<String, Class> entry : sortedMeta.entrySet()) {
-            final Class clazz = entry.getValue();
+        for (Map.Entry<String, FieldMeta> entry : sortedMeta.entrySet()) {
+            final FieldMeta fieldMeta = entry.getValue();
             final String key = entry.getKey();
             if (ignoreFields.contains(key)) {
                 continue;
@@ -77,7 +78,7 @@ public class EntityFormService {
             form.append(getTemplateUtils().getFieldLabelHtml(entityType, key));
             form.append(getTemplateUtils().getFieldController(
                             context, entityType, key,
-                            clazz, getTemplateUtils().getFieldLabel(entityType, key)
+                            fieldMeta, getTemplateUtils().getFieldLabel(entityType, key)
                         ));
             form.append("</div>");
         }

@@ -1,12 +1,13 @@
 package io.betterlife.rest;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import io.betterlife.application.EntityManagerConsumer;
 import io.betterlife.application.manager.MetaDataManager;
+import io.betterlife.application.manager.SharedEntityManager;
 import io.betterlife.domains.security.User;
 import io.betterlife.persistence.BaseOperator;
 import io.betterlife.util.EntityMockUtil;
 import io.betterlife.util.JsonUtils;
-import io.betterlife.util.jpa.JPAUtil;
 import io.betterlife.util.rest.ExecuteResult;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
@@ -31,7 +32,6 @@ import static org.mockito.Mockito.*;
 public class EntityServiceTest {
 
     private BaseOperator operator;
-    private JPAUtil JPAUtil;
     private Query openJPAQuery;
     private User existingUser = new User();
     private User newUser = new User();
@@ -44,14 +44,13 @@ public class EntityServiceTest {
         newUser.setUsername("username");
         newUser.setPassword("password");
         operator = mock(BaseOperator.class);
-        JPAUtil = mock(JPAUtil.class);
         openJPAQuery = mock(Query.class);
     }
 
     @Test
     public void testGetUser() throws IOException {
         when(operator.getBaseObjectById(1, "User.getById")).thenReturn(existingUser);
-        when(JPAUtil.getQuery("User.getById")).thenReturn(openJPAQuery);
+        when(operator.getQuery("User.getById")).thenReturn(openJPAQuery);
         EntityService entityService = new EntityService();
         entityService.setOperator(operator);
         final String userFromDB = entityService.getObjectByTypeAndId(1, "User");
@@ -70,7 +69,10 @@ public class EntityServiceTest {
         entityService.setOperator(operator);
         HttpServletRequest servletRequest = mock(HttpServletRequest.class);
         EntityManager manager = EntityMockUtil.getInstance().mockEntityManagerAndMeta();
-        MetaDataManager.getInstance().setEntityManager(manager);
+        SharedEntityManager sharedEntityManager = mock(SharedEntityManager.class);
+        when(sharedEntityManager.getEntityManager()).thenReturn(manager);
+        Mockito.doNothing().when(sharedEntityManager).close();
+        MetaDataManager.getInstance().setSharedEntityManager(sharedEntityManager);
         Mockito.doNothing().when(manager).persist(newUser);
         Map<String, String> userMap = new HashMap<>(2);
         userMap.put("username", "xqliu");
@@ -85,8 +87,11 @@ public class EntityServiceTest {
     @Test
     public void testGetServiceEntity() throws IOException {
         EntityService service = new EntityService();
+        SharedEntityManager sharedEntityManager = mock(SharedEntityManager.class);
         EntityManager manager = EntityMockUtil.getInstance().mockEntityManagerAndMeta();
-        MetaDataManager.getInstance().setEntityManager(manager);
+        when(sharedEntityManager.getEntityManager()).thenReturn(manager);
+        Mockito.doNothing().when(sharedEntityManager).close();
+        MetaDataManager.getInstance().setSharedEntityManager(sharedEntityManager);
         String userMeta = service.getEntityMeta("User");
         JsonNode expect = JsonUtils.getInstance().stringToJsonNode("{\"success\":true,\"successMessage\":null,\"errorMessages\":[],\"result\":[{\"field\":\"id\",\"name\":\"Id\"},{\"field\":\"username\",\"name\":\"Username\"},{\"field\":\"password\",\"name\":\"Password\"}]}");
         JsonNode node = JsonUtils.getInstance().stringToJsonNode(userMeta);

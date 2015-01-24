@@ -2,6 +2,7 @@ package io.betterlife.util;
 
 import io.betterlife.application.I18n;
 import io.betterlife.application.config.ApplicationConfig;
+import io.betterlife.application.manager.FieldMeta;
 import io.betterlife.domains.BaseObject;
 import io.betterlife.persistence.BaseOperator;
 import io.betterlife.persistence.NamedQueryRules;
@@ -47,10 +48,14 @@ public class TemplateUtils {
 
     @SuppressWarnings("unchecked")
     public String getFieldController(ServletContext context, String entityType,
-                                     String key, Class clazz, String label) {
+                                     String key, FieldMeta fieldMeta, String label) {
         StringBuilder form = new StringBuilder();
+        Class clazz = fieldMeta.getType();
         form.append("<div class='col-sm-4'>");
-        if (EntityUtils.getInstance().isIdField(key)) {
+        if (!fieldMeta.isEditable()) {
+            form.append(String.format("<input type='text' class='form-control' ng-model='%s' name='%s' size='20' disabled/>",
+                                      getNgModelNameForField(key), key));
+        } else if (EntityUtils.getInstance().isIdField(key)) {
             form.append(getIdController(context, key, label));
         }  else if (String.class.equals(clazz)) {
             form.append(getStringController(context, key, label));
