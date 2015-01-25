@@ -101,14 +101,14 @@ public abstract class BaseObject {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("\n{Type : ").append(getClass().getName());
+        sb.append("{Type : ").append(getClass().getName());
         for (Map.Entry<String, Object> entry : _map.entrySet()) {
             if (ApplicationConfig.getToStringIgnoreFields().contains(entry.getKey())) {
                 continue;
             }
-            sb.append("\n\t[").append(entry.getKey()).append(" : ").append(entry.getValue()).append("]");
+            sb.append("\t[").append(entry.getKey()).append(" : ").append(entry.getValue()).append("]");
         }
-        sb.append("\n}");
+        sb.append("}");
         return sb.toString();
     }
 
