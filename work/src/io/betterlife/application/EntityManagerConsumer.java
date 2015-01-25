@@ -21,7 +21,11 @@ public class EntityManagerConsumer {
     }
 
     public void closeEntityManager() {
-        sharedEntityManager.close();
+        getSharedEntityManager().close();
+    }
+
+    public SharedEntityManager getSharedEntityManager(){
+        return this.sharedEntityManager;
     }
 
 }
