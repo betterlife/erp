@@ -65,7 +65,7 @@ public class Product extends BaseObject {
         setValue("purchasePrice", purchasePrice);
     }
 
-    @Form(DisplayRank = 24)
+    @Form(DisplayRank = 22)
     public BigDecimal getRetailPrice() {
         return getValue("retailPrice");
     }
@@ -74,12 +74,16 @@ public class Product extends BaseObject {
         setValue("retailPrice", retailPrice);
     }
 
+    @Form(DisplayRank = 23)
     @Transient
-    public BigDecimal getGrossProfitRate() {
+    public String getGrossProfitRateString() {
         if (getPurchasePrice() != null && getRetailPrice() != null) {
-            return getPurchasePrice().divide(getRetailPrice(), BigDecimal.ROUND_HALF_UP);
+            final BigDecimal bd1 = getRetailPrice().subtract(getPurchasePrice());
+            final BigDecimal bd2 = bd1.divide(getRetailPrice(), 4, BigDecimal.ROUND_HALF_UP);
+            final BigDecimal bd3 = bd2.multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP);
+            return String.valueOf(bd3) + "%";
         }
-        return BigDecimal.ZERO;
+        return "-";
     }
 
     @Form(DisplayRank = 25)

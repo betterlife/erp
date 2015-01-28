@@ -207,6 +207,24 @@ public class ProductTest {
     }
 
     @Test
+    public void testGetGrossProfitRateString() {
+        BigDecimal pp = new BigDecimal("120");
+        product.setPurchasePrice(pp);
+        BigDecimal rp = new BigDecimal("240");
+        product.setRetailPrice(rp);
+        assertNotNull(product.getGrossProfitRateString());
+        assertEquals("50.00%", product.getGrossProfitRateString());
+        BigDecimal nPP = new BigDecimal("60");
+        product.setPurchasePrice(nPP);
+        assertNotNull(product.getGrossProfitRateString());
+        assertEquals("75.00%", product.getGrossProfitRateString());
+        BigDecimal nRP = new BigDecimal("90");
+        product.setRetailPrice(nRP);
+        assertNotNull(product.getGrossProfitRateString());
+        assertEquals("33.33%", product.getGrossProfitRateString());
+    }
+
+    @Test
     public void testEntityAnnotationDefined() {
         Entity entity = Product.class.getAnnotation(Entity.class);
         assertNotNull(entity);
