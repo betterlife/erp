@@ -6,16 +6,15 @@ import io.betterlife.domains.security.User;
 import io.betterlife.util.EntityVerifyUtil;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 
 import javax.persistence.Entity;
-
 import java.math.BigDecimal;
 import java.util.Date;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class PurchaseOrderTest {
 
@@ -115,6 +114,20 @@ public class PurchaseOrderTest {
         Date date1 = new Date();
         purchaseOrder.setPurchaseDate(date1);
         final Date date2 = purchaseOrder.getPurchaseDate();
+        assertNotNull(date2);
+        assertNotSame(date, date2);
+        assertSame(date1, date2);
+    }
+
+    @Test
+    public void testStockInDate() throws Exception {
+        Date date = new Date();
+        purchaseOrder.setStockInDate(date);
+        assertNotNull(purchaseOrder.getStockInDate());
+        assertSame(date, purchaseOrder.getStockInDate());
+        Date date1 = new Date();
+        purchaseOrder.setStockInDate(date1);
+        final Date date2 = purchaseOrder.getStockInDate();
         assertNotNull(date2);
         assertNotSame(date, date2);
         assertSame(date1, date2);

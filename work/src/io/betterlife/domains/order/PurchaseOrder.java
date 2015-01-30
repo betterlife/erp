@@ -97,6 +97,14 @@ public class PurchaseOrder extends BaseObject {
         setValue("otherAmount", otherAmount);
     }
 
+    public Date getStockInDate(){
+        return getValue("stockInDate");
+    }
+
+    public void setStockInDate(Date date){
+        setValue("stockInDate", date);
+    }
+
     @ManyToOne
     @Form(DisplayRank = 45, RepresentField = "displayName")
     public User getUser() {
