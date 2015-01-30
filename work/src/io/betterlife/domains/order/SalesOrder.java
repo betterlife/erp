@@ -87,6 +87,7 @@ public class SalesOrder extends BaseObject {
     }
 
     @Form(DisplayRank = 45)
+    @Temporal(value=TemporalType.DATE)
     public Date getOrderDate() {
         return getValue("orderDate");
     }

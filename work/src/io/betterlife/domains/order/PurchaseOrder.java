@@ -97,6 +97,8 @@ public class PurchaseOrder extends BaseObject {
         setValue("otherAmount", otherAmount);
     }
 
+    @Form(DisplayRank = 42)
+    @Temporal(value=TemporalType.DATE)
     public Date getStockInDate(){
         return getValue("stockInDate");
     }
