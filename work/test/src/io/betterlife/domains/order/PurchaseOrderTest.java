@@ -108,12 +108,12 @@ public class PurchaseOrderTest {
     @Test
     public void testPurchaseDate() throws Exception {
         Date date = new Date();
-        purchaseOrder.setPurchaseDate(date);
-        assertNotNull(purchaseOrder.getPurchaseDate());
-        assertEquals(date, purchaseOrder.getPurchaseDate());
+        purchaseOrder.setOrderDate(date);
+        assertNotNull(purchaseOrder.getOrderDate());
+        assertEquals(date, purchaseOrder.getOrderDate());
         Date date1 = new Date();
-        purchaseOrder.setPurchaseDate(date1);
-        final Date date2 = purchaseOrder.getPurchaseDate();
+        purchaseOrder.setOrderDate(date1);
+        final Date date2 = purchaseOrder.getOrderDate();
         assertNotNull(date2);
         assertNotSame(date, date2);
         assertSame(date1, date2);

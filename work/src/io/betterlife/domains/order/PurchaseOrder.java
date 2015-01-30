@@ -65,12 +65,12 @@ public class PurchaseOrder extends BaseObject {
     @Temporal(value = TemporalType.DATE)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd", timezone = "CST")
     @Form(DisplayRank = 30)
-    public Date getPurchaseDate() {
-        return getValue("purchaseDate");
+    public Date getOrderDate() {
+        return getValue("orderDate");
     }
 
-    public void setPurchaseDate(Date date) {
-        setValue("purchaseDate", date);
+    public void setOrderDate(Date date) {
+        setValue("orderDate", date);
     }
 
     @Form(DisplayRank = 30)
