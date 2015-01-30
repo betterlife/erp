@@ -38,7 +38,7 @@ public class PurchaseOrder extends BaseObject {
         return getProduct().getSupplier();
     }
 
-    @Form(DisplayRank = 15, RepresentField = "name")
+    @Form(DisplayRank = 15)
     public BigDecimal getPricePerUnit() {
         return getValue("pricePerUnit");
     }
@@ -47,7 +47,7 @@ public class PurchaseOrder extends BaseObject {
         setValue("pricePerUnit", price);
     }
 
-    @Form(DisplayRank = 20, RepresentField = "name")
+    @Form(DisplayRank = 20)
     public BigDecimal getQuantity() {
         return getValue("quantity");
     }
@@ -85,7 +85,11 @@ public class PurchaseOrder extends BaseObject {
     @Form(DisplayRank = 35)
     @Transient
     public BigDecimal getUnitLogisticAmount() {
-        return getLogisticAmount().divide(getQuantity(), 2, BigDecimal.ROUND_HALF_UP);
+        BigDecimal result = BigDecimal.ZERO;
+        if (getLogisticAmount() != null && getQuantity() != null) {
+            result = getLogisticAmount().divide(getQuantity(), 2, BigDecimal.ROUND_HALF_UP);
+        }
+        return result;
     }
 
     @Form(DisplayRank = 40)

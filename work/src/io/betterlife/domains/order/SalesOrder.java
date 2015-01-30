@@ -17,7 +17,7 @@ import java.util.Date;
 @Entity
 @NamedQueries({
     @NamedQuery(name = "SalesOrder.getById", query = "SELECT c FROM SalesOrder c WHERE c.id = :id AND c.active = TRUE"),
-    @NamedQuery(name = "SalesOrder.getAll",  query = "SELECT c FROM SalesOrder c WHERE c.active = TRUE")
+    @NamedQuery(name = "SalesOrder.getAll", query = "SELECT c FROM SalesOrder c WHERE c.active = TRUE")
 })
 public class SalesOrder extends BaseObject {
 
@@ -47,29 +47,29 @@ public class SalesOrder extends BaseObject {
         setValue("transactor", transactor);
     }
 
-    @Form(DisplayRank = 20)
     public void setQuantity(BigDecimal quantity) {
         setValue("quantity", quantity);
     }
 
+    @Form(DisplayRank = 20)
     public BigDecimal getQuantity() {
         return getValue("quantity");
     }
 
-    @Form(DisplayRank = 25)
     public void setPricePerUnit(BigDecimal ppu) {
         setValue("pricePerUnit", ppu);
     }
 
+    @Form(DisplayRank = 25)
     public BigDecimal getPricePerUnit() {
         return getValue("pricePerUnit");
     }
 
-    @Form(DisplayRank = 30)
     public void setLogisticAmount(BigDecimal logisticAmount) {
         setValue("logisticAmount", logisticAmount);
     }
 
+    @Form(DisplayRank = 30)
     public BigDecimal getLogisticAmount() {
         return getValue("logisticAmount");
     }
@@ -83,11 +83,15 @@ public class SalesOrder extends BaseObject {
     @Transient
     @Form(DisplayRank = 40)
     public BigDecimal getUnitLogisticAmount() {
-        return getLogisticAmount().divide(getQuantity(), 2, BigDecimal.ROUND_HALF_UP);
+        BigDecimal result = BigDecimal.ZERO;
+        if (getLogisticAmount() != null && getQuantity() != null) {
+            return getLogisticAmount().divide(getQuantity(), 2, BigDecimal.ROUND_HALF_UP);
+        }
+        return result;
     }
 
     @Form(DisplayRank = 45)
-    @Temporal(value=TemporalType.DATE)
+    @Temporal(value = TemporalType.DATE)
     public Date getOrderDate() {
         return getValue("orderDate");
     }
