@@ -49,7 +49,7 @@ public class MetaDataManager extends EntityManagerConsumer {
     }
 
     public boolean hasMetaData() {
-        return hasMetaData && !ApplicationConfig.isDevelopmentMode();
+        return hasMetaData;
     }
 
     private void setHasMetaData(boolean hasMetaData) {
