@@ -102,6 +102,7 @@ public class PurchaseOrder extends BaseObject {
     }
 
     @Form(DisplayRank = 42)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd", timezone = "CST")
     @Temporal(value=TemporalType.DATE)
     public Date getStockInDate(){
         return getValue("stockInDate");

@@ -1,5 +1,6 @@
 package io.betterlife.domains.order;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.betterlife.domains.BaseObject;
 import io.betterlife.domains.catalog.Product;
 import io.betterlife.domains.common.Supplier;
@@ -91,6 +92,7 @@ public class SalesOrder extends BaseObject {
     }
 
     @Form(DisplayRank = 45)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd", timezone = "CST")
     @Temporal(value = TemporalType.DATE)
     public Date getOrderDate() {
         return getValue("orderDate");
