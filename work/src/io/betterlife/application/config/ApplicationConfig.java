@@ -13,7 +13,7 @@ public class ApplicationConfig {
     /**
      * Ignore field when output toString.
      */
-    public static List<String> ToStringIgnoreFields;
+    private static List<String> toStringIgnoreFields;
 
     /**
      * Application data source name
@@ -40,11 +40,11 @@ public class ApplicationConfig {
     }
 
     public static List<String> getToStringIgnoreFields() {
-        if (null == ToStringIgnoreFields) {
-            ToStringIgnoreFields = new ArrayList<>();
-            ToStringIgnoreFields.add("lastModify");
-            ToStringIgnoreFields.add("creator");
+        if (null == toStringIgnoreFields) {
+            toStringIgnoreFields = new ArrayList<>();
+            toStringIgnoreFields.add("lastModify");
+            toStringIgnoreFields.add("creator");
         }
-        return ToStringIgnoreFields;
+        return toStringIgnoreFields;
     }
 }
