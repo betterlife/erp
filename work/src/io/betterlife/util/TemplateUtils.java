@@ -27,7 +27,8 @@ public class TemplateUtils {
     private static TemplateUtils instance = new TemplateUtils();
     private static final Logger logger = LogManager.getLogger(TemplateUtils.class.getName());
 
-    private TemplateUtils(){}
+    private TemplateUtils() {
+    }
 
     public static TemplateUtils getInstance() {
         return instance;
@@ -53,11 +54,10 @@ public class TemplateUtils {
         Class clazz = fieldMeta.getType();
         form.append("<div class='col-sm-4'>");
         if (!fieldMeta.isEditable()) {
-            form.append(String.format("<input type='text' class='form-control' ng-model='%s' name='%s' size='20' disabled/>",
-                                      getNgModelNameForField(key), key));
+            form.append(getReadOnlyController(entityType, key, clazz));
         } else if (EntityUtils.getInstance().isIdField(key)) {
             form.append(getIdController(context, key, label));
-        }  else if (String.class.equals(clazz)) {
+        } else if (String.class.equals(clazz)) {
             form.append(getStringController(context, key, label));
         } else if (Date.class.equals(clazz)) {
             form.append(getDateController(context, key));
@@ -69,11 +69,19 @@ public class TemplateUtils {
             form.append(getBooleanController(context, key));
         } else if (ClassUtils.getAllSuperclasses(clazz).contains(BaseObject.class)) {
             form.append(getBaseObjectController(context, entityType, key, clazz));
-        } else if (Enum.class.isAssignableFrom(clazz)){
+        } else if (Enum.class.isAssignableFrom(clazz)) {
             form.append(getEnumController(context, key, clazz));
         }
         form.append("</div>");
         return form.toString();
+    }
+
+    private String getReadOnlyController(String entityType, String key, Class clazz) {
+        String ngModel = getNgModelNameForField(key);
+        if (ClassUtils.getAllSuperclasses(clazz).contains(BaseObject.class)) {
+            ngModel += "." + EntityUtils.getInstance().getRepresentField(entityType, key);
+        }
+        return String.format("<input type='text' class='form-control' ng-model='%s' name='%s' size='20' disabled/>", ngModel, key);
     }
 
     private String getIdController(ServletContext context, String key, String label) {
@@ -89,8 +97,12 @@ public class TemplateUtils {
         Object[] enumArray = clazz.getEnumConstants();
         StringBuilder sb = new StringBuilder();
         for (Object enumVal : enumArray) {
-            sb.append(String.format("<option value='%s'>%s</option>%n", enumVal.toString(),
-                                    I18n.getInstance().get(enumVal.toString(), ApplicationConfig.getLocale())));
+            sb.append(
+                String.format(
+                    "<option value='%s'>%s</option>%n", enumVal.toString(),
+                    I18n.getInstance().get(enumVal.toString(), ApplicationConfig.getLocale())
+                )
+            );
         }
         String template = getHtmlTemplate(context, "templates/fields/enum.tpl.html");
         return template
@@ -124,7 +136,7 @@ public class TemplateUtils {
     }
 
     public String getIntegerController(ServletContext context, String key, String label) {
-        String type="number";
+        String type = "number";
         String template = getHtmlTemplate(context, "templates/fields/string.tpl.html");
         return template
             .replaceAll("\\$type", type)
@@ -134,7 +146,7 @@ public class TemplateUtils {
     }
 
     public String getBigDecimalController(ServletContext context, String key, String label) {
-        String type="number";
+        String type = "number";
         String template = getHtmlTemplate(context, "templates/fields/string.tpl.html");
         return template
             .replaceAll("\\$type", type)
@@ -176,9 +188,11 @@ public class TemplateUtils {
 
     public String getFieldLabelHtml(String entityType, String key) {
         final String label = getFieldLabel(entityType, key);
-        return String.format("<label for='%s' class='col-sm-2 control-label %s-label'>%s</label>%n",
-                             null == key ? BLStringUtils.EMPTY : key,
-                             null == key ? BLStringUtils.EMPTY : key, label);
+        return String.format(
+            "<label for='%s' class='col-sm-2 control-label %s-label'>%s</label>%n",
+            null == key ? BLStringUtils.EMPTY : key,
+            null == key ? BLStringUtils.EMPTY : key, label
+        );
     }
 
     public String getFieldLabel(String entityType, String key) {
