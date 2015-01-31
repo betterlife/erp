@@ -13,10 +13,15 @@ var createCtrl = function ($scope, $http, $location, loginService, $routeParams)
         $scope.entity = {};
     };
 
-    $scope.open = function($event) {
-      $event.preventDefault();
-      $event.stopPropagation();
-      $scope.opened = true;
+    $scope.calendar = {
+        opened: {},
+        dateFormat: 'MM/dd/yyyy',
+        dateOptions: {},
+        open: function ($event, which) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.calendar.opened[which] = true;
+        }
     };
 
     $scope.create = function () {

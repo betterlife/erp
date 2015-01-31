@@ -160,6 +160,7 @@ public class TemplateUtils {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         return template
             .replaceAll("\\$ngModel", getNgModelNameForField(key))
+            .replaceAll("\\$fieldKey", key)
             .replaceAll("\\$defaultValue", sdf.format(new Date()));
     }
 
