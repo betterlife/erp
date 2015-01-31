@@ -15,8 +15,6 @@ var createCtrl = function ($scope, $http, $location, loginService, $routeParams)
 
     $scope.calendar = {
         opened: {},
-        dateFormat: 'MM/dd/yyyy',
-        dateOptions: {},
         open: function ($event, which) {
             $event.preventDefault();
             $event.stopPropagation();

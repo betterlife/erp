@@ -10,8 +10,6 @@ var editCtrl = function ($scope, $http, $location, loginService, $routeParams) {
     $scope.entity = {};
     $scope.calendar = {
         opened: {},
-        dateFormat: 'MM/dd/yyyy',
-        dateOptions: {},
         open: function ($event, which) {
             $event.preventDefault();
             $event.stopPropagation();
