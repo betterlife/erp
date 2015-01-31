@@ -169,6 +169,20 @@ public class SalesOrderTest {
     }
 
     @Test
+    public void testStockOutDate() throws Exception {
+        Date date = new Date();
+        salesOrder.setStockOutDate(date);
+        assertNotNull(salesOrder.getStockOutDate());
+        assertEquals(date, salesOrder.getStockOutDate());
+        Date date1 = new Date();
+        salesOrder.setStockOutDate(date1);
+        final Date date2 = salesOrder.getStockOutDate();
+        assertNotNull(date2);
+        assertNotSame(date, date2);
+        assertSame(date1, date2);
+    }
+
+    @Test
     public void testRemark() throws Exception {
         String str = "I am a remark with 中文";
         salesOrder.setRemark(str);

@@ -102,6 +102,17 @@ public class SalesOrder extends BaseObject {
         setValue("orderDate", date);
     }
 
+    public void setStockOutDate(Date date) {
+        setValue("stockOutDate", date);
+    }
+
+    @Form(DisplayRank = 47)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd", timezone = "CST")
+    @Temporal(value = TemporalType.DATE)
+    public Date getStockOutDate() {
+        return getValue("stockOutDate");
+    }
+
     public void setRemark(String remark) {
         setValue("remark", remark);
     }
@@ -110,4 +121,5 @@ public class SalesOrder extends BaseObject {
     public String getRemark() {
         return getValue("remark");
     }
+
 }

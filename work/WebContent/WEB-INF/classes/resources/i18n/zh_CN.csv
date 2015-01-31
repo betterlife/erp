@@ -52,3 +52,4 @@ PurchaseOrder.otherAmount,其他支出
 SalesOrder,销售订单
 SalesOrder.transactor,经办人
 SalesOrder.orderDate,销售日期
+SalesOrder.stockOutDate,出库时间
