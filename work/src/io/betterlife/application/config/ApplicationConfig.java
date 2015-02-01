@@ -1,5 +1,8 @@
 package io.betterlife.application.config;
 
+import io.betterlife.util.converter.Converter;
+import io.betterlife.util.converter.DefaultConverter;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +36,7 @@ public class ApplicationConfig {
     public static final String DefaultRepresentField = "name";
     public static final int DefaultFieldRank = 0;
     public static final boolean DefaultVisible = true;
+    public static final Class<? extends Converter> DefaultConverterClass = DefaultConverter.class;
 
     public static String getLocale() {return "zh_CN";}
 

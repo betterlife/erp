@@ -101,12 +101,12 @@ public abstract class BaseObject {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("{Type : ").append(getClass().getName());
+        sb.append("\n{Type : ").append(getClass().getName());
         for (Map.Entry<String, Object> entry : _map.entrySet()) {
             if (ApplicationConfig.getToStringIgnoreFields().contains(entry.getKey())) {
                 continue;
             }
-            sb.append("\t[").append(entry.getKey()).append(" : ").append(entry.getValue()).append("]");
+            sb.append("\n\t[").append(entry.getKey()).append(" : ").append(entry.getValue()).append("]");
         }
         sb.append("}");
         return sb.toString();
@@ -124,46 +124,68 @@ public abstract class BaseObject {
                 logger.trace(String.format("Setting [%s, %s, %s] to type [%s]",
                                            key, value, (value == null) ? null : value.getClass().getName(), clazz));
             }
-            if (null == clazz) {
-                continue;
+            if (null != clazz) {
+                final Class<? extends Converter> converterClass = fieldMeta.getConverterClass();
+                if (converterClass != null && !ApplicationConfig.DefaultConverterClass.equals(converterClass)) {
+                    annotatedConvert(key, value, converterClass);
+                } else if (null != value && EntityUtils.getInstance().isBaseObject(clazz)) {
+                    baseObjectDefaultConvert(key, value, clazz);
+                } else if (null == value || ClassUtils.isAssignable(value.getClass(), clazz)) {
+                    setValue(key, value);
+                } else if (Enum.class.isAssignableFrom(clazz) && value instanceof String) {
+                    enumDefaultConvert(key, (String) value, clazz);
+                } else {
+                    buildInDefaultConvert(key, value, clazz);
+                }
             }
-            if (null != value && EntityUtils.getInstance().isBaseObject(clazz)) {
-                final String idQueryForEntity = NamedQueryRules.getInstance().getIdQueryForEntity(clazz.getSimpleName());
-                if (value instanceof LinkedHashMap) {
-                    value = ((LinkedHashMap) value).get("id");
-                }
-                if (value instanceof String) {
-                    value = Long.parseLong((String) value);
-                }
-                if (value instanceof Integer) {
-                    value = (long) ((Integer) value);
-                }
-                BaseObject baseObj = BaseOperator.getInstance().getBaseObjectById((Long) value, idQueryForEntity);
-                if (null != baseObj) {
-                    setValue(key, baseObj);
-                }
-            } else if (null == value || ClassUtils.isAssignable(value.getClass(), clazz)) {
-                setValue(key, value);
-            } else if (Enum.class.isAssignableFrom(clazz) && value instanceof String) {
-                Enum enumVal = Enum.valueOf((Class<? extends Enum>)clazz, (String) value);
-                setValue(key, enumVal);
+        }
+    }
+
+    private void buildInDefaultConvert(String key, Object value, Class clazz) {
+        final Converter converter = ConverterFactory.getInstance().getConverter(value.getClass(), clazz);
+        Object convertedValue = null;
+        try {
+            if (converter != null) {
+                convertedValue = converter.convert(value);
+                setValue(key, convertedValue);
             } else {
-                final Converter converter = ConverterFactory.getInstance().getConverter(value.getClass(), clazz);
-                Object convertedValue = null;
-                try {
-                    if (converter != null) {
-                        convertedValue = converter.convert(value);
-                        setValue(key, convertedValue);
-                    } else {
-                        logger.error(String.format("Failed to get converter[%s->%s] for value[%s]", value.getClass(), clazz, value));
-                    }
-                } catch (ParseException e) {
-                    logger.error(String.format(
-                                     "Failed to convert[%s,%s] to type [%s]", value,
-                                     value.getClass().getName(), clazz.getName()
-                                 ), e);
-                }
+                logger.error(String.format("Failed to get converter[%s->%s] for value[%s]", value.getClass(), clazz, value));
             }
+        } catch (ParseException e) {
+            logger.error(String.format("Failed to convert[%s,%s] to type [%s]",
+                                       value, value.getClass().getName(), clazz.getName()), e);
+        }
+    }
+
+    private void enumDefaultConvert(String key, String value, Class<? extends Enum> clazz) {
+        Enum enumVal = Enum.valueOf(clazz, value);
+        setValue(key, enumVal);
+    }
+
+    private void baseObjectDefaultConvert(String key, Object value, Class clazz) {
+        final String idQueryForEntity = NamedQueryRules.getInstance().getIdQueryForEntity(clazz.getSimpleName());
+        if (value instanceof LinkedHashMap) {
+            value = ((LinkedHashMap) value).get("id");
+        }
+        if (value instanceof String) {
+            value = Long.parseLong((String) value);
+        }
+        if (value instanceof Integer) {
+            value = (long) ((Integer) value);
+        }
+        BaseObject baseObj = BaseOperator.getInstance().getBaseObjectById((Long) value, idQueryForEntity);
+        if (null != baseObj) {
+            setValue(key, baseObj);
+        }
+    }
+
+    private void annotatedConvert(String key, Object value, Class<? extends Converter> converterClass) {
+        try {
+            Converter converter = converterClass.newInstance();
+            final Object convertedVal = converter.convert(value);
+            setValue(key, convertedVal);
+        } catch (InstantiationException | IllegalAccessException | ParseException e ) {
+            logger.error(e);
         }
     }
 

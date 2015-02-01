@@ -139,6 +139,7 @@ public class MetaDataManager extends EntityManagerConsumer {
                 meta.setDisplayRank(form.DisplayRank());
                 meta.setVisible(form.Visible());
                 meta.setRepresentField(form.RepresentField());
+                meta.setConverter(form.Converter());
             }
         }
     }

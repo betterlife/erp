@@ -1,5 +1,8 @@
 package io.betterlife.application.manager;
 
+import io.betterlife.util.converter.Converter;
+import org.aopalliance.reflect.Field;
+
 /**
  * Author: Lawrence Liu
  * Date: 1/19/15
@@ -12,6 +15,7 @@ public class FieldMeta {
     private boolean visible;
     private String representField;
     private String aggregateType;
+    private Class<? extends Converter> converterClass;
 
     public void setName(String name) {
         this.name = name;
@@ -67,5 +71,13 @@ public class FieldMeta {
 
     public void setAggregateType(String aggregateType) {
         this.aggregateType = aggregateType;
+    }
+
+    public Class<? extends Converter> getConverterClass() {
+        return converterClass;
+    }
+
+    public void setConverter(Class<? extends Converter> converterClass) {
+        this.converterClass = converterClass;
     }
 }
