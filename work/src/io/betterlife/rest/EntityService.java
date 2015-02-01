@@ -35,10 +35,25 @@ public class EntityService {
     private NamedQueryRules namedQueryRule;
     private BaseOperator operator;
 
+    /**
+     * Get entity meta data(for render the entity list page)
+     * Please see document of grid-ui to find detail form.
+     * Something like
+     * <pre>
+     * [
+     *   {name: 'firstName', field: 'first-name'},
+     *   {name: '1stFriend', field: 'friends[0]'},
+     *   {name: 'city', field: 'address.city'},
+     *   {name: 'getZip', field: 'getZip()', enableCellEdit: false}
+     * ]
+     * </pre>
+     * @param entityType Entity type, start with with capitalize letter
+     * @return a Json represent of the entity meta data, in the way grid-ui respects.
+     */
     @GET
     @Path("/entity/{entityType}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getEntityMeta(@PathParam("entityType") String entityType) throws IOException {
+    public String getEntityMeta(@PathParam("entityType") String entityType) {
         if (logger.isTraceEnabled()) {
             logger.trace("Getting entity meta data for " + entityType);
         }
@@ -46,7 +61,8 @@ public class EntityService {
         LinkedHashMap<String, FieldMeta> sortedMeta = EntityUtils.getInstance().sortEntityMetaByDisplayRank(meta);
         List<Map<String, Object>> list = new ArrayList<>(sortedMeta.size());
         for (Map.Entry<String, FieldMeta> entry : sortedMeta.entrySet()) {
-            if (FormConfig.getInstance().getListFormIgnoreFields().contains(entry.getKey())) {
+            if (FormConfig.getInstance().getListFormIgnoreFields().contains(entry.getKey())
+                || !entry.getValue().getVisible()) {
                 continue;
             }
             String field = entry.getKey();
