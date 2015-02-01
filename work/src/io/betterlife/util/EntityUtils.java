@@ -40,58 +40,24 @@ public class EntityUtils {
         return null != clazz && ClassUtils.isAssignable(clazz, BaseObject.class);
     }
 
-    public String getRepresentFieldWithDot(String entityType, String field) {
-        try {
-            field = field  + "." + getRepresentField(entityType, field);;
-        } catch (Exception e) {
-            logger.warn(String.format("Failed to get represent field for field[%s], class[%s]", field, entityType));
-        }
-        return field;
-    }
-
-    public String getRepresentField(String entityType, String field) {
-        Class entityClass = ServiceEntityManager.getInstance().getServiceEntityClass(BLStringUtils.capitalize(entityType));
-        final String methodName = getGetterMethodForField(field);
-        try {
-            Method method = entityClass.getDeclaredMethod(methodName);
-            if (null != method) {
-                Form form = method.getAnnotation(Form.class);
-                return (null == form) ? ApplicationConfig.DefaultRepresentField : form.RepresentField();
-            }
-        } catch (NoSuchMethodException e) {
-            logger.warn("Failed to get method definition for " + methodName);
-        }
-        return ApplicationConfig.DefaultRepresentField;
-    }
-
-    public String getGetterMethodForField(String field) {
-        return "get" + BLStringUtils.capitalize(field);
+    public String getRepresentFieldWithDot(FieldMeta fieldMeta) {
+        return fieldMeta.getName()  + "." + fieldMeta.getRepresentField();
     }
 
     public boolean isIdField(String key) {
         return "id".equals(key);
     }
 
-    public LinkedHashMap<String, FieldMeta> sortEntityMetaByDisplayRank(String entityType, Map<String, FieldMeta> meta) {
+    public LinkedHashMap<String, FieldMeta> sortEntityMetaByDisplayRank(Map<String, FieldMeta> meta) {
         LinkedHashMap<String, FieldMeta> sortedResult = new LinkedHashMap<>();
-        Class entityClass = ServiceEntityManager.getInstance().getServiceEntityClass(BLStringUtils.capitalize(entityType));
         String[] fieldNamesInOrder = new String[100];
         for(Map.Entry<String, FieldMeta> entry : meta.entrySet()) {
             String fieldName = entry.getKey();
-            String getterMethod = getGetterMethodForField(fieldName);
-            try {
-                Method method = entityClass.getMethod(getterMethod);
-                if (null != method) {
-                    Form form = method.getAnnotation(Form.class);
-                    int rank = (null == form) ? ApplicationConfig.DefaultFieldRank : form.DisplayRank();
-                    while (fieldNamesInOrder[rank] != null) {
-                        rank = rank + 1;
-                    }
-                    fieldNamesInOrder[rank] = fieldName;
-                }
-            } catch (NoSuchMethodException e) {
-                logger.warn(String.format("Failed to get method definition[%s.%s]", entityType, getterMethod));
+            int rank = entry.getValue().getDisplayRank();
+            while (fieldNamesInOrder[rank] != null) {
+                rank = rank + 1;
             }
+            fieldNamesInOrder[rank] = fieldName;
         }
         for (String fieldName : fieldNamesInOrder) {
             if (fieldName != null) {

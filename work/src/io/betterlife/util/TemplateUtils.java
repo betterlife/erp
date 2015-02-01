@@ -48,13 +48,13 @@ public class TemplateUtils {
     }
 
     @SuppressWarnings("unchecked")
-    public String getFieldController(ServletContext context, String entityType,
-                                     String key, FieldMeta fieldMeta, String label) {
+    public String getFieldController(ServletContext context, FieldMeta fieldMeta, String label) {
         StringBuilder form = new StringBuilder();
         Class clazz = fieldMeta.getType();
+        String key = fieldMeta.getName();
         form.append("<div class='col-sm-4'>");
         if (!fieldMeta.isEditable()) {
-            form.append(getReadOnlyController(entityType, key, clazz));
+            form.append(getReadOnlyController(fieldMeta, clazz));
         } else if (EntityUtils.getInstance().isIdField(key)) {
             form.append(getIdController(context, key, label));
         } else if (String.class.equals(clazz)) {
@@ -68,7 +68,7 @@ public class TemplateUtils {
         } else if (Boolean.class.equals(clazz) || "boolean".equals(clazz.getSimpleName())) {
             form.append(getBooleanController(context, key));
         } else if (ClassUtils.getAllSuperclasses(clazz).contains(BaseObject.class)) {
-            form.append(getBaseObjectController(context, entityType, key, clazz));
+            form.append(getBaseObjectController(context, fieldMeta, clazz));
         } else if (Enum.class.isAssignableFrom(clazz)) {
             form.append(getEnumController(context, key, clazz));
         }
@@ -76,12 +76,12 @@ public class TemplateUtils {
         return form.toString();
     }
 
-    private String getReadOnlyController(String entityType, String key, Class clazz) {
-        String ngModel = getNgModelNameForField(key);
+    private String getReadOnlyController(FieldMeta fieldMeta, Class clazz) {
+        String ngModel = getNgModelNameForField(fieldMeta.getName());
         if (ClassUtils.getAllSuperclasses(clazz).contains(BaseObject.class)) {
-            ngModel += "." + EntityUtils.getInstance().getRepresentField(entityType, key);
+            ngModel += "." + fieldMeta.getRepresentField();
         }
-        return String.format("<input type='text' class='form-control' ng-model='%s' name='%s' size='20' disabled/>", ngModel, key);
+        return String.format("<input type='text' class='form-control' ng-model='%s' name='%s' size='20' disabled/>", ngModel, fieldMeta);
     }
 
     private String getIdController(ServletContext context, String key, String label) {
@@ -111,20 +111,19 @@ public class TemplateUtils {
             .replaceAll("\\$options", sb.toString());
     }
 
-    public String getBaseObjectController(ServletContext context, String entityType,
-                                          String key, Class<? extends BaseObject> clazz) {
+    public String getBaseObjectController(ServletContext context, FieldMeta fieldMeta, Class<? extends BaseObject> clazz) {
         List<BaseObject> objects = BaseOperator.getInstance().getBaseObjects(
             NamedQueryRules.getInstance().getAllQueryForEntity(clazz.getSimpleName())
         );
-        String representField = EntityUtils.getInstance().getRepresentField(entityType, key);
         StringBuilder sb = new StringBuilder();
         for (BaseObject baseObject : objects) {
-            sb.append(String.format("<option value='%s'>%s</option>%n", baseObject.getId(), baseObject.getValue(representField)));
+            sb.append(String.format("<option value='%s'>%s</option>%n", baseObject.getId(),
+                                    baseObject.getValue(fieldMeta.getRepresentField())));
         }
         String template = getHtmlTemplate(context, "templates/fields/baseobject.tpl.html");
         return template
-            .replaceAll("\\$name", key)
-            .replaceAll("\\$ngModel", getNgModelNameForField(key) + ".id")
+            .replaceAll("\\$name", fieldMeta.getName())
+            .replaceAll("\\$ngModel", getNgModelNameForField(fieldMeta.getName()) + ".id")
             .replaceAll("\\$options", sb.toString());
     }
 
@@ -200,7 +199,7 @@ public class TemplateUtils {
         return I18n.getInstance().getFieldLabel(entityType, key, ApplicationConfig.getLocale());
     }
 
-    public String getListController(ServletContext context, String entityType) {
+    public String getListController(ServletContext context) {
         return getHtmlTemplate(context, "templates/list.tpl.html");
     }
 

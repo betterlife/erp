@@ -8,6 +8,7 @@ import io.betterlife.application.manager.ServiceEntityManager;
 import io.betterlife.domains.BaseObject;
 import io.betterlife.persistence.BaseOperator;
 import io.betterlife.persistence.NamedQueryRules;
+import io.betterlife.util.BLStringUtils;
 import io.betterlife.util.EntityUtils;
 import io.betterlife.util.IOUtil;
 import io.betterlife.util.rest.ExecuteResult;
@@ -42,7 +43,7 @@ public class EntityService {
             logger.trace("Getting entity meta data for " + entityType);
         }
         Map<String, FieldMeta> meta = ServiceEntityManager.getInstance().getMetaFromEntityType(entityType);
-        LinkedHashMap<String, FieldMeta> sortedMeta = EntityUtils.getInstance().sortEntityMetaByDisplayRank(entityType, meta);
+        LinkedHashMap<String, FieldMeta> sortedMeta = EntityUtils.getInstance().sortEntityMetaByDisplayRank(meta);
         List<Map<String, Object>> list = new ArrayList<>(sortedMeta.size());
         for (Map.Entry<String, FieldMeta> entry : sortedMeta.entrySet()) {
             if (FormConfig.getInstance().getListFormIgnoreFields().contains(entry.getKey())) {
@@ -50,11 +51,11 @@ public class EntityService {
             }
             String field = entry.getKey();
             if (EntityUtils.getInstance().isBaseObject(entry.getValue().getType())) {
-                field = EntityUtils.getInstance().getRepresentFieldWithDot(entityType, field);
+                field = EntityUtils.getInstance().getRepresentFieldWithDot(entry.getValue());
             }
             Map<String, Object> map = new HashMap<>();
             map.put("field", field);
-            if (Objects.equals(field, "amount")) {
+            if (BLStringUtils.containsIgnoreCase(field, "amount")) {
                 map.put("aggregationType", 2);
             }
             map.put("name", I18n.getInstance().getFieldLabel(entityType, entry.getKey(), ApplicationConfig.getLocale()));

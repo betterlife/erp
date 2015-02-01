@@ -9,7 +9,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.GET;
@@ -65,21 +64,18 @@ public class EntityFormService {
     public String getForm(String entityType, ServletContext context,
                           final List<String> ignoreFields, final String operationType) {
         Map<String, FieldMeta> meta = ServiceEntityManager.getInstance().getMetaFromEntityType(entityType);
-        LinkedHashMap<String, FieldMeta> sortedMeta = EntityUtils.getInstance().sortEntityMetaByDisplayRank(entityType, meta);
+        LinkedHashMap<String, FieldMeta> sortedMeta = EntityUtils.getInstance().sortEntityMetaByDisplayRank(meta);
         StringBuilder form = new StringBuilder();
         form.append("<div class='form-group form-horizontal'>");
         for (Map.Entry<String, FieldMeta> entry : sortedMeta.entrySet()) {
             final FieldMeta fieldMeta = entry.getValue();
             final String key = entry.getKey();
-            if (ignoreFields.contains(key)) {
+            if (ignoreFields.contains(key) || !fieldMeta.getVisible()) {
                 continue;
             }
             form.append("<div class='form-group'>\n");
             form.append(getTemplateUtils().getFieldLabelHtml(entityType, key));
-            form.append(getTemplateUtils().getFieldController(
-                            context, entityType, key,
-                            fieldMeta, getTemplateUtils().getFieldLabel(entityType, key)
-                        ));
+            form.append(getTemplateUtils().getFieldController(context, fieldMeta, getTemplateUtils().getFieldLabel(entityType, key)));
             form.append("</div>");
         }
         form.append(getTemplateUtils().getButtonsController(context, entityType, operationType));
@@ -97,7 +93,7 @@ public class EntityFormService {
     public String getListForm(@PathParam("entityType") String entityType, @Context HttpServletRequest request) {
         HttpSession session = request.getSession();
         ServletContext context = session.getServletContext();
-        final String formString = getTemplateUtils().getListController(context, entityType);
+        final String formString = getTemplateUtils().getListController(context);
         if (logger.isTraceEnabled()) {
             logger.trace(String.format("List template for EntityType[%s]:%n\t%s", entityType, formString));
         }

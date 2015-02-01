@@ -1,11 +1,12 @@
 package io.betterlife.application.manager;
 
 import io.betterlife.application.EntityManagerConsumer;
-import io.betterlife.application.config.ApplicationConfig;
 import io.betterlife.domains.BaseObject;
+import io.betterlife.rest.Form;
 import io.betterlife.util.BLStringUtils;
 import org.apache.commons.lang3.ClassUtils;
-import org.apache.commons.lang3.reflect.MethodUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Transient;
@@ -26,6 +27,7 @@ import java.util.Set;
  */
 
 public class MetaDataManager extends EntityManagerConsumer {
+    private static final Logger logger = LogManager.getLogger(MetaDataManager.class.getName());
     private Map<String, Map<String, FieldMeta>> _fieldsMetaData = new HashMap<>();
     private boolean hasMetaData = false;
     private static MetaDataManager instance = new MetaDataManager();
@@ -77,6 +79,8 @@ public class MetaDataManager extends EntityManagerConsumer {
                         addTransientAttributes(clazz);
                     }
                     setHasMetaData(true);
+                } catch (NoSuchMethodException e) {
+                    logger.error(e);
                 } finally {
                     closeEntityManager();
                 }
@@ -93,7 +97,8 @@ public class MetaDataManager extends EntityManagerConsumer {
         classMeta.put(fieldMeta.getName(), fieldMeta);
     }
 
-    private void addManagedAttributes(ManagedType managedType, Class<? extends BaseObject> clazz) {
+    private void addManagedAttributes(ManagedType managedType, Class<? extends BaseObject> clazz)
+        throws NoSuchMethodException {
         @SuppressWarnings("unchecked")
         Set<Attribute> attributeSet = managedType.getAttributes();
         for (Attribute attr : attributeSet) {
@@ -103,11 +108,12 @@ public class MetaDataManager extends EntityManagerConsumer {
             meta.setName(name);
             meta.setType(attrJavaType);
             meta.setEditable(true);
+            readFormAnnotation(clazz, name, meta);
             setFieldMetaData(clazz, meta);
         }
     }
 
-    private void addTransientAttributes(Class<? extends BaseObject> clazz) {
+    private void addTransientAttributes(Class<? extends BaseObject> clazz) throws NoSuchMethodException {
         Method[] methods = clazz.getDeclaredMethods();
         for (Method m : methods) {
             if (Modifier.isPublic(m.getModifiers()) && m.getName().startsWith("get")) {
@@ -115,11 +121,24 @@ public class MetaDataManager extends EntityManagerConsumer {
                 if (annotation != null) {
                     String attrName = BLStringUtils.uncapitalize(m.getName().substring(3));
                     FieldMeta meta = new FieldMeta();
+                    readFormAnnotation(clazz, attrName, meta);
                     meta.setName(attrName);
                     meta.setType(m.getReturnType());
                     meta.setEditable(false);
                     setFieldMetaData(clazz, meta);
                 }
+            }
+        }
+    }
+
+    private void readFormAnnotation(Class<? extends BaseObject> clazz, String name, FieldMeta meta) throws NoSuchMethodException {
+        Method m = clazz.getMethod("get" + BLStringUtils.capitalize(name));
+        if (m != null) {
+            Form form = m.getAnnotation(Form.class);
+            if (null != form) {
+                meta.setDisplayRank(form.DisplayRank());
+                meta.setVisible(form.Visible());
+                meta.setRepresentField(form.RepresentField());
             }
         }
     }

@@ -32,6 +32,7 @@ public class ApplicationConfig {
     public static final String TableNamePrefix = "BL_";
     public static final String DefaultRepresentField = "name";
     public static final int DefaultFieldRank = 0;
+    public static final boolean DefaultVisible = true;
 
     public static String getLocale() {return "zh_CN";}
 

@@ -17,4 +17,6 @@ public @interface Form {
     String RepresentField() default ApplicationConfig.DefaultRepresentField;
 
     int DisplayRank() default ApplicationConfig.DefaultFieldRank;
+
+    boolean Visible() default ApplicationConfig.DefaultVisible;
 }

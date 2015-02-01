@@ -1,6 +1,7 @@
 package io.betterlife.domains.security;
 
 import io.betterlife.domains.BaseObject;
+import io.betterlife.rest.Form;
 
 import javax.persistence.*;
 
@@ -23,6 +24,7 @@ public class User extends BaseObject {
         setValue("username",username);
     }
 
+    @Form(DisplayRank = 5)
     public String getUsername() {
         return getValue("username");
     }
@@ -31,10 +33,12 @@ public class User extends BaseObject {
         setValue("password", password);
     }
 
+    @Form(DisplayRank = 15, Visible=false)
     public String getPassword() {
         return getValue("password");
     }
 
+    @Form(DisplayRank = 10)
     public String getDisplayName() {
         return getValue("displayName");
     }
