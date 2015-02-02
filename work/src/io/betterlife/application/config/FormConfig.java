@@ -43,6 +43,7 @@ public class FormConfig {
             listFormIgnoreFields.add("createDate");
             listFormIgnoreFields.add("creator");
             listFormIgnoreFields.add("active");
+            listFormIgnoreFields.add("password");
         }
         return listFormIgnoreFields;
     }
