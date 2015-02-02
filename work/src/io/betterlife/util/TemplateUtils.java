@@ -55,7 +55,7 @@ public class TemplateUtils {
         Class clazz = fieldMeta.getType();
         String key = fieldMeta.getName();
         form.append("<div class='col-sm-4'>");
-        if (!Evaluator.eval(fieldMeta.getEditableCondition(), entityType, null, fieldMeta, operationType)) {
+        if (!Evaluator.evalEditable(entityType, fieldMeta, null, operationType)) {
             form.append(getReadOnlyController(fieldMeta, clazz));
         } else if (EntityUtils.getInstance().isIdField(key)) {
             form.append(getIdController(context, key, label));

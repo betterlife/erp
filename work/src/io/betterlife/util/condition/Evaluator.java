@@ -12,16 +12,25 @@ public class Evaluator {
                                BaseObject baseObject, FieldMeta fieldMeta, String operationType) {
         Condition cond = null;
         try {
-            cond = clazz.newInstance();
+            if (null != clazz) {
+                cond = clazz.newInstance();
+            }
+            return null != cond && cond.evaluate(entityType, fieldMeta, baseObject, operationType);
         } catch (InstantiationException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
-        return cond.evaluate(entityType, fieldMeta, baseObject, operationType);
     }
 
     public static boolean evalVisible(String entityType, final FieldMeta fieldMeta,
                                       final BaseObject baseObject, final String operationType) {
         Class<? extends Condition> vc = fieldMeta.getVisibleCondition();
+        return TrueCondition.class.equals(vc) || !FalseCondition.class.equals(vc)
+            && Evaluator.eval(vc, entityType, baseObject, fieldMeta, operationType);
+    }
+
+    public static boolean evalEditable(String entityType, final FieldMeta fieldMeta,
+                                      final BaseObject baseObject, final String operationType) {
+        Class<? extends Condition> vc = fieldMeta.getEditableCondition();
         return TrueCondition.class.equals(vc) || !FalseCondition.class.equals(vc)
             && Evaluator.eval(vc, entityType, baseObject, fieldMeta, operationType);
     }

@@ -13,11 +13,11 @@ public class CommonFieldsVisibleCondition implements Condition {
     public boolean evaluate(String entityType, FieldMeta fieldMeta, BaseObject baseObject, String operationType) {
         String fieldName = fieldMeta.getName();
         if ("List".equals(operationType)) {
-            return FormConfig.getInstance().getListFormIgnoreFields().contains(fieldName);
+            return !FormConfig.getInstance().getListFormIgnoreFields().contains(fieldName);
         } else if ("Update".equals(operationType)) {
-            return FormConfig.getInstance().getEditFormIgnoreFields().contains(fieldName);
+            return !FormConfig.getInstance().getEditFormIgnoreFields().contains(fieldName);
         } else if ("Create".equals(operationType)) {
-            return FormConfig.getInstance().getCreateFormIgnoreFields().contains(fieldName);
+            return !FormConfig.getInstance().getCreateFormIgnoreFields().contains(fieldName);
         }
         return true;
     }

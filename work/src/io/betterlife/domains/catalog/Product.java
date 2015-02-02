@@ -3,6 +3,7 @@ package io.betterlife.domains.catalog;
 import io.betterlife.domains.BaseObject;
 import io.betterlife.domains.common.Supplier;
 import io.betterlife.rest.Form;
+import io.betterlife.util.condition.ProductCodeEditableCondition;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -19,7 +20,7 @@ import java.net.URL;
 })
 public class Product extends BaseObject {
 
-    @Form(DisplayRank = 1)
+    @Form(DisplayRank = 4, Editable = ProductCodeEditableCondition.class)
     @Column(unique=true)
     public String getCode() {return getValue("code");}
 
