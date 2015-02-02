@@ -1,6 +1,7 @@
 package io.betterlife.domains.financial;
 
 import io.betterlife.domains.BaseObject;
+import io.betterlife.rest.Form;
 
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
@@ -28,6 +29,7 @@ public class IncomingCategory extends BaseObject {
         setValue("name", name);
     }
 
+    @Form(DisplayRank = 5)
     public String getName() {
         return getValue("name");
     }
