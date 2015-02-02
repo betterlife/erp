@@ -33,11 +33,4 @@ public class FieldMetaTest {
         assertEquals(Date.class, meta.getType());
     }
 
-    @Test
-    public void testEditable() {
-        meta.setEditable(false);
-        assertFalse(meta.isEditable());
-        meta.setEditable(true);
-        assertTrue(meta.isEditable());
-    }
 }
