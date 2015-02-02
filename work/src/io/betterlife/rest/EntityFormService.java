@@ -71,7 +71,8 @@ public class EntityFormService {
             if (!Evaluator.evalVisible(entityType, entry.getValue(), null, operationType)) continue;
             form.append("<div class='form-group'>\n");
             form.append(getTemplateUtils().getFieldLabelHtml(entityType, key));
-            form.append(getTemplateUtils().getFieldController(context, fieldMeta, getTemplateUtils().getFieldLabel(entityType, key)));
+            form.append(getTemplateUtils().getFieldController(context, operationType, entityType, fieldMeta,
+                                                              getTemplateUtils().getFieldLabel(entityType, key)));
             form.append("</div>");
         }
         form.append(getTemplateUtils().getButtonsController(context, entityType, operationType));

@@ -11,7 +11,7 @@ import org.aopalliance.reflect.Field;
 public class FieldMeta {
     private String name;
     private Class type;
-    private boolean editable;
+    private Class<? extends Condition> editableClass;
     private int displayRank;
     private Class<? extends Condition> visibleClass;
     private String representField;
@@ -34,12 +34,12 @@ public class FieldMeta {
         return type;
     }
 
-    public void setEditable(boolean editable) {
-        this.editable = editable;
+    public void setEditableCondition(Class<? extends Condition> condition) {
+        this.editableClass = condition;
     }
 
-    public boolean isEditable() {
-        return editable;
+    public Class<? extends Condition> getEditableCondition() {
+        return this.editableClass;
     }
 
     public void setDisplayRank(int displayRank) {

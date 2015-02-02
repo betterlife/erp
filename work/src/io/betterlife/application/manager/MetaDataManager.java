@@ -4,6 +4,7 @@ import io.betterlife.application.EntityManagerConsumer;
 import io.betterlife.domains.BaseObject;
 import io.betterlife.rest.Form;
 import io.betterlife.util.BLStringUtils;
+import io.betterlife.util.condition.FalseCondition;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -107,7 +108,6 @@ public class MetaDataManager extends EntityManagerConsumer {
             FieldMeta meta = new FieldMeta();
             meta.setName(name);
             meta.setType(attrJavaType);
-            meta.setEditable(true);
             readFormAnnotation(clazz, name, meta);
             setFieldMetaData(clazz, meta);
         }
@@ -124,8 +124,8 @@ public class MetaDataManager extends EntityManagerConsumer {
                     readFormAnnotation(clazz, attrName, meta);
                     meta.setName(attrName);
                     meta.setType(m.getReturnType());
-                    meta.setEditable(false);
                     setFieldMetaData(clazz, meta);
+                    meta.setEditableCondition(FalseCondition.class);
                 }
             }
         }
@@ -140,6 +140,7 @@ public class MetaDataManager extends EntityManagerConsumer {
                 meta.setVisibleCondition(form.Visible());
                 meta.setRepresentField(form.RepresentField());
                 meta.setConverter(form.Converter());
+                meta.setEditableCondition(form.Editable());
             }
         }
     }

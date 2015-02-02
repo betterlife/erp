@@ -6,6 +6,7 @@ import io.betterlife.application.manager.FieldMeta;
 import io.betterlife.domains.BaseObject;
 import io.betterlife.persistence.BaseOperator;
 import io.betterlife.persistence.NamedQueryRules;
+import io.betterlife.util.condition.Evaluator;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -48,12 +49,13 @@ public class TemplateUtils {
     }
 
     @SuppressWarnings("unchecked")
-    public String getFieldController(ServletContext context, FieldMeta fieldMeta, String label) {
+    public String getFieldController(ServletContext context, String operationType,
+                                     String entityType, FieldMeta fieldMeta, String label) {
         StringBuilder form = new StringBuilder();
         Class clazz = fieldMeta.getType();
         String key = fieldMeta.getName();
         form.append("<div class='col-sm-4'>");
-        if (!fieldMeta.isEditable()) {
+        if (!Evaluator.eval(fieldMeta.getEditableCondition(), entityType, null, fieldMeta, operationType)) {
             form.append(getReadOnlyController(fieldMeta, clazz));
         } else if (EntityUtils.getInstance().isIdField(key)) {
             form.append(getIdController(context, key, label));
