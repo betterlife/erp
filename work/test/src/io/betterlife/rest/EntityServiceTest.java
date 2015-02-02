@@ -93,7 +93,7 @@ public class EntityServiceTest {
         Mockito.doNothing().when(sharedEntityManager).close();
         MetaDataManager.getInstance().setSharedEntityManager(sharedEntityManager);
         String userMeta = service.getEntityMeta("User");
-        JsonNode expect = JsonUtils.getInstance().stringToJsonNode("{\"success\":true,\"successMessage\":null,\"errorMessages\":[],\"result\":[{\"field\":\"id\",\"name\":\"Id\"},{\"field\":\"username\",\"name\":\"Username\"}]}");
+        JsonNode expect = JsonUtils.getInstance().stringToJsonNode("{\"success\":true,\"successMessage\":null,\"errorMessages\":[],\"result\":[{\"field\":\"id\",\"name\":\"Id\"},{\"field\":\"username\",\"name\":\"Username\"},{\"field\":\"password\",\"name\":\"Password\"}]}");
         JsonNode node = JsonUtils.getInstance().stringToJsonNode(userMeta);
         assertEquals(expect, node);
     }
