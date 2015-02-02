@@ -34,12 +34,13 @@ public class FormConfigTest {
         FormConfig config = FormConfig.getInstance();
         List<String> ignoreFields = config.getListFormIgnoreFields();
         assertNotNull(ignoreFields);
-        assertEquals(5, ignoreFields.size());
+        assertEquals(6, ignoreFields.size());
         assertTrue(ignoreFields.contains("lastModifyDate"));
         assertTrue(ignoreFields.contains("lastModify"));
         assertTrue(ignoreFields.contains("createDate"));
         assertTrue(ignoreFields.contains("creator"));
         assertTrue(ignoreFields.contains("active"));
+        assertTrue(ignoreFields.contains("password"));
     }
 
     @Test
