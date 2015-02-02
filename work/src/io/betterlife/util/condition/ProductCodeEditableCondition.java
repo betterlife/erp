@@ -10,8 +10,6 @@ import io.betterlife.domains.BaseObject;
 public class ProductCodeEditableCondition implements Condition {
     @Override
     public boolean evaluate(String entityType, FieldMeta fieldMeta, BaseObject baseObject, String operationType) {
-        return "Create".equals(operationType) &&
-            "product".equals(entityType) &&
-            "code".equals(fieldMeta.getName());
+        return !"product".equals(entityType) || "Create".equals(operationType) && "code".equals(fieldMeta.getName());
     }
 }

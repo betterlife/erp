@@ -26,5 +26,7 @@ public class ConverterFactoryTest {
     public void testGetConverter() throws Exception {
         assertNotNull(ConverterFactory.getInstance().getConverter(String.class, Date.class));
         assertNotNull(ConverterFactory.getInstance().getConverter(Double.class, BigDecimal.class));
+        assertNotNull(ConverterFactory.getInstance().getConverter(Integer.class, BigDecimal.class));
+        assertNotNull(ConverterFactory.getInstance().getConverter(Long.class, Date.class));
     }
 }

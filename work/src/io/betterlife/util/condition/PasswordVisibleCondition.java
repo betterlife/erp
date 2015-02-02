@@ -10,6 +10,6 @@ import io.betterlife.domains.BaseObject;
 public class PasswordVisibleCondition implements Condition {
     @Override
     public boolean evaluate(String entityType, FieldMeta fieldMeta, BaseObject baseObject, String operationType) {
-        return "user".equals(entityType) && ("Create".equals(operationType) ||"Update".equals(operationType));
+        return !"user".equals(entityType) || ("Create".equals(operationType) || "Update".equals(operationType));
     }
 }

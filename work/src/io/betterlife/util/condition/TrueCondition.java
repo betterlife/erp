@@ -10,6 +10,6 @@ import io.betterlife.domains.BaseObject;
 public class TrueCondition implements Condition {
     @Override
     public boolean evaluate(String entityType, FieldMeta fieldMeta, BaseObject baseObject, String operationType) {
-        return false;
+        return true;
     }
 }

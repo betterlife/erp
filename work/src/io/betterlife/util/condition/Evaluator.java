@@ -24,14 +24,12 @@ public class Evaluator {
     public static boolean evalVisible(String entityType, final FieldMeta fieldMeta,
                                       final BaseObject baseObject, final String operationType) {
         Class<? extends Condition> vc = fieldMeta.getVisibleCondition();
-        return TrueCondition.class.equals(vc) || !FalseCondition.class.equals(vc)
-            && Evaluator.eval(vc, entityType, baseObject, fieldMeta, operationType);
+        return Evaluator.eval(vc, entityType, baseObject, fieldMeta, operationType);
     }
 
     public static boolean evalEditable(String entityType, final FieldMeta fieldMeta,
                                       final BaseObject baseObject, final String operationType) {
         Class<? extends Condition> vc = fieldMeta.getEditableCondition();
-        return TrueCondition.class.equals(vc) || !FalseCondition.class.equals(vc)
-            && Evaluator.eval(vc, entityType, baseObject, fieldMeta, operationType);
+        return Evaluator.eval(vc, entityType, baseObject, fieldMeta, operationType);
     }
 }
