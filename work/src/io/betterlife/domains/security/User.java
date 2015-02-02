@@ -2,6 +2,8 @@ package io.betterlife.domains.security;
 
 import io.betterlife.domains.BaseObject;
 import io.betterlife.rest.Form;
+import io.betterlife.util.condition.FalseCondition;
+import io.betterlife.util.condition.PasswordVisibleCondition;
 import io.betterlife.util.converter.PasswordConverter;
 
 import javax.persistence.*;
@@ -34,7 +36,7 @@ public class User extends BaseObject {
         setValue("password", password);
     }
 
-    @Form(DisplayRank = 15, Converter = PasswordConverter.class)
+    @Form(DisplayRank = 15, Converter = PasswordConverter.class, Visible = PasswordVisibleCondition.class)
     public String getPassword() {
         return getValue("password");
     }
