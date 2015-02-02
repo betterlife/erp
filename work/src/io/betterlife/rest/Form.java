@@ -1,6 +1,8 @@
 package io.betterlife.rest;
 
 import io.betterlife.application.config.ApplicationConfig;
+import io.betterlife.util.condition.Condition;
+import io.betterlife.util.condition.TrueCondition;
 import io.betterlife.util.converter.Converter;
 import io.betterlife.util.converter.DefaultConverter;
 
@@ -20,7 +22,10 @@ public @interface Form {
 
     int DisplayRank() default ApplicationConfig.DefaultFieldRank;
 
-    boolean Visible() default ApplicationConfig.DefaultVisible;
+    Class<? extends Condition> Visible() default TrueCondition.class;
 
     Class<? extends Converter> Converter() default DefaultConverter.class;
+
+    Class<? extends Condition> Editable() default TrueCondition.class;
+
 }

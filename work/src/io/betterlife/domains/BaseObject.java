@@ -9,6 +9,7 @@ import io.betterlife.persistence.BaseOperator;
 import io.betterlife.persistence.NamedQueryRules;
 import io.betterlife.rest.Form;
 import io.betterlife.util.EntityUtils;
+import io.betterlife.util.condition.CommonFieldsVisibleCondition;
 import io.betterlife.util.converter.Converter;
 import io.betterlife.util.converter.ConverterFactory;
 import org.apache.commons.lang3.ClassUtils;
@@ -38,7 +39,7 @@ public abstract class BaseObject {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Form(DisplayRank = 0)
+    @Form(DisplayRank = 0, Visible = CommonFieldsVisibleCondition.class)
     public long getId() {
         return this.id;
     }
@@ -63,6 +64,7 @@ public abstract class BaseObject {
     }
 
     @Temporal(value=TemporalType.DATE)
+    @Form(Visible = CommonFieldsVisibleCondition.class)
     public Date getLastModifyDate() {
         return getValue("lastModifyDate");
     }
@@ -72,6 +74,7 @@ public abstract class BaseObject {
     }
 
     @ManyToOne
+    @Form(Visible = CommonFieldsVisibleCondition.class)
     public User getLastModify() {
         return getValue("lastModify");
     }
@@ -81,6 +84,7 @@ public abstract class BaseObject {
     }
 
     @Temporal(value=TemporalType.DATE)
+    @Form(Visible = CommonFieldsVisibleCondition.class)
     public Date getCreateDate() {
         return getValue("createDate");
     }
@@ -90,6 +94,7 @@ public abstract class BaseObject {
     }
 
     @ManyToOne
+    @Form(Visible = CommonFieldsVisibleCondition.class)
     public User getCreator() {
         return getValue("creator");
     }

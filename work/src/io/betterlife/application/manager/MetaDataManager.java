@@ -137,7 +137,7 @@ public class MetaDataManager extends EntityManagerConsumer {
             Form form = m.getAnnotation(Form.class);
             if (null != form) {
                 meta.setDisplayRank(form.DisplayRank());
-                meta.setVisible(form.Visible());
+                meta.setVisibleCondition(form.Visible());
                 meta.setRepresentField(form.RepresentField());
                 meta.setConverter(form.Converter());
             }

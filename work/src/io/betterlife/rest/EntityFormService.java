@@ -1,10 +1,10 @@
 package io.betterlife.rest;
 
-import io.betterlife.application.config.FormConfig;
 import io.betterlife.application.manager.FieldMeta;
 import io.betterlife.application.manager.ServiceEntityManager;
 import io.betterlife.util.EntityUtils;
 import io.betterlife.util.TemplateUtils;
+import io.betterlife.util.condition.Evaluator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,7 +18,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -48,7 +47,7 @@ public class EntityFormService {
     public String getCreateForm(@PathParam("entityType") String entityType, @Context HttpServletRequest request) {
         HttpSession session = request.getSession();
         ServletContext context = session.getServletContext();
-        return getForm(entityType, context, FormConfig.getInstance().getCreateFormIgnoreFields(), "Create");
+        return getForm(entityType, context, "Create");
     }
 
     @GET @Path("/{entityType}/edit/{id}")
@@ -58,11 +57,10 @@ public class EntityFormService {
                               @PathParam("id") int id) {
         HttpSession session = request.getSession();
         ServletContext context = session.getServletContext();
-        return getForm(entityType, context, FormConfig.getInstance().getEditFormIgnoreFields(), "Update");
+        return getForm(entityType, context, "Update");
     }
 
-    public String getForm(String entityType, ServletContext context,
-                          final List<String> ignoreFields, final String operationType) {
+    public String getForm(String entityType, ServletContext context, final String operationType) {
         Map<String, FieldMeta> meta = ServiceEntityManager.getInstance().getMetaFromEntityType(entityType);
         LinkedHashMap<String, FieldMeta> sortedMeta = EntityUtils.getInstance().sortEntityMetaByDisplayRank(meta);
         StringBuilder form = new StringBuilder();
@@ -70,9 +68,7 @@ public class EntityFormService {
         for (Map.Entry<String, FieldMeta> entry : sortedMeta.entrySet()) {
             final FieldMeta fieldMeta = entry.getValue();
             final String key = entry.getKey();
-            if (ignoreFields.contains(key) || !fieldMeta.getVisible()) {
-                continue;
-            }
+            if (!Evaluator.evalVisible(entityType, entry.getValue(), null, operationType)) continue;
             form.append("<div class='form-group'>\n");
             form.append(getTemplateUtils().getFieldLabelHtml(entityType, key));
             form.append(getTemplateUtils().getFieldController(context, fieldMeta, getTemplateUtils().getFieldLabel(entityType, key)));

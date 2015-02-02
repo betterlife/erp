@@ -1,5 +1,6 @@
 package io.betterlife.application.manager;
 
+import io.betterlife.util.condition.Condition;
 import io.betterlife.util.converter.Converter;
 import org.aopalliance.reflect.Field;
 
@@ -12,7 +13,7 @@ public class FieldMeta {
     private Class type;
     private boolean editable;
     private int displayRank;
-    private boolean visible;
+    private Class<? extends Condition> visibleClass;
     private String representField;
     private String aggregateType;
     private Class<? extends Converter> converterClass;
@@ -49,12 +50,12 @@ public class FieldMeta {
         return displayRank;
     }
 
-    public void setVisible(boolean visible) {
-        this.visible = visible;
+    public void setVisibleCondition(Class<? extends Condition> visibleClass) {
+        this.visibleClass = visibleClass;
     }
 
-    public boolean getVisible() {
-        return this.visible;
+    public Class<? extends Condition> getVisibleCondition() {
+        return this.visibleClass;
     }
 
     public void setRepresentField(String representField) {

@@ -2,7 +2,6 @@ package io.betterlife.rest;
 
 import io.betterlife.application.I18n;
 import io.betterlife.application.config.ApplicationConfig;
-import io.betterlife.application.config.FormConfig;
 import io.betterlife.application.manager.FieldMeta;
 import io.betterlife.application.manager.ServiceEntityManager;
 import io.betterlife.domains.BaseObject;
@@ -11,6 +10,7 @@ import io.betterlife.persistence.NamedQueryRules;
 import io.betterlife.util.BLStringUtils;
 import io.betterlife.util.EntityUtils;
 import io.betterlife.util.IOUtil;
+import io.betterlife.util.condition.Evaluator;
 import io.betterlife.util.rest.ExecuteResult;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -61,10 +61,7 @@ public class EntityService {
         LinkedHashMap<String, FieldMeta> sortedMeta = EntityUtils.getInstance().sortEntityMetaByDisplayRank(meta);
         List<Map<String, Object>> list = new ArrayList<>(sortedMeta.size());
         for (Map.Entry<String, FieldMeta> entry : sortedMeta.entrySet()) {
-            if (FormConfig.getInstance().getListFormIgnoreFields().contains(entry.getKey())
-                || !entry.getValue().getVisible()) {
-                continue;
-            }
+            if (!Evaluator.evalVisible(entityType, entry.getValue(), null, "List")) continue;
             String field = entry.getKey();
             if (EntityUtils.getInstance().isBaseObject(entry.getValue().getType())) {
                 field = EntityUtils.getInstance().getRepresentFieldWithDot(entry.getValue());
@@ -83,7 +80,6 @@ public class EntityService {
         }
         return result;
     }
-
 
     @GET
     @Path("/{entityType}/{id}")
