@@ -1,6 +1,7 @@
 package io.betterlife.application.manager;
 
 import io.betterlife.application.EntityManagerConsumer;
+import io.betterlife.application.config.ApplicationConfig;
 import io.betterlife.domains.BaseObject;
 import io.betterlife.rest.Form;
 import io.betterlife.util.BLStringUtils;
@@ -52,7 +53,7 @@ public class MetaDataManager extends EntityManagerConsumer {
     }
 
     public boolean hasMetaData() {
-        return hasMetaData;
+        return hasMetaData && !ApplicationConfig.isDevelopmentMode();
     }
 
     private void setHasMetaData(boolean hasMetaData) {
