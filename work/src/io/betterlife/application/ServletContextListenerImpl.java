@@ -1,11 +1,14 @@
 package io.betterlife.application;
 
 import io.betterlife.application.manager.SharedEntityManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.persistence.EntityManager;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
+import java.io.IOException;
 
 /**
  * Author: Lawrence Liu<br>
@@ -18,10 +21,16 @@ import javax.servlet.annotation.WebListener;
  */
 @WebListener
 public class ServletContextListenerImpl implements ServletContextListener {
+    private final Logger logger = LogManager.getLogger(ServletContextListenerImpl.class.getName());
+
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         SharedEntityManager.getInstance().initEntityManagerFactory();
-        I18n.getInstance().initResources(servletContextEvent.getServletContext());
+        try {
+            I18n.getInstance().initResources(servletContextEvent.getServletContext());
+        } catch (IOException e) {
+            logger.error(e);
+        }
     }
 
     @Override
