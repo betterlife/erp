@@ -8,6 +8,7 @@ import io.betterlife.persistence.BaseOperator;
 import io.betterlife.persistence.NamedQueryRules;
 import io.betterlife.util.condition.Evaluator;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -15,6 +16,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletContext;
 import java.io.File;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -40,12 +42,12 @@ public class TemplateUtils {
             if (!filePath.startsWith("/")) {
                 filePath = "/" + filePath;
             }
-            String realPath = context.getRealPath(filePath);
-            logger.debug("realPath: " + realPath);
-            final File file = new File(realPath);
-            logger.debug("File: [" + file.getAbsolutePath() + "], file exists? " + file.exists());
-            logger.debug("Name: " + file.getName());
-            return FileUtils.readFileToString(file, "UTF-8");
+            logger.debug("filePath: " + filePath);
+            InputStream inputStream = context.getResourceAsStream(filePath);
+            logger.debug("inputStream: " + inputStream);
+            final String string = IOUtil.getInstance().inputStreamToString(inputStream);
+            logger.debug("Template String: " + string);
+            return string;
         } catch (Exception e) {
             logger.warn(String.format("Failed to get resource for file[%s], Returning empty string", filePath));
             return StringUtils.EMPTY;
