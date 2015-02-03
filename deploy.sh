@@ -1,0 +1,2 @@
+cp target/artifact/package/betterlife-erp_0.3.war target/artifact/package/ROOT.war
+scp target/artifact/package/ROOT.war $OPEN_SHIFT_USER@erp-betterlife.rhcloud.com:app-root/dependencies/jbossews/webapps
