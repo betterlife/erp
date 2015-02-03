@@ -30,7 +30,7 @@ public class ServiceEntityManager {
     private ServiceEntityManager() {}
 
     public Class<? extends BaseObject> getServiceEntityClass(String name) {
-        if (!serviceEntityRegistered || ApplicationConfig.isDevelopmentMode()) {
+        if (!serviceEntityRegistered) {
             registerEntities();
             serviceEntityRegistered = true;
         }
