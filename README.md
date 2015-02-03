@@ -20,9 +20,9 @@ so it might not suitable to be used in other company.
 
 Code Climate Measure
 --------------------
-Enable for Javascript only currently
+Javascript
 
-[![Code Climate](https://codeclimate.com/github/betterlife/erp/badges/gpa.svg)](https://codeclimate.com/github/betterlife/erp)
+[![Code Climate](https://codeclimate.com/github/betterlife/erp/badges/gpa.svg)](https://codeclimate.com/github/betterlife/erp)  [![Test Coverage](https://codeclimate.com/github/betterlife/erp/badges/coverage.svg)](https://codeclimate.com/github/betterlife/erp)
 
 License
 -------
