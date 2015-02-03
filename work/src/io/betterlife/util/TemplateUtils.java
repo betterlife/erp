@@ -20,7 +20,9 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Author: Lawrence Liu(lawrence@betterlife.io)
@@ -29,6 +31,8 @@ import java.util.List;
 public class TemplateUtils {
     private static TemplateUtils instance = new TemplateUtils();
     private static final Logger logger = LogManager.getLogger(TemplateUtils.class.getName());
+
+    private Map<String, String> cachedTemplates = new HashMap<>(16);
 
     private TemplateUtils() {
     }
@@ -42,12 +46,12 @@ public class TemplateUtils {
             if (!filePath.startsWith("/")) {
                 filePath = "/" + filePath;
             }
-            logger.debug("filePath: " + filePath);
-            InputStream inputStream = context.getResourceAsStream(filePath);
-            logger.debug("inputStream: " + inputStream);
-            final String string = IOUtil.getInstance().inputStreamToString(inputStream);
-            logger.debug("Template String: " + string);
-            return string;
+            if (null == cachedTemplates.get(filePath)) {
+                InputStream inputStream = context.getResourceAsStream(filePath);
+                final String string = IOUtil.getInstance().inputStreamToString(inputStream);
+                cachedTemplates.put(filePath, string);
+            }
+            return cachedTemplates.get(filePath);
         } catch (Exception e) {
             logger.warn(String.format("Failed to get resource for file[%s], Returning empty string", filePath));
             return StringUtils.EMPTY;
