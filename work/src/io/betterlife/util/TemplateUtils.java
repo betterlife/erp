@@ -41,7 +41,11 @@ public class TemplateUtils {
                 filePath = "/" + filePath;
             }
             String realPath = context.getRealPath(filePath);
-            return FileUtils.readFileToString(new File(realPath), "UTF-8");
+            logger.debug("realPath: " + realPath);
+            final File file = new File(realPath);
+            logger.debug("File: [" + file.getAbsolutePath() + "], file exists? " + file.exists());
+            logger.debug("Name: " + file.getName());
+            return FileUtils.readFileToString(file, "UTF-8");
         } catch (Exception e) {
             logger.warn(String.format("Failed to get resource for file[%s], Returning empty string", filePath));
             return StringUtils.EMPTY;
