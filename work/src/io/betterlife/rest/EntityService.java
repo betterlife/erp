@@ -71,6 +71,9 @@ public class EntityService {
             if (BLStringUtils.containsIgnoreCase(field, "amount")) {
                 map.put("aggregationType", 2);
             }
+            if (EntityUtils.getInstance().isIdField(field)) {
+                map.put("width", 60);
+            }
             map.put("name", I18n.getInstance().getFieldLabel(entityType, entry.getKey(), ApplicationConfig.getLocale()));
             list.add(map);
         }
