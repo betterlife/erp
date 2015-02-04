@@ -24,6 +24,11 @@ Javascript
 
 [![Code Climate](https://codeclimate.com/github/betterlife/erp/badges/gpa.svg)](https://codeclimate.com/github/betterlife/erp)  [![Test Coverage](https://codeclimate.com/github/betterlife/erp/badges/coverage.svg)](https://codeclimate.com/github/betterlife/erp)
 
+Build Status
+------------
+
+[![Codeship](https://codeship.com/projects/b09b65c0-8da6-0132-a9a4-5691319bff63/status?branch=develop)](https://codeship.com/projects/60731)
+
 License
 -------
 [![MIT License](http://img.shields.io/:license-mit-blue.svg)](http://badges.mit-license.org)
