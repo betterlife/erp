@@ -61,10 +61,11 @@ public class EntityService {
         LinkedHashMap<String, FieldMeta> sortedMeta = EntityUtils.getInstance().sortEntityMetaByDisplayRank(meta);
         List<Map<String, Object>> list = new ArrayList<>(sortedMeta.size());
         for (Map.Entry<String, FieldMeta> entry : sortedMeta.entrySet()) {
-            if (!Evaluator.evalVisible(entityType, entry.getValue(), null, "List")) continue;
+            final FieldMeta fieldMeta = entry.getValue();
+            if (!Evaluator.evalVisible(entityType, fieldMeta, null, "List")) continue;
             String field = entry.getKey();
-            if (EntityUtils.getInstance().isBaseObject(entry.getValue().getType())) {
-                field = EntityUtils.getInstance().getRepresentFieldWithDot(entry.getValue());
+            if (EntityUtils.getInstance().isBaseObject(fieldMeta.getType())) {
+                field = EntityUtils.getInstance().getRepresentFieldWithDot(fieldMeta);
             }
             Map<String, Object> map = new HashMap<>();
             map.put("field", field);
