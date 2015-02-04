@@ -9,7 +9,7 @@ cd work/WebContent
 bower install
 cd ../../
 ant build.flat
-printf "Build Number:\t$CI_BUILD_NUMBER @ $CI_BUILD_URL \nCommit Info :\t$CI_MESSAGE\n"> target/artifact/flat/build.txt
+printf "Branch  Name:\t$CI_BRANCH\n Build Number:\t$CI_BUILD_NUMBER @ $CI_BUILD_URL \nCommit Info :\t$CI_MESSAGE\n"> target/artifact/flat/build.txt
 ant build.war junit.run.all
 cd work
 npm install
