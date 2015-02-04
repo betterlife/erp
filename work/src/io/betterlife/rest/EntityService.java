@@ -12,6 +12,9 @@ import io.betterlife.util.EntityUtils;
 import io.betterlife.util.IOUtil;
 import io.betterlife.util.condition.Evaluator;
 import io.betterlife.util.rest.ExecuteResult;
+import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.ClassUtils;
+import org.apache.commons.lang3.reflect.TypeUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,6 +34,7 @@ import java.util.*;
 public class EntityService {
 
     private static final Logger logger = LogManager.getLogger(EntityService.class.getName());
+    public static final String BooleanCellTemplate = "<div class='ui-grid-cell-contents'><span ng-show='row.entity.%s'>%s</span><span ng-show='!row.entity.%s'>%s</span></div>";
 
     private NamedQueryRules namedQueryRule;
     private BaseOperator operator;
@@ -69,6 +73,9 @@ public class EntityService {
             }
             Map<String, Object> map = new HashMap<>();
             map.put("field", field);
+            if (EntityUtils.getInstance().isBooleanField(fieldMeta)) {
+                setBooleanFieldAdditionalMeta(fieldMeta, field, map);
+            }
             if (BLStringUtils.containsIgnoreCase(field, "amount")) {
                 map.put("aggregationType", 2);
             }
@@ -83,6 +90,12 @@ public class EntityService {
             logger.trace(String.format("Entity[%s]'s meta: %n\t%s", entityType, result));
         }
         return result;
+    }
+
+    private void setBooleanFieldAdditionalMeta(FieldMeta fieldMeta, String field, Map<String, Object> map) {
+        String trueLabel = I18n.getInstance().get(fieldMeta.getTrueLabel(), ApplicationConfig.getLocale());
+        String falseLabel = I18n.getInstance().get(fieldMeta.getFalseLabel(), ApplicationConfig.getLocale());
+        map.put("cellTemplate", String.format(BooleanCellTemplate, field, trueLabel, field, falseLabel));
     }
 
     @GET

@@ -17,6 +17,8 @@ public class FieldMeta {
     private String representField;
     private String aggregateType;
     private Class<? extends Converter> converterClass;
+    private String trueLabel;
+    private String falseLabel;
 
     public void setName(String name) {
         this.name = name;
@@ -80,5 +82,21 @@ public class FieldMeta {
 
     public void setConverter(Class<? extends Converter> converterClass) {
         this.converterClass = converterClass;
+    }
+
+    public String getTrueLabel() {
+        return this.trueLabel;
+    }
+
+    public void setTrueLabel(String trueLabel) {
+        this.trueLabel = trueLabel;
+    }
+
+    public String getFalseLabel() {
+        return falseLabel;
+    }
+
+    public void setFalseLabel(String falseLabel) {
+        this.falseLabel = falseLabel;
     }
 }

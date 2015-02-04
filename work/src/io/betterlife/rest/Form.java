@@ -28,4 +28,6 @@ public @interface Form {
 
     Class<? extends Condition> Editable() default TrueCondition.class;
 
+    String TrueLabel() default "True";
+    String FalseLabel() default "False";
 }

@@ -66,4 +66,8 @@ public class EntityUtils {
         }
         return sortedResult;
     }
+
+    public boolean isBooleanField(FieldMeta fieldMeta) {
+        return fieldMeta.getType().equals(Boolean.class) || "boolean".equals(fieldMeta.getType().getSimpleName());
+    }
 }

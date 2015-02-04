@@ -5,6 +5,7 @@ import io.betterlife.application.config.ApplicationConfig;
 import io.betterlife.domains.BaseObject;
 import io.betterlife.rest.Form;
 import io.betterlife.util.BLStringUtils;
+import io.betterlife.util.EntityUtils;
 import io.betterlife.util.condition.FalseCondition;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.logging.log4j.LogManager;
@@ -34,7 +35,8 @@ public class MetaDataManager extends EntityManagerConsumer {
     private boolean hasMetaData = false;
     private static MetaDataManager instance = new MetaDataManager();
 
-    private MetaDataManager(){}
+    private MetaDataManager() {
+    }
 
     public FieldMeta getFieldMetaData(Class<? extends BaseObject> aClass, String fieldName) {
         Map<String, FieldMeta> meta = _fieldsMetaData.get(aClass.getName());
@@ -122,11 +124,11 @@ public class MetaDataManager extends EntityManagerConsumer {
                 if (annotation != null) {
                     String attrName = BLStringUtils.uncapitalize(m.getName().substring(3));
                     FieldMeta meta = new FieldMeta();
-                    readFormAnnotation(clazz, attrName, meta);
                     meta.setName(attrName);
                     meta.setType(m.getReturnType());
-                    setFieldMetaData(clazz, meta);
+                    readFormAnnotation(clazz, attrName, meta);
                     meta.setEditableCondition(FalseCondition.class);
+                    setFieldMetaData(clazz, meta);
                 }
             }
         }
@@ -142,6 +144,10 @@ public class MetaDataManager extends EntityManagerConsumer {
                 meta.setRepresentField(form.RepresentField());
                 meta.setConverter(form.Converter());
                 meta.setEditableCondition(form.Editable());
+                if (EntityUtils.getInstance().isBooleanField(meta)) {
+                    meta.setTrueLabel(form.TrueLabel());
+                    meta.setFalseLabel(form.FalseLabel());
+                }
             }
         }
     }
