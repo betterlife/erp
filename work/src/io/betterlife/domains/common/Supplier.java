@@ -82,7 +82,7 @@ public class Supplier extends BaseObject {
         setValue("wholesaleRequirement", wholesaleRequirement);
     }
 
-    @Form(DisplayRank = 40)
+    @Form(DisplayRank = 40, TrueLabel = "Can", FalseLabel = "Cannot")
     public boolean getCanMixedWholesale() {
         return getValue("canMixedWholesale");
     }
