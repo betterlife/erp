@@ -16,7 +16,16 @@ body {
 }
 .footer {
     text-align:center;
-    margin: 20px auto auto;
+    height: 7em;
+}
+html, body {
+    height: 100%;
+}
+.wrapper {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -7em;
 }
 .boolean-controller {
     margin-top:11px !important;
@@ -45,7 +54,7 @@ body {
     padding-left:50px;
 }
 .dashboard-container {
-    margin-top:100px;
+    margin-top:150px;
     margin-bottom: 100px;
 }
 

@@ -35,8 +35,8 @@
 
 </head>
 <body>
-<div class="container-fluid">
-    <div ng-controller="mainController">
+    <div class="wrapper">
+        <div ng-controller="mainController">
         <nav class="navbar navbar-default" role="navigation" ng-show="isLoggedIn()">
             <div class="container-fluid">
                 <!-- Brand and toggle get grouped for better mobile display -->
@@ -116,7 +116,8 @@
             </div>
         </nav>
     </div>
-    <div ng-view>
+        <div ng-view>
+        </div>
     </div>
     <div class="footer">
         &copy; 2014-2015 北南创意文化传播有限公司版权所有 | <a href="/build.txt" target="_blank">Build Info</a>
@@ -124,6 +125,5 @@
             <a href="https://www.openshift.com/" target="_blank"></a>
         </div>
     </div>
-</div>
 </body>
 </html>
