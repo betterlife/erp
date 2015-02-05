@@ -53,6 +53,11 @@ body {
     color: #428bca;
 }
 
+.dashboard-row .btn-default {
+    border-color: #428bca;
+    background-image: none;
+}
+
 .dashboard-row {
     margin-bottom: 80px;
 }
