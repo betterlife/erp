@@ -1,11 +1,12 @@
 package io.betterlife.util.converter;
 
+import io.betterlife.framework.converter.Converter;
+import io.betterlife.framework.converter.DefaultConverter;
 import org.junit.Test;
 
 import java.util.Date;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
 public class DefaultConverterTest {
 

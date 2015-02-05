@@ -1,7 +1,7 @@
 package io.betterlife.util.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.betterlife.util.IOUtil;
+import io.betterlife.framework.util.IOUtil;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 

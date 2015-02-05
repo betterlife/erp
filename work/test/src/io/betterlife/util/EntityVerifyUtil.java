@@ -1,7 +1,6 @@
 package io.betterlife.util;
 
-import io.betterlife.domains.BaseObject;
-import io.betterlife.domains.security.User;
+import io.betterlife.framework.domains.BaseObject;
 
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;

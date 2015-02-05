@@ -1,7 +1,6 @@
 package io.betterlife.util;
 
-import io.betterlife.domains.security.User;
-import io.betterlife.rest.EntityService;
+import io.betterlife.framework.domains.security.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.metamodel.Attribute;

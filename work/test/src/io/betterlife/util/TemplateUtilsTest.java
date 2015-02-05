@@ -1,6 +1,8 @@
 package io.betterlife.util;
 
-import io.betterlife.application.I18n;
+import io.betterlife.framework.application.I18n;
+import io.betterlife.framework.util.IOUtil;
+import io.betterlife.framework.util.TemplateUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
