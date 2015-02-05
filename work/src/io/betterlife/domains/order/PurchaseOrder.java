@@ -4,12 +4,15 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.betterlife.domains.BaseObject;
 import io.betterlife.domains.catalog.Product;
 import io.betterlife.domains.common.Supplier;
+import io.betterlife.domains.financial.Expense;
 import io.betterlife.domains.security.User;
 import io.betterlife.rest.Form;
+import io.betterlife.util.condition.FalseCondition;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Author: Lawrence Liu
@@ -103,12 +106,12 @@ public class PurchaseOrder extends BaseObject {
 
     @Form(DisplayRank = 42)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd", timezone = "CST")
-    @Temporal(value=TemporalType.DATE)
-    public Date getStockInDate(){
+    @Temporal(value = TemporalType.DATE)
+    public Date getStockInDate() {
         return getValue("stockInDate");
     }
 
-    public void setStockInDate(Date date){
+    public void setStockInDate(Date date) {
         setValue("stockInDate", date);
     }
 
@@ -129,5 +132,15 @@ public class PurchaseOrder extends BaseObject {
     @Form(DisplayRank = 50)
     public String getRemark() {
         return getValue("remark");
+    }
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "purchaseOrder")
+    @Form(Visible = FalseCondition.class)
+    public List<Expense> getExpenses() {
+        return getValue("expenses");
+    }
+
+    public void setExpenses(List<Expense> expenses) {
+        setValue("expenses", expenses);
     }
 }
