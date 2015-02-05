@@ -64,7 +64,7 @@ public class TemplateUtils {
         StringBuilder form = new StringBuilder();
         Class clazz = fieldMeta.getType();
         String key = fieldMeta.getName();
-        form.append("<div class='col-sm-4'>");
+        form.append("<div class='col-md-4'>");
         if (!Evaluator.evalEditable(entityType, fieldMeta, null, operationType)) {
             form.append(getReadOnlyController(fieldMeta, clazz));
         } else if (EntityUtils.getInstance().isIdField(key)) {
@@ -201,7 +201,7 @@ public class TemplateUtils {
     public String getFieldLabelHtml(String entityType, String key) {
         final String label = getFieldLabel(entityType, key);
         return String.format(
-            "<label for='%s' class='col-sm-2 control-label %s-label'>%s</label>%n",
+            "<label for='%s' class='col-md-offset-2 col-md-2 control-label %s-label'>%s</label>%n",
             null == key ? BLStringUtils.EMPTY : key,
             null == key ? BLStringUtils.EMPTY : key, label
         );

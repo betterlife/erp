@@ -12,6 +12,7 @@
     <script type="text/javascript" src="js/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
     <link rel="stylesheet" href="css/normalize.css"/>
+
     <link rel="stylesheet" href="js/bower_components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="js/bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="js/bower_components/angular-ui-grid/ui-grid.min.css">
@@ -47,7 +48,6 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#">Betterlife</a>
                 </div>
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
@@ -57,56 +57,56 @@
                             <a href="/" ng-show="isLoggedIn()"><span class="glyphicon glyphicon-home"></span> 首页</a>
                         </li>
                         <li ng-class="{active: (isActive('/costCenter'))}" ng-show="isLoggedIn()">
-                            <a class="dropdown-toggle ng-binding" data-toggle="dropdown"><span class="glyphicon glyphicon-wrench"></span> 基础数据<span class="caret"></span></a>
+                            <a class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-wrench"></span> 基础数据<span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li class="dropdown-header menu-title"><span class="glyphicon glyphicon-globe"></span> 部门/项目</li>
-                                <li><a href="/costCenter/create" class="ng-binding">创建部门/项目</a></li>
-                                <li><a href="/costCenter/list" class="ng-binding">列出部门/项目</a></li>
+                                <li><a href="/costCenter/create">创建部门/项目</a></li>
+                                <li><a href="/costCenter/list">列出部门/项目</a></li>
                                 <li class="dropdown-header menu-title"><span class="glyphicon glyphicon-user"></span> 用户</li>
-                                <li><a href="/user/create" class="ng-binding">创建用户</a></li>
-                                <li><a href="/user/list" class="ng-binding">列出用户</a></li>
+                                <li><a href="/user/create">创建用户</a></li>
+                                <li><a href="/user/list">列出用户</a></li>
                             </ul>
                          </li>
                         <li ng-class="{active: (isActive('/expenseCategory') || isActive('/incomingCategory') || isActive('/incoming') || isActive('/expense'))}" ng-show="isLoggedIn()">
-                            <a class="dropdown-toggle ng-binding" data-toggle="dropdown"><span class="glyphicon glyphicon-usd"></span> 财务<span class="caret"></span></a>
+                            <a class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-usd"></span> 财务<span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li class="dropdown-header menu-title"><span class="glyphicon glyphicon-tag"></span> 支出分类</li>
-                                <li><a href="/expenseCategory/create" class="ng-binding">创建支出分类</a></li>
-                                <li><a href="/expenseCategory/list" class="ng-binding">列出支出分类</a></li>
+                                <li><a href="/expenseCategory/create">创建支出分类</a></li>
+                                <li><a href="/expenseCategory/list">列出支出分类</a></li>
                                 <li class="dropdown-header menu-title"><span class="glyphicon glyphicon-minus-sign"></span> 支出</li>
-                                <li><a href="/expense/create" class="ng-binding">增加支出</a></li>
-                                <li><a href="/expense/list" class="ng-binding">列出支出</a></li>
+                                <li><a href="/expense/create">增加支出</a></li>
+                                <li><a href="/expense/list">列出支出</a></li>
                                 <li class="dropdown-header menu-title"><span class="glyphicon glyphicon-tag"></span> 收入分类</li>
-                                <li><a href="/incomingCategory/create" class="ng-binding">创建收入分类</a></li>
-                                <li><a href="/incomingCategory/list" class="ng-binding">列出收入分类</a></li>
+                                <li><a href="/incomingCategory/create">创建收入分类</a></li>
+                                <li><a href="/incomingCategory/list">列出收入分类</a></li>
                                 <li class="dropdown-header menu-title"><span class="glyphicon glyphicon-usd"></span> 收入</li>
-                                <li><a href="/incoming/create" class="ng-binding">增加收入</a></li>
-                                <li><a href="/incoming/list" class="ng-binding">列出收入</a></li>
+                                <li><a href="/incoming/create">增加收入</a></li>
+                                <li><a href="/incoming/list">列出收入</a></li>
                             </ul>
                          </li>
                         <li ng-class="{active: (isActive('/product') || isActive('/productCategory'))}" ng-show="isLoggedIn()">
-                            <a class="dropdown-toggle ng-binding" data-toggle="dropdown"><span class="glyphicon glyphicon-barcode"></span> 产品及供应商<span class="caret"></span></a>
+                            <a class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-barcode"></span> 产品及供应商<span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li class="dropdown-header menu-title"><span class="glyphicon glyphicon-tag"></span> 产品分类</li>
-                                <li><a href="/productCategory/create" class="ng-binding">增加产品分类</a></li>
-                                <li><a href="/productCategory/list" class="ng-binding">列出产品分类</a></li>
+                                <li><a href="/productCategory/create">增加产品分类</a></li>
+                                <li><a href="/productCategory/list">列出产品分类</a></li>
                                 <li class="dropdown-header menu-title"><span class="glyphicon glyphicon-user"></span> 供应商</li>
-                                <li><a href="/supplier/create" class="ng-binding">增加供应商</a></li>
-                                <li><a href="/supplier/list" class="ng-binding">列出供应商</a></li>
+                                <li><a href="/supplier/create">增加供应商</a></li>
+                                <li><a href="/supplier/list">列出供应商</a></li>
                                 <li class="dropdown-header menu-title"><span class="glyphicon glyphicon-barcode"></span> 产品</li>
-                                <li><a href="/product/create" class="ng-binding">增加产品</a></li>
-                                <li><a href="/product/list" class="ng-binding">列出产品</a></li>
+                                <li><a href="/product/create">增加产品</a></li>
+                                <li><a href="/product/list">列出产品</a></li>
                             </ul>
                          </li>
                         <li ng-class="{active: (isActive('/purchaseOrder') || isActive('/salesOrder'))}" ng-show="isLoggedIn()">
-                            <a class="dropdown-toggle ng-binding" data-toggle="dropdown"><span class="glyphicon glyphicon-shopping-cart"></span> 订单<span class="caret"></span></a>
+                            <a class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-shopping-cart"></span> 订单<span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li class="dropdown-header menu-title"><span class="glyphicon glyphicon-shopping-cart"></span> 采购订单</li>
-                                <li><a href="/purchaseOrder/create" class="ng-binding">新增采购订单</a></li>
-                                <li><a href="/purchaseOrder/list" class="ng-binding">列出采购订单</a></li>
+                                <li><a href="/purchaseOrder/create">新增采购订单</a></li>
+                                <li><a href="/purchaseOrder/list">列出采购订单</a></li>
                                 <li class="dropdown-header menu-title"><span class="glyphicon glyphicon-send"></span> 销售订单</li>
-                                <li><a href="/salesOrder/create" class="ng-binding">新增销售订单</a></li>
-                                <li><a href="/salesOrder/list" class="ng-binding">列出销售订单</a></li>
+                                <li><a href="/salesOrder/create">新增销售订单</a></li>
+                                <li><a href="/salesOrder/list">列出销售订单</a></li>
                             </ul>
                          </li>
                         <li><a href="/login" ng-show="!isLoggedIn()">登陆</a></li>
