@@ -2,8 +2,10 @@ package io.betterlife.domains.financial;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.betterlife.domains.BaseObject;
+import io.betterlife.domains.order.SalesOrder;
 import io.betterlife.domains.security.User;
 import io.betterlife.rest.Form;
+import io.betterlife.util.condition.FalseCondition;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -60,4 +62,13 @@ public class Incoming extends BaseObject {
         return getValue("date");
     }
 
+    @OneToOne(fetch=FetchType.LAZY)
+    @Form(Visible = FalseCondition.class)
+    public SalesOrder getSalesOrder() {
+        return getValue("salesOrder");
+    }
+
+    public void setSalesOrder(SalesOrder salesOrder) {
+        setValue("salesOrder", salesOrder);
+    }
 }

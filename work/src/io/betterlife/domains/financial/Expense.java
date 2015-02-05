@@ -3,6 +3,7 @@ package io.betterlife.domains.financial;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.betterlife.domains.BaseObject;
 import io.betterlife.domains.order.PurchaseOrder;
+import io.betterlife.domains.order.SalesOrder;
 import io.betterlife.domains.security.User;
 import io.betterlife.rest.Form;
 import io.betterlife.util.condition.FalseCondition;
@@ -90,5 +91,15 @@ public class Expense extends BaseObject {
 
     public void setPurchaseOrder(PurchaseOrder purchaseOrder) {
         setValue("purchaseOrder", purchaseOrder);
+    }
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @Form(Visible = FalseCondition.class)
+    public SalesOrder getSalesOrder() {
+          return getValue("salesOrder");
+      }
+
+    public void setSalesOrder(SalesOrder salesOrder) {
+        setValue("salesOrder", salesOrder);
     }
 }
