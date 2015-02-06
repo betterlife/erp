@@ -1,5 +1,6 @@
 package io.betterlife.framework.application;
 
+import io.betterlife.framework.application.config.ApplicationConfig;
 import io.betterlife.framework.util.BLStringUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
@@ -64,9 +65,8 @@ public class I18n {
     }
 
     public void initResources(ServletContext servletContext) throws IOException {
-        final String locale = "zh_CN";
-        final String resourceName = "/WEB-INF/classes/resources/i18n/" + locale + ".csv";
+        final String resourceName = "/WEB-INF/classes/resources/i18n/" + ApplicationConfig.getLocale() + ".csv";
         InputStream stream = servletContext.getResourceAsStream(resourceName);
-        loadTranslations(stream, locale);
+        loadTranslations(stream, ApplicationConfig.getLocale());
     }
 }
