@@ -5,6 +5,8 @@ import io.betterlife.framework.condition.Condition;
 import io.betterlife.framework.condition.TrueCondition;
 import io.betterlife.framework.converter.Converter;
 import io.betterlife.framework.converter.DefaultConverter;
+import io.betterlife.framework.trigger.DoNothingFieldTrigger;
+import io.betterlife.framework.trigger.FieldTrigger;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -27,6 +29,8 @@ public @interface FormField {
     Class<? extends Converter> Converter() default DefaultConverter.class;
 
     Class<? extends Condition> Editable() default TrueCondition.class;
+
+    Class<? extends FieldTrigger> ValueChangeTrigger() default DoNothingFieldTrigger.class;
 
     String TrueLabel() default "True";
     String FalseLabel() default "False";

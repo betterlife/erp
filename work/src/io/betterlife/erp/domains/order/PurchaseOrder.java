@@ -1,7 +1,8 @@
 package io.betterlife.erp.domains.order;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.betterlife.framework.annotation.EntityTriggers;
+import io.betterlife.erp.trigger.PurchaseOrderSaveTrigger;
+import io.betterlife.framework.annotation.Triggers;
 import io.betterlife.framework.domains.BaseObject;
 import io.betterlife.erp.domains.catalog.Product;
 import io.betterlife.erp.domains.common.Supplier;
@@ -24,7 +25,7 @@ import java.util.List;
     @NamedQuery(name = "PurchaseOrder.getById", query = "SELECT c FROM PurchaseOrder c WHERE c.id = :id AND c.active = TRUE"),
     @NamedQuery(name = "PurchaseOrder.getAll", query = "SELECT c FROM PurchaseOrder c WHERE c.active = TRUE")
 })
-@EntityTriggers()
+@Triggers(Save = PurchaseOrderSaveTrigger.class)
 public class PurchaseOrder extends BaseObject {
 
     @ManyToOne

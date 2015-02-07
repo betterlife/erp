@@ -3,14 +3,14 @@ package io.betterlife.framework.rest;
 import io.betterlife.framework.application.I18n;
 import io.betterlife.framework.application.config.ApplicationConfig;
 import io.betterlife.framework.application.manager.FieldMeta;
-import io.betterlife.framework.application.manager.ServiceEntityManager;
+import io.betterlife.framework.application.manager.MetaDataManager;
+import io.betterlife.framework.condition.Evaluator;
 import io.betterlife.framework.domains.BaseObject;
 import io.betterlife.framework.persistence.BaseOperator;
 import io.betterlife.framework.persistence.NamedQueryRules;
 import io.betterlife.framework.util.BLStringUtils;
 import io.betterlife.framework.util.EntityUtils;
 import io.betterlife.framework.util.IOUtil;
-import io.betterlife.framework.condition.Evaluator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -57,7 +57,7 @@ public class EntityService {
         if (logger.isTraceEnabled()) {
             logger.trace("Getting entity meta data for " + entityType);
         }
-        Map<String, FieldMeta> meta = ServiceEntityManager.getInstance().getMetaFromEntityType(entityType);
+        Map<String, FieldMeta> meta = MetaDataManager.getInstance().getMetaFromEntityType(entityType);
         LinkedHashMap<String, FieldMeta> sortedMeta = EntityUtils.getInstance().sortEntityMetaByDisplayRank(meta);
         List<Map<String, Object>> list = new ArrayList<>(sortedMeta.size());
         for (Map.Entry<String, FieldMeta> entry : sortedMeta.entrySet()) {
@@ -145,7 +145,7 @@ public class EntityService {
                          InputStream requestBody)
         throws ClassNotFoundException, IllegalAccessException, InstantiationException, IOException {
         Map<String, Object> parameters = IOUtil.getInstance().inputStreamToJson(requestBody);
-        BaseObject obj = ServiceEntityManager.getInstance().entityObjectFromType(entityType);
+        BaseObject obj = MetaDataManager.getInstance().entityObjectFromType(entityType);
         EntityUtils.getInstance().mapToBaseObject(obj, (Map<String, Object>) parameters.get("entity"));
         getOperator().save(obj, BaseOperator.CREATE_OPERA);
         return new ExecuteResult<String>().getRestString("SUCCESS");

@@ -1,5 +1,6 @@
 package io.betterlife.framework.application;
 
+import io.betterlife.framework.application.manager.MetaDataManager;
 import io.betterlife.framework.application.manager.SharedEntityManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,6 +28,7 @@ public class ServletContextListenerImpl implements ServletContextListener {
         SharedEntityManager.getInstance().initEntityManagerFactory();
         try {
             I18n.getInstance().initResources(servletContextEvent.getServletContext());
+            MetaDataManager.getInstance().setAllFieldMetaData();
         } catch (IOException e) {
             logger.error(e);
         }

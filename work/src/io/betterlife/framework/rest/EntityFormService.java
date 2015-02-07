@@ -1,10 +1,10 @@
 package io.betterlife.framework.rest;
 
 import io.betterlife.framework.application.manager.FieldMeta;
-import io.betterlife.framework.application.manager.ServiceEntityManager;
+import io.betterlife.framework.application.manager.MetaDataManager;
+import io.betterlife.framework.condition.Evaluator;
 import io.betterlife.framework.util.EntityUtils;
 import io.betterlife.framework.util.TemplateUtils;
-import io.betterlife.framework.condition.Evaluator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -61,7 +61,7 @@ public class EntityFormService {
     }
 
     public String getForm(String entityType, ServletContext context, final String operationType) {
-        Map<String, FieldMeta> meta = ServiceEntityManager.getInstance().getMetaFromEntityType(entityType);
+        Map<String, FieldMeta> meta = MetaDataManager.getInstance().getMetaFromEntityType(entityType);
         LinkedHashMap<String, FieldMeta> sortedMeta = EntityUtils.getInstance().sortEntityMetaByDisplayRank(meta);
         StringBuilder form = new StringBuilder();
         form.append("<div class='form-group form-horizontal'>");

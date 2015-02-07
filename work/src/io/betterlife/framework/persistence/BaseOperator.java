@@ -1,7 +1,11 @@
 package io.betterlife.framework.persistence;
 
 import io.betterlife.framework.application.EntityManagerConsumer;
+import io.betterlife.framework.application.manager.EntityMeta;
+import io.betterlife.framework.application.manager.MetaDataManager;
 import io.betterlife.framework.domains.BaseObject;
+import io.betterlife.framework.trigger.EntityTrigger;
+import io.betterlife.framework.trigger.Invoker;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -37,20 +41,19 @@ public class BaseOperator extends EntityManagerConsumer {
         return getSingleResult(q);
     }
 
-    public <T> void save(T obj, int operation) {
-        if (obj instanceof BaseObject) {
-            final BaseObject bo = (BaseObject) obj;
+    public <T extends BaseObject> void save(T obj, int operation) {
+        if (obj != null) {
             final Date date = new Date();
-            if (bo.getId() == 0) {
-                bo.setCreateDate(date);
-                bo.setActive(true);
+            if (obj.getId() == 0) {
+                obj.setCreateDate(date);
+                obj.setActive(true);
             }
-            bo.setLastModifyDate(date);
+            obj.setLastModifyDate(date);
             saveBaseObjectWithTransaction(obj, operation);
         }
     }
 
-    public <T> void saveBaseObjectWithTransaction(T obj, int operation) {
+    public <T extends BaseObject> void saveBaseObjectWithTransaction(T obj, int operation) {
         try {
             entityManager.getTransaction().begin();
             if (UPDATE_OPERA == operation) {
@@ -61,6 +64,7 @@ public class BaseOperator extends EntityManagerConsumer {
             if (logger.isTraceEnabled()) {
                 logger.trace(String.format("Saving Object: [%s]", obj));
             }
+            Invoker.invokeSaveTrigger(obj);
             entityManager.flush();
             entityManager.getTransaction().commit();
         } catch (Exception e) {

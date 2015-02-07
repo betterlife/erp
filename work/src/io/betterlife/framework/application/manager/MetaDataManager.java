@@ -1,9 +1,11 @@
 package io.betterlife.framework.application.manager;
 
+import io.betterlife.framework.annotation.Triggers;
 import io.betterlife.framework.application.EntityManagerConsumer;
 import io.betterlife.framework.application.config.ApplicationConfig;
 import io.betterlife.framework.domains.BaseObject;
 import io.betterlife.framework.annotation.FormField;
+import io.betterlife.framework.trigger.EntityTrigger;
 import io.betterlife.framework.util.BLStringUtils;
 import io.betterlife.framework.util.EntityUtils;
 import io.betterlife.framework.condition.FalseCondition;
@@ -31,124 +33,46 @@ import java.util.Set;
 
 public class MetaDataManager extends EntityManagerConsumer {
     private static final Logger logger = LogManager.getLogger(MetaDataManager.class.getName());
-    private Map<String, Map<String, FieldMeta>> _fieldsMetaData = new HashMap<>();
-    private boolean hasMetaData = false;
     private static MetaDataManager instance = new MetaDataManager();
+    private static FieldMetaDataContainer fieldMetaDataContainer = new FieldMetaDataContainer();
+    private static EntityMetaDataContainer entityMetaDataContainer = new EntityMetaDataContainer();
+    private static RestMetaDataContainer restMetaDataContainer = new RestMetaDataContainer();
 
     private MetaDataManager() {
     }
 
-    public FieldMeta getFieldMetaData(Class<? extends BaseObject> aClass, String fieldName) {
-        Map<String, FieldMeta> meta = _fieldsMetaData.get(aClass.getName());
+    public EntityMeta getEntityMeta(Class<? extends BaseObject> aClass) {
+        return entityMetaDataContainer.get(aClass.getSimpleName());
+    }
+
+    public FieldMeta getFieldMeta(Class<? extends BaseObject> aClass, String fieldName) {
+        Map<String, FieldMeta> meta = fieldMetaDataContainer.get(aClass.getName());
         return meta.get(fieldName);
     }
 
-    public Map<String, FieldMeta> getMetaDataOfClass(Class<? extends BaseObject> clazz) {
-        if (!hasMetaData() || null == _fieldsMetaData || _fieldsMetaData.size() == 0) {
-            setAllFieldMetaData();
-        }
-        return _fieldsMetaData.get(clazz.getName());
+    public Map<String, FieldMeta> getFieldsMeta(Class<? extends BaseObject> clazz) {
+        return fieldMetaDataContainer.get(clazz.getName());
+    }
+
+    public BaseObject entityObjectFromType(String objectType) throws InstantiationException, IllegalAccessException {
+        Class<? extends BaseObject> clazz = restMetaDataContainer.get(objectType);
+        return clazz.newInstance();
+    }
+
+    public Map<String, FieldMeta> getMetaFromEntityType(String entityType) {
+        final Class<? extends BaseObject> entityClass = restMetaDataContainer.get(BLStringUtils.capitalize(entityType));
+        return MetaDataManager.getInstance().getFieldsMeta(entityClass);
     }
 
     public static MetaDataManager getInstance() {
         return instance;
     }
 
-    public boolean hasMetaData() {
-        return hasMetaData && !ApplicationConfig.isDevelopmentMode();
-    }
-
-    private void setHasMetaData(boolean hasMetaData) {
-        this.hasMetaData = hasMetaData;
-    }
 
     public void setAllFieldMetaData() {
-        if (!hasMetaData()) {
-            synchronized (this) {
-                if (hasMetaData()) {
-                    return;
-                }
-                try {
-                    EntityManager entityManager = newEntityManager();
-                    Metamodel metaModel = entityManager.getMetamodel();
-                    Set<ManagedType<?>> managedTypes = metaModel.getManagedTypes();
-                    for (ManagedType managedType : managedTypes) {
-                        @SuppressWarnings("unchecked")
-                        Class<? extends BaseObject> clazz = managedType.getJavaType();
-                        List<Class<?>> ignoreClasses = ClassUtils.getAllSuperclasses(BaseObject.class);
-                        if (clazz.equals(BaseObject.class) || (ignoreClasses != null && ignoreClasses.contains(clazz))) {
-                            continue;
-                        }
-                        addManagedAttributes(managedType, clazz);
-                        addTransientAttributes(clazz);
-                    }
-                    setHasMetaData(true);
-                } catch (NoSuchMethodException e) {
-                    logger.error(e);
-                } finally {
-                    closeEntityManager();
-                }
-            }
-        }
+        fieldMetaDataContainer.loadMeta();
+        entityMetaDataContainer.loadMeta();
+        restMetaDataContainer.loadMeta();
     }
 
-    private void setFieldMetaData(Class<? extends BaseObject> clazz, FieldMeta fieldMeta) {
-        Map<String, FieldMeta> classMeta = _fieldsMetaData.get(clazz.getName());
-        if (null == classMeta) {
-            classMeta = new HashMap<>(8);
-            _fieldsMetaData.put(clazz.getName(), classMeta);
-        }
-        classMeta.put(fieldMeta.getName(), fieldMeta);
-    }
-
-    private void addManagedAttributes(ManagedType managedType, Class<? extends BaseObject> clazz)
-        throws NoSuchMethodException {
-        @SuppressWarnings("unchecked")
-        Set<Attribute> attributeSet = managedType.getAttributes();
-        for (Attribute attr : attributeSet) {
-            Class attrJavaType = attr.getJavaType();
-            String name = attr.getName();
-            FieldMeta meta = new FieldMeta();
-            meta.setName(name);
-            meta.setType(attrJavaType);
-            readFormAnnotation(clazz, name, meta);
-            setFieldMetaData(clazz, meta);
-        }
-    }
-
-    private void addTransientAttributes(Class<? extends BaseObject> clazz) throws NoSuchMethodException {
-        Method[] methods = clazz.getDeclaredMethods();
-        for (Method m : methods) {
-            if (Modifier.isPublic(m.getModifiers()) && m.getName().startsWith("get")) {
-                Annotation annotation = m.getAnnotation(Transient.class);
-                if (annotation != null) {
-                    String attrName = BLStringUtils.uncapitalize(m.getName().substring(3));
-                    FieldMeta meta = new FieldMeta();
-                    meta.setName(attrName);
-                    meta.setType(m.getReturnType());
-                    readFormAnnotation(clazz, attrName, meta);
-                    meta.setEditableCondition(FalseCondition.class);
-                    setFieldMetaData(clazz, meta);
-                }
-            }
-        }
-    }
-
-    private void readFormAnnotation(Class<? extends BaseObject> clazz, String name, FieldMeta meta) throws NoSuchMethodException {
-        Method m = clazz.getMethod("get" + BLStringUtils.capitalize(name));
-        if (m != null) {
-            FormField form = m.getAnnotation(FormField.class);
-            if (null != form) {
-                meta.setDisplayRank(form.DisplayRank());
-                meta.setVisibleCondition(form.Visible());
-                meta.setRepresentField(form.RepresentField());
-                meta.setConverter(form.Converter());
-                meta.setEditableCondition(form.Editable());
-                if (EntityUtils.getInstance().isBooleanField(meta)) {
-                    meta.setTrueLabel(form.TrueLabel());
-                    meta.setFalseLabel(form.FalseLabel());
-                }
-            }
-        }
-    }
 }

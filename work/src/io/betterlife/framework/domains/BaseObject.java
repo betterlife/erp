@@ -119,11 +119,10 @@ public abstract class BaseObject {
 
     @SuppressWarnings("unchecked")
     public void setValues(Map<String, Object> parameters) {
-        MetaDataManager.getInstance().setAllFieldMetaData();
         for (Map.Entry<String, Object> entry : parameters.entrySet()) {
             String key = entry.getKey();
             Object value = entry.getValue();
-            FieldMeta fieldMeta = MetaDataManager.getInstance().getFieldMetaData(this.getClass(), key);
+            FieldMeta fieldMeta = MetaDataManager.getInstance().getFieldMeta(this.getClass(), key);
             Class clazz = fieldMeta.getType();
             if (logger.isTraceEnabled()) {
                 logger.trace(String.format("Setting [%s, %s, %s] to type [%s]",
