@@ -64,7 +64,7 @@ public class BaseOperator extends EntityManagerConsumer {
             if (logger.isTraceEnabled()) {
                 logger.trace(String.format("Saving Object: [%s]", obj));
             }
-            Invoker.invokeSaveTrigger(obj);
+            Invoker.invokeSaveTrigger(entityManager, obj);
             entityManager.flush();
             entityManager.getTransaction().commit();
         } catch (Exception e) {
