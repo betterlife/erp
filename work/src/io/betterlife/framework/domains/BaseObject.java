@@ -111,7 +111,14 @@ public abstract class BaseObject {
             if (ApplicationConfig.getToStringIgnoreFields().contains(entry.getKey())) {
                 continue;
             }
-            sb.append("\n\t[").append(entry.getKey()).append(" : ").append(entry.getValue()).append("]");
+            final Object value = entry.getValue();
+            if (null != value) {
+                if (EntityUtils.getInstance().isBaseObject(value.getClass())) {
+                    sb.append("\n\t[").append(entry.getKey()).append(" : ").append(((BaseObject) entry.getValue()).getId()).append("]");
+                } else {
+                    sb.append("\n\t[").append(entry.getKey()).append(" : ").append(entry.getValue()).append("]");
+                }
+            }
         }
         sb.append("}");
         return sb.toString();
