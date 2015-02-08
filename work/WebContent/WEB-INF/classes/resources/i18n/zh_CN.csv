@@ -8,6 +8,8 @@ user,用户
 remark,备注
 date,时间
 amount,金额
+salesOrder,销售订单
+purchaseOrder,采购订单
 INCOME,收入
 EXPEND,支出
 Create,创建

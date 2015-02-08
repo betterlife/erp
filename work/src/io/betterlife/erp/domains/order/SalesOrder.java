@@ -1,5 +1,6 @@
 package io.betterlife.erp.domains.order;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.betterlife.framework.domains.BaseObject;
 import io.betterlife.erp.domains.catalog.Product;
@@ -138,6 +139,7 @@ public class SalesOrder extends BaseObject {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "salesOrder")
     @FormField(Visible = FalseCondition.class)
+    @JsonBackReference
     public List<Expense> getExpenses() {
         return getValue("expenses");
     }

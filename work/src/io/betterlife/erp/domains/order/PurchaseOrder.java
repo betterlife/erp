@@ -1,5 +1,7 @@
 package io.betterlife.erp.domains.order;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.betterlife.erp.trigger.PurchaseOrderSaveTrigger;
 import io.betterlife.framework.annotation.Triggers;
@@ -139,6 +141,7 @@ public class PurchaseOrder extends BaseObject {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "purchaseOrder")
     @FormField(Visible = FalseCondition.class)
+    @JsonBackReference
     public List<Expense> getExpenses() {
         return getValue("expenses");
     }
