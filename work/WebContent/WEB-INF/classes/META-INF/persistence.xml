@@ -11,6 +11,7 @@
 		<class>io.betterlife.erp.domains.financial.Expense</class>
 		<class>io.betterlife.erp.domains.financial.ExpenseCategory</class>
 		<class>io.betterlife.erp.domains.financial.IncomingCategory</class>
+        <class>io.betterlife.erp.domains.financial.DefaultFinancialSetting</class>
 		<class>io.betterlife.erp.domains.catalog.Product</class>
 		<class>io.betterlife.erp.domains.catalog.ProductCategory</class>
 		<class>io.betterlife.erp.domains.common.Supplier</class>

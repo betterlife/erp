@@ -21,7 +21,7 @@ import java.util.Date;
 @Entity
 @NamedQueries({
     @NamedQuery(name = "Expense.getById", query = "SELECT e FROM Expense e WHERE e.id = :id AND e.active = TRUE"),
-    @NamedQuery(name = "Expense.getAll",  query = "SELECT e FROM Expense e WHERE e.active = TRUE")
+    @NamedQuery(name = "Expense.getAll", query = "SELECT e FROM Expense e WHERE e.active = TRUE")
 })
 public class Expense extends BaseObject {
 
@@ -30,7 +30,7 @@ public class Expense extends BaseObject {
     }
 
     @ManyToOne
-    @FormField(RepresentField="name", DisplayRank =10)
+    @FormField(RepresentField = "name", DisplayRank = 10)
     public ExpenseCategory getExpenseCategory() {
         return getValue("expenseCategory");
     }
@@ -40,7 +40,7 @@ public class Expense extends BaseObject {
     }
 
     @ManyToOne
-    @FormField(RepresentField="name", DisplayRank =15)
+    @FormField(RepresentField = "name", DisplayRank = 15)
     public CostCenter getCostCenter() {
         return getValue("costCenter");
     }
@@ -50,7 +50,7 @@ public class Expense extends BaseObject {
     }
 
     @ManyToOne
-    @FormField(RepresentField="displayName", DisplayRank =4)
+    @FormField(RepresentField = "displayName", DisplayRank = 4)
     public User getUser() {
         return getValue("user");
     }
@@ -64,27 +64,18 @@ public class Expense extends BaseObject {
         return getValue("amount");
     }
 
-    public void setRemark(String remark) {
-        setValue("remark", remark);
-    }
-
-    @FormField(DisplayRank = 20)
-    public String getRemark() {
-        return getValue("remark");
-    }
-
     public void setDate(Date date) {
         setValue("date", date);
     }
 
     @FormField(DisplayRank = 2)
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy/MM/dd", timezone="CST")
-    @Temporal(value=TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd", timezone = "CST")
+    @Temporal(value = TemporalType.DATE)
     public Date getDate() {
         return getValue("date");
     }
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @FormField(RepresentField = "id", DisplayRank = 25)
     @JsonManagedReference
     public PurchaseOrder getPurchaseOrder() {
@@ -95,14 +86,24 @@ public class Expense extends BaseObject {
         setValue("purchaseOrder", purchaseOrder);
     }
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @FormField(RepresentField = "id", DisplayRank = 30)
     @JsonManagedReference
     public SalesOrder getSalesOrder() {
-          return getValue("salesOrder");
-      }
+        return getValue("salesOrder");
+    }
 
     public void setSalesOrder(SalesOrder salesOrder) {
         setValue("salesOrder", salesOrder);
     }
+
+    public void setRemark(String remark) {
+        setValue("remark", remark);
+    }
+
+    @FormField(DisplayRank = 35)
+    public String getRemark() {
+        return getValue("remark");
+    }
+
 }

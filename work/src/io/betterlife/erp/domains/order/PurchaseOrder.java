@@ -139,7 +139,7 @@ public class PurchaseOrder extends BaseObject {
         return getValue("remark");
     }
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "purchaseOrder")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "purchaseOrder")
     @FormField(Visible = FalseCondition.class)
     @JsonBackReference
     public List<Expense> getExpenses() {

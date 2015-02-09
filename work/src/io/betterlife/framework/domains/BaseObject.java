@@ -200,4 +200,9 @@ public abstract class BaseObject {
         }
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return !(null == obj || !obj.getClass().equals(getClass()))
+            && ((BaseObject) obj).getId() == getId();
+    }
 }

@@ -63,3 +63,9 @@ SalesOrder,销售订单
 SalesOrder.transactor,经办人
 SalesOrder.orderDate,销售日期
 SalesOrder.stockOutDate,出库时间
+DefaultFinancialSetting,财务默认设置
+DefaultFinancialSetting.defPOProductExpCate,采购货款支出分类
+DefaultFinancialSetting.defPOLogisticExpCate,采购物流支出分类
+DefaultFinancialSetting.defPOOtherExpCate,采购其他支出分类
+DefaultFinancialSetting.defSOIncomingCate,销售款收入分类
+DefaultFinancialSetting.defSOLogisticExpCate,销售物流支出分类

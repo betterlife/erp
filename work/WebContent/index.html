@@ -83,6 +83,10 @@
                                 <li class="dropdown-header menu-title"><span class="glyphicon glyphicon-usd"></span> 收入</li>
                                 <li><a href="/incoming/create">增加收入</a></li>
                                 <li><a href="/incoming/list">列出收入</a></li>
+                                <li class="dropdown-header menu-title"><span class="glyphicon glyphicon-wrench"></span> 财务设置</li>
+                                <li><a href="/defaultFinancialSetting/create">初始化财务设置</a></li>
+                                <li><a href="/defaultFinancialSetting/edit/1">编辑财务设置</a></li>
+                                <li><a href="/defaultFinancialSetting/list">列出财务设置</a></li>
                             </ul>
                          </li>
                         <li ng-class="{active: (isActive('/product') || isActive('/productCategory'))}" ng-show="isLoggedIn()">

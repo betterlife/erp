@@ -1,13 +1,11 @@
 package io.betterlife.framework.persistence;
 
 import io.betterlife.framework.application.EntityManagerConsumer;
-import io.betterlife.framework.application.manager.EntityMeta;
-import io.betterlife.framework.application.manager.MetaDataManager;
 import io.betterlife.framework.domains.BaseObject;
-import io.betterlife.framework.trigger.EntityTrigger;
 import io.betterlife.framework.trigger.Invoker;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.eclipse.persistence.config.QueryHints;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -65,7 +63,6 @@ public class BaseOperator extends EntityManagerConsumer {
                 logger.trace(String.format("Saving Object: [%s]", obj));
             }
             Invoker.invokeSaveTrigger(entityManager, obj);
-            entityManager.flush();
             entityManager.getTransaction().commit();
         } catch (Exception e) {
             logger.error("Error to save object " + obj);
@@ -84,6 +81,14 @@ public class BaseOperator extends EntityManagerConsumer {
             q.setParameter(entry.getKey(), entry.getValue());
         }
         return getSingleResult(q);
+    }
+
+    public <T> T getBaseObjectFromDbById(Class<T> clazz, long id) {
+        String queryName = NamedQueryRules.getInstance().getIdQueryForEntity(clazz.getSimpleName());
+        Query q = getQuery(queryName);
+        q.setHint(QueryHints.REFRESH, true);
+        q.setParameter("id", id);
+        return (T) getSingleResult(q);
     }
 
     public <T> List<T> getBaseObjects(String queryName) {
