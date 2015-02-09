@@ -185,12 +185,12 @@ public class ProductTest {
         int ld = 1;
         product.setLeadDay(ld);
         assertNotNull(product.getLeadDay());
-        assertEquals(ld, product.getLeadDay());
+        assertEquals(ld, product.getLeadDay().intValue());
         int nld = 2;
         product.setLeadDay(nld);
         assertNotNull(product.getLeadDay());
-        assertNotEquals(ld, product.getLeadDay());
-        assertEquals(nld, product.getLeadDay());
+        assertNotEquals(ld, product.getLeadDay().intValue());
+        assertEquals(nld, product.getLeadDay().intValue());
     }
 
     @Test
@@ -198,12 +198,12 @@ public class ProductTest {
         int ld = 1;
         product.setDeliverDay(ld);
         assertNotNull(product.getDeliverDay());
-        assertEquals(ld, product.getDeliverDay());
+        assertEquals(ld, product.getDeliverDay().intValue());
         int nld = 2;
         product.setDeliverDay(nld);
         assertNotNull(product.getDeliverDay());
-        assertNotEquals(ld, product.getDeliverDay());
-        assertEquals(nld, product.getDeliverDay());
+        assertNotEquals(ld, product.getDeliverDay().intValue());
+        assertEquals(nld, product.getDeliverDay().intValue());
     }
 
     @Test

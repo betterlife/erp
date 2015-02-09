@@ -105,20 +105,20 @@ public class Product extends BaseObject {
     }
 
     @FormField(DisplayRank = 35)
-    public int getLeadDay() {
+    public Integer getLeadDay() {
         return getValue("leadDay");
     }
 
-    public void setLeadDay(int leadDay) {
+    public void setLeadDay(Integer leadDay) {
         setValue("leadDay", leadDay);
     }
 
     @FormField(DisplayRank = 40)
-    public int getDeliverDay() {
+    public Integer getDeliverDay() {
         return getValue("deliverDay");
     }
 
-    public void setDeliverDay(int deliverDay) {
+    public void setDeliverDay(Integer deliverDay) {
         setValue("deliverDay", deliverDay);
     }
 
