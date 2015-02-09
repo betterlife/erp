@@ -4,13 +4,32 @@ checkout:
     - git submodule update --init
     - cd work/WebContent;bower install
     - echo $CLOVER_LICENSE > .builder/tools/clover-ant/lib/clover.license
+    - npm install -g codeclimate-test-reporter
 test:
   override:
-    - ant -f .builder/build.xml build.war clean.classes cc.report
+    - ln -s .builder/build.xml build.xml
+    - ant build.flat
+    - printf "Branch  Name:\t$CI_BRANCH\nBuild Number:\t$CI_BUILD_NUMBER @ $CI_BUILD_URL \nCommit  Info:\t$CI_MESSAGE\n"> target/artifact/flat/build.txt
+    - ant build.war junit.run.all
+    - cd work
+    - npm install
+    - npm test
+    - codeclimate < ../target/data/coverage/javascript/lcov.info
   post:
     - ant -f .builder/build.xml clean.classes compile findbugs pmd
     - cp -R target/data/* $CI_REPORTS
     - cd target/artifact/; tar -cf reports.tar.gz ../reports
+deployment:
+  production:
+    branch: master
+    commands:
+      - cp target/artifact/package/betterlife-erp_0.3.war target/artifact/package/ROOT.war
+      - scp target/artifact/package/ROOT.war $OPEN_SHIFT_PRD_USER@$OPEN_SHIFT_PRD_HOST:app-root/dependencies/jbossews/webapps
+  testing:
+    branch: develop
+    commands:
+      - cp target/artifact/package/betterlife-erp_0.3.war target/artifact/package/ROOT.war
+      - scp target/artifact/package/ROOT.war $OPEN_SHIFT_DEV_USER@$OPEN_SHIFT_DEV_HOST:app-root/dependencies/jbossews/webapps
 general:
   artifacts:
     - "target/artifact/package/"        # war package
