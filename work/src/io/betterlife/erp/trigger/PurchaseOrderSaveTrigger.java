@@ -38,7 +38,9 @@ public class PurchaseOrderSaveTrigger implements EntityTrigger {
         if (baseObject instanceof PurchaseOrder) {
             final PurchaseOrder purchaseOrder = (PurchaseOrder) baseObject;
             final long id = baseObject.getId();
-            originalPurchaseOrder = getOriginalPurchaseOrder(id);
+            if (0 != id) {
+                originalPurchaseOrder = getOriginalPurchaseOrder(id);
+            }
             mergeExpense(
                 em, purchaseOrder, setting.getDefPOLogisticExpCate(), purchaseOrder.getLogisticAmount(),
                 "Logistic expense for PurchaseOrder " + id, false
@@ -60,14 +62,16 @@ public class PurchaseOrderSaveTrigger implements EntityTrigger {
                               final String remarkStr, boolean throwException) throws Exception {
         if (null != amount) {
             Expense expense = null;
-            List<Expense> expenses = originalPurchaseOrder.getExpenses();
-            for (Expense e : expenses) {
-                if (e.getActive()) {
-                    final ExpenseCategory expenseCategory = e.getExpenseCategory();
-                    if (null != expenseCategory && expenseCategory.equals(defaultExpenseCate)) {
-                        expense = e;
-                        updateExpense(baseObject, expense, amount);
-                        break;
+            if (originalPurchaseOrder != null) {
+                List<Expense> expenses = originalPurchaseOrder.getExpenses();
+                for (Expense e : expenses) {
+                    if (e.getActive()) {
+                        final ExpenseCategory expenseCategory = e.getExpenseCategory();
+                        if (null != expenseCategory && expenseCategory.equals(defaultExpenseCate)) {
+                            expense = e;
+                            updateExpense(baseObject, expense, amount);
+                            break;
+                        }
                     }
                 }
             }
