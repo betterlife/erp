@@ -40,3 +40,4 @@ Special Thanks
 - [Sprint.ly](https://sprint.ly/) for providing free plan to manage issues.
 - [Codeship](https://codeship.com/) for providing free CI plan
 - [Code Climate](https://codeclimate.com) for providing free plan to do JavaScript code analysis.
+- [Openshift](https://www.openshift.com) for providing PAAS platform.
