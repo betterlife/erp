@@ -12,7 +12,7 @@ import javax.persistence.EntityManager;
  */
 public class Invoker {
 
-    public static <T extends BaseObject> void invokeSaveTrigger(EntityManager entityManager, T obj)
+    public static <T extends BaseObject> void invokeSaveTrigger(EntityManager entityManager, T obj, BaseObject original)
         throws Exception {
         EntityMeta meta = MetaDataManager.getInstance().getEntityMeta(obj.getClass());
         if (null != meta) {
@@ -20,7 +20,7 @@ public class Invoker {
             if (null != triggerClazz) {
                 EntityTrigger trigger = triggerClazz.newInstance();
                 if (null != trigger) {
-                    trigger.action(entityManager, obj);
+                    trigger.action(entityManager, obj, original);
                 }
             }
         }

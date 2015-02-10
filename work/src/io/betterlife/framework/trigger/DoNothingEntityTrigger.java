@@ -10,7 +10,7 @@ import javax.persistence.EntityManager;
  */
 public class DoNothingEntityTrigger implements EntityTrigger {
     @Override
-    public void action(EntityManager entityManager, BaseObject baseObject) {
+    public void action(EntityManager entityManager, BaseObject newObj, BaseObject oldObj) {
 
     }
 }

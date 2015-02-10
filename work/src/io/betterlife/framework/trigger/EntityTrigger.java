@@ -9,5 +9,5 @@ import javax.persistence.EntityManager;
  * Date: 2/5/15
  */
 public interface EntityTrigger {
-    public void action(EntityManager entityManager, BaseObject baseObject) throws Exception;
+    public void action(EntityManager entityManager, BaseObject newObj, BaseObject oldObj) throws Exception;
 }

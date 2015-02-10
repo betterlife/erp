@@ -1,10 +1,13 @@
 package io.betterlife.framework.persistence;
 
+import io.betterlife.erp.domains.order.PurchaseOrder;
 import io.betterlife.framework.application.EntityManagerConsumer;
+import io.betterlife.framework.application.manager.SharedEntityManager;
 import io.betterlife.framework.domains.BaseObject;
 import io.betterlife.framework.trigger.Invoker;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
 
 import javax.persistence.EntityManager;
@@ -62,7 +65,11 @@ public class BaseOperator extends EntityManagerConsumer {
             if (logger.isTraceEnabled()) {
                 logger.trace(String.format("Saving Object: [%s]", obj));
             }
-            Invoker.invokeSaveTrigger(entityManager, obj);
+            BaseObject original = null;
+            if (operation == UPDATE_OPERA) {
+                 original = getOriginalBaseObject(obj.getId(), obj.getClass());
+            }
+            Invoker.invokeSaveTrigger(entityManager, obj, original);
             entityManager.getTransaction().commit();
         } catch (Exception e) {
             logger.error("Error to save object " + obj);
@@ -75,20 +82,21 @@ public class BaseOperator extends EntityManagerConsumer {
         }
     }
 
+    private <T extends BaseObject> T getOriginalBaseObject(long id, Class<? extends BaseObject> aClass) {
+        String queryName = NamedQueryRules.getInstance().getIdQueryForEntity(aClass.getSimpleName());
+        EntityManager entityManager = SharedEntityManager.getInstance().getEntityManager();
+        Query q = entityManager.createNamedQuery(queryName);
+        q.setHint(QueryHints.REFRESH, HintValues.TRUE);
+        q.setParameter("id", id);
+        return (T) q.getSingleResult();
+    }
+
     public <T> T getBaseObject(String queryName, Map<String, ?> queryParams) {
         Query q = getQuery(queryName);
         for (Map.Entry<String, ?> entry : queryParams.entrySet()) {
             q.setParameter(entry.getKey(), entry.getValue());
         }
         return getSingleResult(q);
-    }
-
-    public <T> T getBaseObjectFromDbById(Class<T> clazz, long id) {
-        String queryName = NamedQueryRules.getInstance().getIdQueryForEntity(clazz.getSimpleName());
-        Query q = getQuery(queryName);
-        q.setHint(QueryHints.REFRESH, true);
-        q.setParameter("id", id);
-        return (T) getSingleResult(q);
     }
 
     public <T> List<T> getBaseObjects(String queryName) {

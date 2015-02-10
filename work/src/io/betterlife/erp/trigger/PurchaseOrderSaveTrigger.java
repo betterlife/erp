@@ -30,17 +30,15 @@ public class PurchaseOrderSaveTrigger implements EntityTrigger {
     private PurchaseOrder originalPurchaseOrder;
 
     @Override
-    public void action(EntityManager em, BaseObject baseObject) throws Exception {
+    public void action(EntityManager em, BaseObject newObj, BaseObject oldObj) throws Exception {
         logger.debug("=======Invoking the PurchaseOrderSaveTrigger Start=====");
         final String query = NamedQueryRules.getInstance().getAllQueryForEntity("DefaultFinancialSetting");
         final BaseOperator baseOpera = BaseOperator.getInstance();
         DefaultFinancialSetting setting = baseOpera.getSingleResult(baseOpera.getQuery(query));
-        if (baseObject instanceof PurchaseOrder) {
-            final PurchaseOrder purchaseOrder = (PurchaseOrder) baseObject;
-            final long id = baseObject.getId();
-            if (0 != id) {
-                originalPurchaseOrder = getOriginalPurchaseOrder(id);
-            }
+        if (newObj instanceof PurchaseOrder) {
+            final PurchaseOrder purchaseOrder = (PurchaseOrder) newObj;
+            long id = newObj.getId();
+            originalPurchaseOrder = (PurchaseOrder) oldObj;
             mergeExpense(
                 em, purchaseOrder, setting.getDefPOLogisticExpCate(), purchaseOrder.getLogisticAmount(),
                 "Logistic expense for PurchaseOrder " + id, false
@@ -85,15 +83,6 @@ public class PurchaseOrderSaveTrigger implements EntityTrigger {
                 throw new Exception("Amount should not be null for PO: " + baseObject);
             }
         }
-    }
-
-    private PurchaseOrder getOriginalPurchaseOrder(long id) {
-        String queryName = NamedQueryRules.getInstance().getIdQueryForEntity(PurchaseOrder.class.getSimpleName());
-        EntityManager entityManager = SharedEntityManager.getInstance().getEntityManager();
-        Query q = entityManager.createNamedQuery(queryName);
-        q.setHint(QueryHints.REFRESH, HintValues.TRUE);
-        q.setParameter("id", id);
-        return (PurchaseOrder) q.getSingleResult();
     }
 
     private void updateExpense(PurchaseOrder baseObject, Expense existing, BigDecimal bd) {
