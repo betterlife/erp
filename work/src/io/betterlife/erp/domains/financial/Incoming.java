@@ -53,7 +53,7 @@ public class Incoming extends BaseObject {
     }
 
     @OneToOne(fetch=FetchType.LAZY)
-    @FormField(DisplayRank = 20)
+    @FormField(DisplayRank = 20, RepresentField = "id")
     public SalesOrder getSalesOrder() {
         return getValue("salesOrder");
     }
