@@ -41,15 +41,6 @@ public class Incoming extends BaseObject {
         return getValue("amount");
     }
 
-    public void setRemark(String remark) {
-        setValue("remark", remark);
-    }
-
-    @FormField(DisplayRank = 20)
-    public String getRemark() {
-        return getValue("remark");
-    }
-
     public void setDate(Date date) {
         setValue("date", date);
     }
@@ -62,12 +53,21 @@ public class Incoming extends BaseObject {
     }
 
     @OneToOne(fetch=FetchType.LAZY)
-    @FormField(Visible = FalseCondition.class)
+    @FormField(DisplayRank = 20)
     public SalesOrder getSalesOrder() {
         return getValue("salesOrder");
     }
 
     public void setSalesOrder(SalesOrder salesOrder) {
         setValue("salesOrder", salesOrder);
+    }
+
+    @FormField(DisplayRank = 25)
+    public String getRemark() {
+        return getValue("remark");
+    }
+
+    public void setRemark(String remark) {
+        setValue("remark", remark);
     }
 }
