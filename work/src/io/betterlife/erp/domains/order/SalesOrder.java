@@ -2,14 +2,16 @@ package io.betterlife.erp.domains.order;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.betterlife.framework.domains.BaseObject;
 import io.betterlife.erp.domains.catalog.Product;
 import io.betterlife.erp.domains.common.Supplier;
 import io.betterlife.erp.domains.financial.Expense;
 import io.betterlife.erp.domains.financial.Incoming;
-import io.betterlife.framework.domains.security.User;
+import io.betterlife.erp.trigger.SalesOrderSaveTrigger;
 import io.betterlife.framework.annotation.FormField;
+import io.betterlife.framework.annotation.Triggers;
 import io.betterlife.framework.condition.FalseCondition;
+import io.betterlife.framework.domains.BaseObject;
+import io.betterlife.framework.domains.security.User;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -25,6 +27,7 @@ import java.util.List;
     @NamedQuery(name = "SalesOrder.getById", query = "SELECT c FROM SalesOrder c WHERE c.id = :id AND c.active = TRUE"),
     @NamedQuery(name = "SalesOrder.getAll", query = "SELECT c FROM SalesOrder c WHERE c.active = TRUE")
 })
+@Triggers(Save = SalesOrderSaveTrigger.class)
 public class SalesOrder extends BaseObject {
 
     @ManyToOne
