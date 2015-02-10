@@ -132,6 +132,7 @@ public class SalesOrder extends BaseObject {
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "salesOrder")
     @FormField(Visible = FalseCondition.class)
+    @JsonBackReference
     public Incoming getIncoming() {
         return getValue("incoming");
     }

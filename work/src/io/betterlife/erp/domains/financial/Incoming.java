@@ -1,6 +1,7 @@
 package io.betterlife.erp.domains.financial;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.betterlife.framework.domains.BaseObject;
 import io.betterlife.erp.domains.order.SalesOrder;
 import io.betterlife.framework.annotation.FormField;
@@ -54,6 +55,7 @@ public class Incoming extends BaseObject {
 
     @OneToOne(fetch=FetchType.LAZY)
     @FormField(DisplayRank = 20, RepresentField = "id")
+    @JsonManagedReference
     public SalesOrder getSalesOrder() {
         return getValue("salesOrder");
     }
