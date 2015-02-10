@@ -18,7 +18,7 @@
  */
 var listCtrl = function ($scope, $http, $location, $modal, loginService, i18nService, $routeParams) {
     "use strict";
-    i18nService.setCurrentLang('zh-cn');
+    //i18nService.setCurrentLang('zh-cn');
     $scope.entityType = $routeParams.entityType;
     $scope.captalizedEntityType = $scope.entityType.charAt(0).toUpperCase() + $scope.entityType.substr(1);
     $scope.externalScope = $scope;
@@ -26,7 +26,11 @@ var listCtrl = function ($scope, $http, $location, $modal, loginService, i18nSer
         enableSorting: true,
         enableColumnResizing: true,
         enableGridMenu: true,
-        showFooter: true
+        showFooter: true,
+        enablePaginationControls: true,
+        enableHorizontalScrollbar: false,
+        paginationPageSizes : [10, 20, 40],
+        paginationPageSize : 10
     };
 
     $http.get("/rest/entity/" + $scope.captalizedEntityType, {}).success(function (metaData) {

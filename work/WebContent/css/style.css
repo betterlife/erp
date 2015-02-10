@@ -16,16 +16,13 @@ body {
 }
 .footer {
     text-align:center;
-    height: 7em;
 }
 html, body {
     height: 100%;
 }
 .wrapper {
     min-height: 100%;
-    height: auto !important;
     height: 100%;
-    margin: 0 auto -7em;
 }
 .boolean-controller {
     margin-top:11px !important;
@@ -84,4 +81,11 @@ html, body {
 
 .navbar, .navbar-nav, .navbar-header {
     text-align:center;
+}
+
+.grid {
+    height: 668px;
+    min-width: 1024px;
+    width:98%;
+    margin:auto;
 }

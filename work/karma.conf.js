@@ -16,7 +16,7 @@ module.exports = function(config){
             'WebContent/js/bower_components/angular-mocks/angular-mocks.js',
             'WebContent/js/bower_components/angular-cookies/angular-cookies.js',
             'WebContent/js/bower_components/angular-bootstrap/ui-bootstrap.js',
-            'WebContent/js/bower_components/angular-ui-grid/ui-grid.js',
+            'WebContent/js/3rd/angular-ui-grid/ui-grid.js',
             'WebContent/js/app/**/*.js',
             'test/js/app/**/*.js'
         ],
