@@ -4,6 +4,7 @@ import io.betterlife.framework.application.I18n;
 import io.betterlife.framework.util.IOUtil;
 import io.betterlife.framework.util.TemplateUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,6 +12,7 @@ import org.junit.Test;
 import javax.servlet.ServletContext;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.UUID;
 
 import static org.junit.Assert.*;
@@ -58,7 +60,7 @@ public class TemplateUtilsTest {
             ServletContext context = mock(ServletContext.class);
             when(context.getRealPath(absolutePath)).thenThrow(IOException.class);
             String result = templateUtils.getHtmlTemplate(context, absolutePath);
-            verify(context, times(1)).getRealPath(absolutePath);
+            verify(context, times(1)).getResourceAsStream(absolutePath);
             assertEquals(StringUtils.EMPTY, result);
         } finally {
             FileUtils.forceDelete(new File(absolutePath));
@@ -69,9 +71,9 @@ public class TemplateUtilsTest {
     public void testGetHtmlTemplateFileNotFound() throws IOException {
         final String absolutePath = "/tmp/" + UUID.randomUUID() + ".tpl.html";
         ServletContext context = mock(ServletContext.class);
-        when(context.getRealPath(absolutePath)).thenReturn(absolutePath);
+        when(context.getResourceAsStream(absolutePath)).thenThrow(IOException.class);
         String result = templateUtils.getHtmlTemplate(context, absolutePath);
-        verify(context, times(1)).getRealPath(absolutePath);
+        verify(context, times(1)).getResourceAsStream(absolutePath);
         assertEquals(StringUtils.EMPTY, result);
     }
 
@@ -81,10 +83,13 @@ public class TemplateUtilsTest {
         try {
             final String data = IOUtil.getInstance().writeToAbsolutePath(absolutePath, content, encoding);
             ServletContext context = mock(ServletContext.class);
-            when(context.getRealPath(absolutePath)).thenReturn(absolutePath);
+            final File file = new File(absolutePath);
+            final String fileContent = FileUtils.readFileToString(file);
+            final InputStream fileContentStream = IOUtils.toInputStream(fileContent);
+            when(context.getResourceAsStream(absolutePath)).thenReturn(fileContentStream);
             String result = templateUtils.getHtmlTemplate(context, absolutePath);
             assertEquals(data, result);
-            verify(context, times(1)).getRealPath(absolutePath);
+            verify(context, times(1)).getResourceAsStream(absolutePath);
         } finally {
             FileUtils.forceDelete(new File(absolutePath));
         }
@@ -139,15 +144,15 @@ public class TemplateUtilsTest {
     @Test
     public void testGetFieldLabelHtml() throws Exception {
         String entityType = "Expense";
-        assertEquals("<label for='user' class='col-sm-2 control-label user-label'>用户</label>\n",
+        assertEquals("<label for='user' class='col-md-offset-2 col-md-2 control-label user-label'>用户</label>\n",
                      templateUtils.getFieldLabelHtml(entityType, "user"));
-        assertEquals("<label for='expense' class='col-sm-2 control-label expense-label'>Expense</label>\n",
+        assertEquals("<label for='expense' class='col-md-offset-2 col-md-2 control-label expense-label'>Expense</label>\n",
                      templateUtils.getFieldLabelHtml(entityType, "expense"));
-        assertEquals("<label for='expenseCategory' class='col-sm-2 control-label expenseCategory-label'>支出分类</label>\n",
+        assertEquals("<label for='expenseCategory' class='col-md-offset-2 col-md-2 control-label expenseCategory-label'>支出分类</label>\n",
                      templateUtils.getFieldLabelHtml(entityType, "expenseCategory"));
-        assertEquals("<label for='' class='col-sm-2 control-label -label'></label>\n",
+        assertEquals("<label for='' class='col-md-offset-2 col-md-2 control-label -label'></label>\n",
                      templateUtils.getFieldLabelHtml(entityType, null));
-        assertEquals("<label for='' class='col-sm-2 control-label -label'></label>\n",
+        assertEquals("<label for='' class='col-md-offset-2 col-md-2 control-label -label'></label>\n",
                      templateUtils.getFieldLabelHtml(entityType, ""));
     }
 
