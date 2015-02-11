@@ -26,9 +26,10 @@ var listCtrl = function ($scope, $http, $location, $modal, loginService, i18nSer
         enableSorting: true,
         enableColumnResizing: true,
         enableGridMenu: true,
-        showFooter: true,
+        showColumnFooter: true,
         enablePaginationControls: true,
-        enableHorizontalScrollbar: false,
+        enableHorizontalScrollbar: 0,
+        enableVerticalScrollbar: 0,
         paginationPageSizes : [10, 20, 40],
         paginationPageSize : 10
     };
