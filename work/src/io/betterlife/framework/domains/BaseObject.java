@@ -29,13 +29,19 @@ import java.util.Map;
  */
 @MappedSuperclass
 @JsonIgnoreProperties({"creator", "lastModify", "active"})
-public abstract class BaseObject {
+public class BaseObject {
 
     private static final Logger logger = LogManager.getLogger(BaseObject.class.getName());
 
     private Map<String, Object> _map = new HashMap<>();
 
     private long id;
+
+    private MetaDataManager metaDataManager = MetaDataManager.getInstance();
+
+    public void setMetaDataManager(MetaDataManager manager) {
+        this.metaDataManager = manager;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -129,7 +135,7 @@ public abstract class BaseObject {
         for (Map.Entry<String, Object> entry : parameters.entrySet()) {
             String key = entry.getKey();
             Object value = entry.getValue();
-            FieldMeta fieldMeta = MetaDataManager.getInstance().getFieldMeta(this.getClass(), key);
+            FieldMeta fieldMeta = metaDataManager.getFieldMeta(this.getClass(), key);
             Class clazz = fieldMeta.getType();
             if (logger.isTraceEnabled()) {
                 logger.trace(String.format("Setting [%s, %s, %s] to type [%s]",

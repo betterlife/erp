@@ -6,6 +6,7 @@ import org.apache.commons.lang3.ClassUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.swing.text.rtf.RTFEditorKit;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -27,7 +28,11 @@ public class EntityUtils {
     }
 
     public void mapToBaseObject(BaseObject obj, Map<String, Object> parameters) {
-        obj.setValues(parameters);
+        if (null != obj) {
+            obj.setValues(parameters);
+        } else {
+            throw new RuntimeException("Trying to setting parameters to null object: " + String.valueOf(parameters));
+        }
     }
 
     public boolean isBaseObject(Class clazz) {
@@ -35,7 +40,14 @@ public class EntityUtils {
     }
 
     public String getRepresentFieldWithDot(FieldMeta fieldMeta) {
-        return fieldMeta.getName()  + "." + fieldMeta.getRepresentField();
+        if (null != fieldMeta) {
+            if (isBaseObject(fieldMeta.getType())) {
+                return fieldMeta.getName() + "." + fieldMeta.getRepresentField();
+            }
+            return fieldMeta.getName();
+        } else {
+            throw new RuntimeException("Field Meta is null when invoke getRepresentFieldWithDot");
+        }
     }
 
     public boolean isIdField(String key) {
@@ -62,6 +74,7 @@ public class EntityUtils {
     }
 
     public boolean isBooleanField(FieldMeta fieldMeta) {
-        return fieldMeta.getType().equals(Boolean.class) || "boolean".equals(fieldMeta.getType().getSimpleName());
+        final Class type = fieldMeta.getType();
+        return Boolean.class.equals(type) || "boolean".equals(type.getSimpleName());
     }
 }

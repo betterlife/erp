@@ -1,6 +1,8 @@
 package io.betterlife.util;
 
+import io.betterlife.framework.application.manager.FieldMeta;
 import io.betterlife.framework.domains.security.User;
+import org.mockito.Mockito;
 
 import javax.persistence.EntityManager;
 import javax.persistence.metamodel.Attribute;
@@ -20,52 +22,23 @@ public class EntityMockUtil {
 
     private static EntityMockUtil instance = new EntityMockUtil();
 
-    private EntityMockUtil(){}
+    private EntityMockUtil() {
+    }
 
-    public static EntityMockUtil getInstance(){
+    public static EntityMockUtil getInstance() {
         return instance;
     }
 
-    public EntityManager mockEntityManagerAndMeta() {
-        Set<Attribute> attributes = mockAttributes();
-        ManagedType type = mockManagedType(attributes);
-        Metamodel model = mockMetamodel(type);
-        return mockEntityManager(model);
+    public FieldMeta mockFieldMeta(final String name, final Class type) {
+        FieldMeta meta = Mockito.mock(FieldMeta.class);
+        when(meta.getName()).thenReturn(name);
+        when(meta.getType()).thenReturn(type);
+        return meta;
     }
 
-    private EntityManager mockEntityManager(Metamodel model) {
-        EntityManager entityManager = mock(EntityManager.class);
-        when(entityManager.getMetamodel()).thenReturn(model);
-        return entityManager;
-    }
-
-    private Metamodel mockMetamodel(ManagedType type) {
-        Metamodel model = mock(Metamodel.class);
-        Set<ManagedType<?>> types = new HashSet<>();
-        types.add(type);
-        when(model.getManagedTypes()).thenReturn(types);
-        return model;
-    }
-
-    private ManagedType mockManagedType(Set<Attribute> attributes) {
-        ManagedType type = mock(ManagedType.class);
-        when(type.getJavaType()).thenReturn(User.class);
-        when(type.getAttributes()).thenReturn(attributes);
-        return type;
-    }
-
-    private Set<Attribute> mockAttributes() {
-        Set<Attribute> attributes = new HashSet<>(4);
-        attributes.add(mockAttribute(Long.class, "id"));
-        attributes.add(mockAttribute(String.class, "username"));
-        attributes.add(mockAttribute(String.class, "password"));
-        return attributes;
-    }
-
-    private Attribute mockAttribute(Class javaType, String name) {
-        Attribute attribute = mock(Attribute.class);
-        when(attribute.getJavaType()).thenReturn(javaType);
-        when(attribute.getName()).thenReturn(name);
-        return attribute;
+    public FieldMeta mockFieldMetaWithDisplayRank(String id, Class clazz, int displayRank) {
+        FieldMeta meta = mockFieldMeta(id, clazz);
+        when(meta.getDisplayRank()).thenReturn(displayRank);
+        return meta;
     }
 }
