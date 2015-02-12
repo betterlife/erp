@@ -33,6 +33,10 @@ public class BaseOperator extends EntityManagerConsumer {
         return instance;
     }
 
+    public static void setInstance(BaseOperator operator) {
+        instance = operator;
+    }
+
     private BaseOperator() {
     }
 
@@ -91,7 +95,7 @@ public class BaseOperator extends EntityManagerConsumer {
         return (T) q.getSingleResult();
     }
 
-    public <T> T getBaseObject(String queryName, Map<String, ?> queryParams) {
+    public <T extends BaseObject> T getBaseObject(String queryName, Map<String, ?> queryParams) {
         Query q = getQuery(queryName);
         for (Map.Entry<String, ?> entry : queryParams.entrySet()) {
             q.setParameter(entry.getKey(), entry.getValue());
@@ -99,7 +103,7 @@ public class BaseOperator extends EntityManagerConsumer {
         return getSingleResult(q);
     }
 
-    public <T> List<T> getBaseObjects(String queryName) {
+    public <T extends BaseObject> List<T> getBaseObjects(String queryName) {
         List<T> result = new ArrayList<>();
         Query q = getQuery(queryName);
         Collection coll = q.getResultList();

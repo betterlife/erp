@@ -69,11 +69,11 @@ public class TemplateUtils {
         } else if (String.class.equals(clazz)) {
             form.append(getStringController(context, key, label));
         } else if (Date.class.equals(clazz)) {
-            form.append(getDateController(context, key));
+            form.append(getDateController(context, key, new Date()));
         } else if (BigDecimal.class.equals(clazz)) {
-            form.append(getBigDecimalController(context, key, label));
+            form.append(getNumberController(context, key, label));
         } else if (Integer.class.equals(clazz) || "int".equals(clazz.getSimpleName())) {
-            form.append(getIntegerController(context, key, label));
+            form.append(getNumberController(context, key, label));
         } else if (Boolean.class.equals(clazz) || "boolean".equals(clazz.getSimpleName())) {
             form.append(getBooleanController(context, key));
         } else if (ClassUtils.getAllSuperclasses(clazz).contains(BaseObject.class)) {
@@ -85,15 +85,16 @@ public class TemplateUtils {
         return form.toString();
     }
 
-    private String getReadOnlyController(FieldMeta fieldMeta, Class clazz) {
+    public String getReadOnlyController(FieldMeta fieldMeta, Class clazz) {
         String ngModel = getNgModelNameForField(fieldMeta.getName());
         if (ClassUtils.getAllSuperclasses(clazz).contains(BaseObject.class)) {
             ngModel += "." + fieldMeta.getRepresentField();
         }
-        return String.format("<input type='text' class='form-control' ng-model='%s' name='%s' size='20' disabled/>", ngModel, fieldMeta);
+        return String.format("<input type='text' class='form-control' ng-model='%s' name='%s' size='20' disabled/>",
+                             ngModel, fieldMeta.getName());
     }
 
-    private String getIdController(ServletContext context, String key, String label) {
+    public String getIdController(ServletContext context, String key, String label) {
         String template = getHtmlTemplate(context, "templates/fields/string.tpl.html");
         return template
             .replaceAll("\\$name", key)
@@ -102,7 +103,7 @@ public class TemplateUtils {
             .replaceAll("\\$type", "hidden");
     }
 
-    private String getEnumController(ServletContext context, String key, Class clazz) {
+    public String getEnumController(ServletContext context, String key, Class clazz) {
         Object[] enumArray = clazz.getEnumConstants();
         StringBuilder sb = new StringBuilder();
         for (Object enumVal : enumArray) {
@@ -126,9 +127,10 @@ public class TemplateUtils {
         );
         StringBuilder sb = new StringBuilder();
         for (BaseObject baseObject : objects) {
-            sb.append(String.format("<option value='%s'>%s</option>%n", baseObject.getId(),
+            sb.append(String.format("%n\t<option value='%s'>%s</option>", baseObject.getId(),
                                     baseObject.getValue(fieldMeta.getRepresentField())));
         }
+        sb.append("\n");
         String template = getHtmlTemplate(context, "templates/fields/baseobject.tpl.html");
         return template
             .replaceAll("\\$name", fieldMeta.getName())
@@ -143,7 +145,7 @@ public class TemplateUtils {
             .replaceAll("\\$name", key);
     }
 
-    public String getIntegerController(ServletContext context, String key, String label) {
+    public String getNumberController(ServletContext context, String key, String label) {
         String type = "number";
         String template = getHtmlTemplate(context, "templates/fields/string.tpl.html");
         return template
@@ -153,23 +155,13 @@ public class TemplateUtils {
             .replaceAll("\\$placeholder", label);
     }
 
-    public String getBigDecimalController(ServletContext context, String key, String label) {
-        String type = "number";
-        String template = getHtmlTemplate(context, "templates/fields/string.tpl.html");
-        return template
-            .replaceAll("\\$type", type)
-            .replaceAll("\\$ngModel", getNgModelNameForField(key))
-            .replaceAll("\\$name", key)
-            .replaceAll("\\$placeholder", label);
-    }
-
-    public String getDateController(ServletContext context, String key) {
+    public String getDateController(ServletContext context, String key, final Date defaultVal) {
         String template = getHtmlTemplate(context, "templates/fields/date.tpl.html");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         return template
             .replaceAll("\\$ngModel", getNgModelNameForField(key))
             .replaceAll("\\$fieldKey", key)
-            .replaceAll("\\$defaultValue", sdf.format(new Date()));
+            .replaceAll("\\$defaultValue", sdf.format(defaultVal));
     }
 
     public String getStringController(ServletContext context, String key, String label) {

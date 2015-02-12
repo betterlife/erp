@@ -1,7 +1,9 @@
 package io.betterlife.util;
 
 import io.betterlife.framework.util.BLStringUtils;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
@@ -10,6 +12,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * Author: Lawrence Liu(lawrence@betterlife.io)
@@ -26,6 +29,7 @@ public class BLStringUtilsTest {
         this.patterns = patterns;
         this.toMatch = toMatch;
         this.expected = expected;
+        BLStringUtils.init();
     }
 
     @Parameterized.Parameters
@@ -47,4 +51,16 @@ public class BLStringUtilsTest {
         final boolean actual = BLStringUtils.getInstance().startWithAnyPattern(patterns, toMatch);
         assertEquals(String.format("Failed on match [%s] with [%s]", toMatch, BLStringUtils.join(patterns)), expected, actual);
     }
+
+    @Test
+    public void testCryptWithMD5() throws Exception {
+        assertEquals("13C257762EC5236764A0FF761894DEED", BLStringUtils.getInstance().cryptWithMD5("Test123_"));
+        assertEquals("DC647EB65E6711E155375218212B3964", BLStringUtils.getInstance().cryptWithMD5("Password"));
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testCryptWithMD5NullPointerException() {
+        BLStringUtils.getInstance().cryptWithMD5(null);
+    }
+
 }

@@ -34,11 +34,9 @@ public class EntityUtilsTest {
         assertEquals(EntityUtils.class, entityUtils.getClass());
     }
 
-    @Test
+    @Test(expected = RuntimeException.class)
     public void testMapToBaseObjectNullObj() throws Exception {
         Map<String, Object> map = new HashMap<>();
-        expectedException.expect(RuntimeException.class);
-        expectedException.expectMessage("Trying to setting parameters to null object");
         entityUtils.mapToBaseObject(null, map);
     }
 
@@ -98,10 +96,8 @@ public class EntityUtilsTest {
         assertEquals("name", entityUtils.getRepresentFieldWithDot(meta));
     }
 
-    @Test
+    @Test(expected = RuntimeException.class)
     public void testGetRepresentFieldWithDotNull() throws Exception {
-        expectedException.expect(RuntimeException.class);
-        expectedException.expectMessage("Field Meta is null when invoke getRepresentFieldWithDot");
         entityUtils.getRepresentFieldWithDot(null);
     }
 
@@ -145,13 +141,12 @@ public class EntityUtilsTest {
         }
     }
 
-    @Test
+    @Test(expected = NullPointerException.class)
     public void testIsBooleanField() throws Exception {
         FieldMeta meta = EntityMockUtil.getInstance().mockFieldMeta("active", Boolean.class);
         assertTrue(entityUtils.isBooleanField(meta));
         meta = EntityMockUtil.getInstance().mockFieldMeta("Incoming", String.class);
         assertFalse(entityUtils.isBooleanField(meta));
-        expectedException.expect(NullPointerException.class);
         entityUtils.isBooleanField(null);
     }
 }

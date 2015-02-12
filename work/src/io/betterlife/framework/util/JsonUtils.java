@@ -21,16 +21,9 @@ public class JsonUtils {
     private JsonUtils() {
     }
 
-    public <T> String objectToJsonString(T object) throws IOException {
-        return new ObjectMapper().writeValueAsString(object);
-    }
-
     public JsonNode stringToJsonNode (String str) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readTree(str);
     }
 
-    public InputStream jsonNodeToInputStream(JsonNode node) {
-        return IOUtils.toInputStream(node.toString());
-    }
 }

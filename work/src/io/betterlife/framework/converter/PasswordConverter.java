@@ -13,6 +13,6 @@ public class PasswordConverter<F, T> implements Converter<F, T> {
     @Override
     @SuppressWarnings("unchecked")
     public T convert(F source) throws ParseException {
-        return (T) BLStringUtils.upperCase(LoginUtil.getInstance().cryptWithMD5((String) source));
+        return (T) BLStringUtils.getInstance().cryptWithMD5((String) source);
     }
 }
