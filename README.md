@@ -29,6 +29,22 @@ Build Status
 
 [![Codeship](https://codeship.com/projects/b09b65c0-8da6-0132-a9a4-5691319bff63/status?branch=develop)](https://codeship.com/projects/60731)
 
+Code Quantity
+-------------
+- Latest
+    * [Java Code Coverage](http://betterlifedevreport.s3-website-us-west-2.amazonaws.com/ci/coverage/java/dashboard.html)
+    * [JavaScript Code Coverage](http://betterlifedevreport.s3-website-us-west-2.amazonaws.com/ci/coverage/javascript/index.html)
+    * [FindBugs Report](http://betterlifedevreport.s3-website-us-west-2.amazonaws.com/ci/findbugs/index.htm)
+    * [PMD Report](http://betterlifedevreport.s3-website-us-west-2.amazonaws.com/ci/pmd/report_pmd.html)
+    * [Simian Duplicate Code Scan](http://betterlifedevreport.s3-website-us-west-2.amazonaws.com/ci/simian/simian.html)
+
+- Stable Release
+    * [Java Code Coverage](http://betterlifedevreport.s3-website-us-west-2.amazonaws.com/release/coverage/java/dashboard.html)
+    * [JavaScript Code Coverage](http://betterlifedevreport.s3-website-us-west-2.amazonaws.com/release/coverage/javascript/index.html)
+    * [FindBugs Report](http://betterlifedevreport.s3-website-us-west-2.amazonaws.com/release/findbugs/index.htm)
+    * [PMD Report](http://betterlifedevreport.s3-website-us-west-2.amazonaws.com/release/pmd/report_pmd.html)
+    * [Simian Duplicate Code Scan](http://betterlifedevreport.s3-website-us-west-2.amazonaws.com/release/simian/simian.html)
+
 License
 -------
 [![MIT License](http://img.shields.io/:license-mit-blue.svg)](http://badges.mit-license.org)
