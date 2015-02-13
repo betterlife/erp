@@ -12,7 +12,7 @@ ant build.flat
 printf "Branch  Name:\t$CI_BRANCH\nBuild Number:\t$CI_BUILD_NUMBER @ $CI_BUILD_URL \nCommit  Info:\t$CI_MESSAGE\n"> target/artifact/flat/build.txt
 # ant build.war junit.run.all
 ant build.war
-cd work
-npm install
+# cd work
+# npm install
 # npm test
 # codeclimate < ../target/data/coverage/javascript/lcov.info
