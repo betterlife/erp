@@ -52,6 +52,9 @@ public class MetaDataManager extends EntityManagerConsumer {
         return instance;
     }
 
+    public static void setInstance(MetaDataManager metaDataManager) {
+        instance = metaDataManager;
+    }
 
     public void setAllFieldMetaData() {
         fieldMetaDataContainer.loadMeta();

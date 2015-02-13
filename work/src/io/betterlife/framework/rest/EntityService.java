@@ -32,9 +32,6 @@ public class EntityService {
     private static final Logger logger = LogManager.getLogger(EntityService.class.getName());
     public static final String BooleanCellTemplate = "<div class='ui-grid-cell-contents'><span ng-show='row.entity.%s'>%s</span><span ng-show='!row.entity.%s'>%s</span></div>";
 
-    private NamedQueryRules namedQueryRule;
-    private BaseOperator operator;
-
     /**
      * Get entity meta data(for render the entity list page)
      * Please see document of grid-ui to find detail form.
@@ -100,7 +97,7 @@ public class EntityService {
     public String getObjectByTypeAndId(@PathParam("id") long id,
                                        @PathParam("entityType") String entityType) throws IOException {
         final String idQueryForEntity = getNamedQueryRule().getIdQueryForEntity(entityType);
-        final BaseObject entity = getOperator().getBaseObjectById(id, idQueryForEntity);
+        final BaseObject entity = getBaseOperator().getBaseObjectById(id, idQueryForEntity);
         return new ExecuteResult<BaseObject>().getRestString(entity);
     }
 
@@ -108,7 +105,7 @@ public class EntityService {
     @Path("/{entityType}")
     @Produces(MediaType.APPLICATION_JSON)
     public String getAllByObjectType(@PathParam("entityType") String entityType) throws IOException {
-        List<BaseObject> result = getOperator().getBaseObjects(
+        List<BaseObject> result = getBaseOperator().getBaseObjects(
             getNamedQueryRule().getAllQueryForEntity(entityType)
         );
         if (logger.isTraceEnabled()) {
@@ -127,13 +124,13 @@ public class EntityService {
         throws ClassNotFoundException, IllegalAccessException, InstantiationException, IOException {
         Map<String, Object> parameters = IOUtil.getInstance().inputStreamToJson(requestBody);
         Map<String, Object> entityParams = (Map<String, Object>) parameters.get("entity");
-        BaseObject existingObj = getOperator().getBaseObjectById(
+        BaseObject existingObj = getBaseOperator().getBaseObjectById(
             id, getNamedQueryRule().getIdQueryForEntity(entityType)
         );
         if (null != existingObj) {
             existingObj.setValues(entityParams);
         }
-        getOperator().save(existingObj, BaseOperator.UPDATE_OPERA);
+        getBaseOperator().save(existingObj, BaseOperator.UPDATE_OPERA);
         return new ExecuteResult<String>().getRestString("SUCCESS");
     }
 
@@ -147,29 +144,15 @@ public class EntityService {
         Map<String, Object> parameters = IOUtil.getInstance().inputStreamToJson(requestBody);
         BaseObject obj = MetaDataManager.getInstance().entityObjectFromType(entityType);
         EntityUtils.getInstance().mapToBaseObject(obj, (Map<String, Object>) parameters.get("entity"));
-        getOperator().save(obj, BaseOperator.CREATE_OPERA);
+        getBaseOperator().save(obj, BaseOperator.CREATE_OPERA);
         return new ExecuteResult<String>().getRestString("SUCCESS");
     }
 
     public NamedQueryRules getNamedQueryRule() {
-        if (null == this.namedQueryRule) {
-            setNamedQueryRule(NamedQueryRules.getInstance());
-        }
-        return this.namedQueryRule;
+        return NamedQueryRules.getInstance();
     }
 
-    public void setNamedQueryRule(NamedQueryRules rule) {
-        this.namedQueryRule = rule;
-    }
-
-    public void setOperator(BaseOperator operator) {
-        this.operator = operator;
-    }
-
-    public BaseOperator getOperator() {
-        if (null == operator) {
-            setOperator(BaseOperator.getInstance());
-        }
-        return operator;
+    public BaseOperator getBaseOperator() {
+            return BaseOperator.getInstance();
     }
 }

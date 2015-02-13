@@ -15,6 +15,10 @@ public class NamedQueryRules {
         return instance;
     }
 
+    public static void setInstance(NamedQueryRules instance) {
+        NamedQueryRules.instance = instance;
+    }
+
     public String getIdQueryForEntity(String entityName){
         return StringUtils.capitalize(entityName) + ".getById";
     }

@@ -18,6 +18,10 @@ public class FormConfig {
         return instance;
     }
 
+    public static void setInstance(FormConfig instance) {
+        FormConfig.instance = instance;
+    }
+
     private FormConfig() {
     }
 

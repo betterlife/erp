@@ -2,6 +2,7 @@ package io.betterlife.framework.application;
 
 import io.betterlife.framework.application.config.FormConfig;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.util.List;
 
@@ -13,6 +14,15 @@ public class FormConfigTest {
     public void testGetInstance() throws Exception {
         FormConfig config = FormConfig.getInstance();
         assertNotNull(config);
+    }
+
+    @Test
+    public void testSetInstance() {
+        FormConfig config = FormConfig.getInstance();
+        FormConfig formConfig = Mockito.mock(FormConfig.class);
+        FormConfig.setInstance(formConfig);
+        assertNotEquals(config, FormConfig.getInstance());
+        assertSame(formConfig, FormConfig.getInstance());
     }
 
     @Test

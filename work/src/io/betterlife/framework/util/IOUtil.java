@@ -19,11 +19,15 @@ import java.util.Map;
  * Date: 11/12/14
  */
 public class IOUtil {
-    private static IOUtil ourInstance = new IOUtil();
+    private static IOUtil instance = new IOUtil();
     private static final Logger logger = LogManager.getLogger(IOUtil.class.getName());
 
     public static IOUtil getInstance() {
-        return ourInstance;
+        return instance;
+    }
+
+    public static void setInstance(IOUtil instance) {
+        IOUtil.instance = instance;
     }
 
     private IOUtil() {

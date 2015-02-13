@@ -23,6 +23,10 @@ public class EntityUtils {
         return instance;
     }
 
+    public static void setInstance(EntityUtils entityUtils) {
+        instance = entityUtils;
+    }
+
     private EntityUtils() {
     }
 
