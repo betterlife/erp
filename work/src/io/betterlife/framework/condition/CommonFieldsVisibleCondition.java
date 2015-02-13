@@ -1,8 +1,7 @@
 package io.betterlife.framework.condition;
 
 import io.betterlife.framework.application.config.FormConfig;
-import io.betterlife.framework.application.manager.FieldMeta;
-import io.betterlife.framework.condition.Condition;
+import io.betterlife.framework.meta.FieldMeta;
 import io.betterlife.framework.domains.BaseObject;
 
 /**

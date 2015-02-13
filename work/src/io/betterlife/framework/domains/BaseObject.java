@@ -2,7 +2,7 @@ package io.betterlife.framework.domains;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.betterlife.framework.application.config.ApplicationConfig;
-import io.betterlife.framework.application.manager.FieldMeta;
+import io.betterlife.framework.meta.FieldMeta;
 import io.betterlife.framework.application.manager.MetaDataManager;
 import io.betterlife.framework.domains.security.User;
 import io.betterlife.framework.persistence.BaseOperator;

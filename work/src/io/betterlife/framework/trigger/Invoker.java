@@ -1,6 +1,6 @@
 package io.betterlife.framework.trigger;
 
-import io.betterlife.framework.application.manager.EntityMeta;
+import io.betterlife.framework.meta.EntityMeta;
 import io.betterlife.framework.application.manager.MetaDataManager;
 import io.betterlife.framework.domains.BaseObject;
 

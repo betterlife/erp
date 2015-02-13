@@ -1,6 +1,7 @@
 package io.betterlife.framework.rest;
 
-import io.betterlife.framework.application.manager.FieldMeta;
+import io.betterlife.framework.application.I18n;
+import io.betterlife.framework.meta.FieldMeta;
 import io.betterlife.framework.application.manager.MetaDataManager;
 import io.betterlife.framework.condition.Evaluator;
 import io.betterlife.framework.util.EntityUtils;
@@ -68,11 +69,11 @@ public class EntityFormService {
         for (Map.Entry<String, FieldMeta> entry : sortedMeta.entrySet()) {
             final FieldMeta fieldMeta = entry.getValue();
             final String key = entry.getKey();
-            if (!Evaluator.evalVisible(entityType, entry.getValue(), null, operationType)) continue;
+            if (!Evaluator.getInstance().evalVisible(entityType, entry.getValue(), null, operationType)) continue;
             form.append("<div class='form-group'>\n");
             form.append(getTemplateUtils().getFieldLabelHtml(entityType, key));
             form.append(getTemplateUtils().getFieldController(context, operationType, entityType, fieldMeta,
-                                                              getTemplateUtils().getFieldLabel(entityType, key)));
+                                                              I18n.getInstance().getFieldLabel(entityType, key)));
             form.append("</div>");
         }
         form.append(getTemplateUtils().getButtonsController(context, entityType, operationType));

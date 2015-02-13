@@ -1,5 +1,6 @@
 package io.betterlife.framework.application.manager;
 
+import io.betterlife.framework.meta.FieldMeta;
 import org.junit.Before;
 import org.junit.Test;
 

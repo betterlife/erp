@@ -1,10 +1,9 @@
 package io.betterlife.framework.util;
 
-import io.betterlife.framework.application.manager.FieldMeta;
+import io.betterlife.framework.meta.FieldMeta;
 import io.betterlife.framework.application.manager.MetaDataManager;
 import io.betterlife.framework.domains.BaseObject;
 import io.betterlife.util.EntityMockUtil;
-import jersey.repackaged.com.google.common.collect.Maps;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -148,5 +147,11 @@ public class EntityUtilsTest {
         meta = EntityMockUtil.getInstance().mockFieldMeta("Incoming", String.class);
         assertFalse(entityUtils.isBooleanField(meta));
         entityUtils.isBooleanField(null);
+    }
+
+    @Test
+    public void testGetNgModelNameForField() throws Exception {
+        String key = "user";
+        assertEquals("entity.user", entityUtils.getNgModelNameForField(key));
     }
 }

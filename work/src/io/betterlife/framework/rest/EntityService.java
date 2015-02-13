@@ -2,7 +2,7 @@ package io.betterlife.framework.rest;
 
 import io.betterlife.framework.application.I18n;
 import io.betterlife.framework.application.config.ApplicationConfig;
-import io.betterlife.framework.application.manager.FieldMeta;
+import io.betterlife.framework.meta.FieldMeta;
 import io.betterlife.framework.application.manager.MetaDataManager;
 import io.betterlife.framework.condition.Evaluator;
 import io.betterlife.framework.domains.BaseObject;
@@ -62,7 +62,7 @@ public class EntityService {
         List<Map<String, Object>> list = new ArrayList<>(sortedMeta.size());
         for (Map.Entry<String, FieldMeta> entry : sortedMeta.entrySet()) {
             final FieldMeta fieldMeta = entry.getValue();
-            if (!Evaluator.evalVisible(entityType, fieldMeta, null, "List")) continue;
+            if (!Evaluator.getInstance().evalVisible(entityType, fieldMeta, null, "List")) continue;
             String field = entry.getKey();
             if (EntityUtils.getInstance().isBaseObject(fieldMeta.getType())) {
                 field = EntityUtils.getInstance().getRepresentFieldWithDot(fieldMeta);
@@ -78,7 +78,7 @@ public class EntityService {
             if (EntityUtils.getInstance().isIdField(field)) {
                 map.put("width", 60);
             }
-            map.put("name", I18n.getInstance().getFieldLabel(entityType, entry.getKey(), ApplicationConfig.getLocale()));
+            map.put("name", I18n.getInstance().getFieldLabel(entityType, entry.getKey()));
             list.add(map);
         }
         String result = new ExecuteResult<List<Map<String, Object>>>().getRestString(list);

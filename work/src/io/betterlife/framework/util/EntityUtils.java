@@ -1,12 +1,11 @@
 package io.betterlife.framework.util;
 
-import io.betterlife.framework.application.manager.FieldMeta;
+import io.betterlife.framework.meta.FieldMeta;
 import io.betterlife.framework.domains.BaseObject;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.swing.text.rtf.RTFEditorKit;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -76,5 +75,9 @@ public class EntityUtils {
     public boolean isBooleanField(FieldMeta fieldMeta) {
         final Class type = fieldMeta.getType();
         return Boolean.class.equals(type) || "boolean".equals(type.getSimpleName());
+    }
+
+    public String getNgModelNameForField(String key) {
+        return "entity." + key;
     }
 }

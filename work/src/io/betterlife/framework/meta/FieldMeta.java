@@ -1,4 +1,4 @@
-package io.betterlife.framework.application.manager;
+package io.betterlife.framework.meta;
 
 import io.betterlife.framework.condition.Condition;
 import io.betterlife.framework.converter.Converter;

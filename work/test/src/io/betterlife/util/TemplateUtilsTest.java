@@ -1,9 +1,8 @@
 package io.betterlife.util;
 
 import io.betterlife.framework.application.I18n;
-import io.betterlife.framework.application.manager.FieldMeta;
+import io.betterlife.framework.meta.FieldMeta;
 import io.betterlife.framework.domains.BaseObject;
-import io.betterlife.framework.domains.security.User;
 import io.betterlife.framework.persistence.BaseOperator;
 import io.betterlife.framework.util.BLStringUtils;
 import io.betterlife.framework.util.IOUtil;
@@ -40,15 +39,15 @@ public class TemplateUtilsTest {
     public void setUp() throws Exception {
         templateUtils = TemplateUtils.getInstance();
         I18n i18n = mock(I18n.class);
-        when(i18n.getFieldLabel("Expense", "user", "zh_CN")).thenReturn("用户");
-        when(i18n.getFieldLabel("Expense", "expense", "zh_CN")).thenReturn("Expense");
-        when(i18n.getFieldLabel("Expense", "", "zh_CN")).thenReturn("");
-        when(i18n.getFieldLabel("Expense", "amount", "zh_CN")).thenReturn("金额");
-        when(i18n.getFieldLabel("Expense", "quantity", "zh_CN")).thenReturn("数量");
-        when(i18n.getFieldLabel("Expense", null, "zh_CN")).thenReturn("");
-        when(i18n.getFieldLabel("Expense", "expenseCategory", "zh_CN")).thenReturn("支出分类");
-        when(i18n.getFieldLabel("User", "password", "zh_CN")).thenReturn("密码");
-        when(i18n.getFieldLabel("PurchaseOrder", "id", "zh_CN")).thenReturn("编号");
+        when(i18n.getFieldLabel("Expense", "user")).thenReturn("用户");
+        when(i18n.getFieldLabel("Expense", "expense")).thenReturn("Expense");
+        when(i18n.getFieldLabel("Expense", "")).thenReturn("");
+        when(i18n.getFieldLabel("Expense", "amount")).thenReturn("金额");
+        when(i18n.getFieldLabel("Expense", "quantity")).thenReturn("数量");
+        when(i18n.getFieldLabel("Expense", null)).thenReturn("");
+        when(i18n.getFieldLabel("Expense", "expenseCategory")).thenReturn("支出分类");
+        when(i18n.getFieldLabel("User", "password")).thenReturn("密码");
+        when(i18n.getFieldLabel("PurchaseOrder", "id")).thenReturn("编号");
         when(i18n.get("Update", "zh_CN")).thenReturn("更新");
         when(i18n.get("Create", "zh_CN")).thenReturn("创建");
         when(i18n.get("Reset", "zh_CN")).thenReturn("重置");
@@ -122,12 +121,6 @@ public class TemplateUtilsTest {
         } finally {
             FileUtils.forceDelete(file);
         }
-    }
-
-    @Test
-    public void testGetNgModelNameForField() throws Exception {
-        String key = "user";
-        assertEquals("entity.user", templateUtils.getNgModelNameForField(key));
     }
 
     @Test
@@ -249,33 +242,32 @@ public class TemplateUtilsTest {
 
     @Test
     public void testGetIdController() {
-        internalTestGetStringController("PurchaseOrder", "id", "zh_CN", "hidden");
+        internalTestGetStringController("PurchaseOrder", "id", "hidden");
     }
 
     @Test
     public void testGetIntegerController() throws Exception {
-        internalTestGetStringController("Expense", "amount", "zh_CN", "number");
+        internalTestGetStringController("Expense", "amount", "number");
     }
 
     @Test
     public void testGetBigDecimalController() throws Exception {
-        internalTestGetStringController("Expense", "quantity", "zh_CN", "number");
+        internalTestGetStringController("Expense", "quantity", "number");
     }
 
     @Test
     public void testGetStringController() throws Exception {
-        internalTestGetStringController("Expense", "expenseCategory", "zh_CN", "text");
+        internalTestGetStringController("Expense", "expenseCategory", "text");
     }
 
     @Test
     public void testGetPasswordStringController() throws Exception {
-        internalTestGetStringController("User", "password", "zh_CN", "password");
+        internalTestGetStringController("User", "password", "password");
     }
 
-    private void internalTestGetStringController(final String entity, final String fieldKey,
-                                                 final String locale, final String type) {
+    private void internalTestGetStringController(final String entity, final String fieldKey, final String type) {
         String template = "<input type='$type' class='form-control' ng-model='$ngModel' name='$name' placeholder='$placeholder' size='20'/>";
-        String label = I18n.getInstance().getFieldLabel(entity, fieldKey, locale);
+        String label = I18n.getInstance().getFieldLabel(entity, fieldKey);
         String expect = "<input type='" + type + "' class='form-control' ng-model='entity." + fieldKey + "' name='" + fieldKey + "' placeholder='" + label + "' size='20'/>";
         ServletContext context = mockServletContext(template, "/templates/fields/string.tpl.html");
         String result = templateUtils.getStringController(context, fieldKey, label);
@@ -327,15 +319,6 @@ public class TemplateUtilsTest {
                      templateUtils.getFieldLabelHtml(entityType, null));
         assertEquals("<label for='' class='col-md-offset-2 col-md-2 control-label -label'></label>\n",
                      templateUtils.getFieldLabelHtml(entityType, ""));
-    }
-
-    @Test
-    public void testGetFieldLabel() throws Exception {
-        String entityType = "Expense";
-        assertEquals("用户", templateUtils.getFieldLabel(entityType, "user"));
-        assertEquals("Expense", templateUtils.getFieldLabel(entityType, "expense"));
-        assertEquals("", templateUtils.getFieldLabel(entityType, ""));
-        assertEquals("", templateUtils.getFieldLabel(entityType, null));
     }
 
     @Test

@@ -1,6 +1,6 @@
 package io.betterlife.erp.condition;
 
-import io.betterlife.framework.application.manager.FieldMeta;
+import io.betterlife.framework.meta.FieldMeta;
 import io.betterlife.framework.condition.Condition;
 import io.betterlife.framework.condition.PasswordVisibleCondition;
 import org.junit.Before;

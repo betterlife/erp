@@ -2,7 +2,7 @@ package io.betterlife.framework.util;
 
 import io.betterlife.framework.application.I18n;
 import io.betterlife.framework.application.config.ApplicationConfig;
-import io.betterlife.framework.application.manager.FieldMeta;
+import io.betterlife.framework.meta.FieldMeta;
 import io.betterlife.framework.domains.BaseObject;
 import io.betterlife.framework.persistence.BaseOperator;
 import io.betterlife.framework.persistence.NamedQueryRules;
@@ -62,7 +62,7 @@ public class TemplateUtils {
         Class clazz = fieldMeta.getType();
         String key = fieldMeta.getName();
         form.append("<div class='col-md-4'>");
-        if (!Evaluator.evalEditable(entityType, fieldMeta, null, operationType)) {
+        if (!Evaluator.getInstance().evalEditable(entityType, fieldMeta, null, operationType)) {
             form.append(getReadOnlyController(fieldMeta, clazz));
         } else if (EntityUtils.getInstance().isIdField(key)) {
             form.append(getIdController(context, key, label));
@@ -86,7 +86,7 @@ public class TemplateUtils {
     }
 
     public String getReadOnlyController(FieldMeta fieldMeta, Class clazz) {
-        String ngModel = getNgModelNameForField(fieldMeta.getName());
+        String ngModel = EntityUtils.getInstance().getNgModelNameForField(fieldMeta.getName());
         if (ClassUtils.getAllSuperclasses(clazz).contains(BaseObject.class)) {
             ngModel += "." + fieldMeta.getRepresentField();
         }
@@ -98,7 +98,7 @@ public class TemplateUtils {
         String template = getHtmlTemplate(context, "templates/fields/string.tpl.html");
         return template
             .replaceAll("\\$name", key)
-            .replaceAll("\\$ngModel", getNgModelNameForField(key))
+            .replaceAll("\\$ngModel", EntityUtils.getInstance().getNgModelNameForField(key))
             .replaceAll("\\$placeholder", label)
             .replaceAll("\\$type", "hidden");
     }
@@ -117,7 +117,7 @@ public class TemplateUtils {
         String template = getHtmlTemplate(context, "templates/fields/enum.tpl.html");
         return template
             .replaceAll("\\$name", key)
-            .replaceAll("\\$ngModel", getNgModelNameForField(key))
+            .replaceAll("\\$ngModel", EntityUtils.getInstance().getNgModelNameForField(key))
             .replaceAll("\\$options", sb.toString());
     }
 
@@ -134,14 +134,14 @@ public class TemplateUtils {
         String template = getHtmlTemplate(context, "templates/fields/baseobject.tpl.html");
         return template
             .replaceAll("\\$name", fieldMeta.getName())
-            .replaceAll("\\$ngModel", getNgModelNameForField(fieldMeta.getName()) + ".id")
+            .replaceAll("\\$ngModel", EntityUtils.getInstance().getNgModelNameForField(fieldMeta.getName()) + ".id")
             .replaceAll("\\$options", sb.toString());
     }
 
     public String getBooleanController(ServletContext context, String key) {
         String template = getHtmlTemplate(context, "templates/fields/boolean.tpl.html");
         return template
-            .replaceAll("\\$ngModel", getNgModelNameForField(key))
+            .replaceAll("\\$ngModel", EntityUtils.getInstance().getNgModelNameForField(key))
             .replaceAll("\\$name", key);
     }
 
@@ -150,7 +150,7 @@ public class TemplateUtils {
         String template = getHtmlTemplate(context, "templates/fields/string.tpl.html");
         return template
             .replaceAll("\\$type", type)
-            .replaceAll("\\$ngModel", getNgModelNameForField(key))
+            .replaceAll("\\$ngModel", EntityUtils.getInstance().getNgModelNameForField(key))
             .replaceAll("\\$name", key)
             .replaceAll("\\$placeholder", label);
     }
@@ -159,7 +159,7 @@ public class TemplateUtils {
         String template = getHtmlTemplate(context, "templates/fields/date.tpl.html");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         return template
-            .replaceAll("\\$ngModel", getNgModelNameForField(key))
+            .replaceAll("\\$ngModel", EntityUtils.getInstance().getNgModelNameForField(key))
             .replaceAll("\\$fieldKey", key)
             .replaceAll("\\$defaultValue", sdf.format(defaultVal));
     }
@@ -172,7 +172,7 @@ public class TemplateUtils {
         String template = getHtmlTemplate(context, "templates/fields/string.tpl.html");
         return template
             .replaceAll("\\$type", type)
-            .replaceAll("\\$ngModel", getNgModelNameForField(key))
+            .replaceAll("\\$ngModel", EntityUtils.getInstance().getNgModelNameForField(key))
             .replaceAll("\\$name", key)
             .replaceAll("\\$placeholder", label);
     }
@@ -188,7 +188,7 @@ public class TemplateUtils {
     }
 
     public String getFieldLabelHtml(String entityType, String key) {
-        final String label = getFieldLabel(entityType, key);
+        final String label = I18n.getInstance().getFieldLabel(entityType, key);
         return String.format(
             "<label for='%s' class='col-md-offset-2 col-md-2 control-label %s-label'>%s</label>%n",
             null == key ? BLStringUtils.EMPTY : key,
@@ -196,16 +196,8 @@ public class TemplateUtils {
         );
     }
 
-    public String getFieldLabel(String entityType, String key) {
-        return I18n.getInstance().getFieldLabel(entityType, key, ApplicationConfig.getLocale());
-    }
-
     public String getListController(ServletContext context) {
         return getHtmlTemplate(context, "templates/list.tpl.html");
-    }
-
-    public String getNgModelNameForField(String key) {
-        return "entity." + key;
     }
 
 }

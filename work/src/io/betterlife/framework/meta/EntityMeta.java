@@ -1,4 +1,4 @@
-package io.betterlife.framework.application.manager;
+package io.betterlife.framework.meta;
 
 import io.betterlife.framework.trigger.EntityTrigger;
 

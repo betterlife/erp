@@ -3,6 +3,7 @@ package io.betterlife.framework.application.manager;
 import io.betterlife.framework.annotation.FormField;
 import io.betterlife.framework.condition.FalseCondition;
 import io.betterlife.framework.domains.BaseObject;
+import io.betterlife.framework.meta.FieldMeta;
 import io.betterlife.framework.util.BLStringUtils;
 import io.betterlife.framework.util.EntityUtils;
 

@@ -1,16 +1,7 @@
 package io.betterlife.util;
 
-import io.betterlife.framework.application.manager.FieldMeta;
-import io.betterlife.framework.domains.security.User;
+import io.betterlife.framework.meta.FieldMeta;
 import org.mockito.Mockito;
-
-import javax.persistence.EntityManager;
-import javax.persistence.metamodel.Attribute;
-import javax.persistence.metamodel.ManagedType;
-import javax.persistence.metamodel.Metamodel;
-
-import java.util.HashSet;
-import java.util.Set;
 
 import static org.mockito.Mockito.*;
 

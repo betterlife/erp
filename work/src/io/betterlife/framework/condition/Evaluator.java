@@ -1,6 +1,6 @@
 package io.betterlife.framework.condition;
 
-import io.betterlife.framework.application.manager.FieldMeta;
+import io.betterlife.framework.meta.FieldMeta;
 import io.betterlife.framework.domains.BaseObject;
 
 /**
@@ -8,6 +8,10 @@ import io.betterlife.framework.domains.BaseObject;
  * Date: 2/2/15
  */
 public class Evaluator {
+    private static Evaluator instance = new Evaluator();
+
+    private Evaluator(){};
+
     public static boolean eval(Class<? extends Condition> clazz, String entityType,
                                BaseObject baseObject, FieldMeta fieldMeta, String operationType) {
         Condition cond = null;
@@ -21,15 +25,23 @@ public class Evaluator {
         }
     }
 
-    public static boolean evalVisible(String entityType, final FieldMeta fieldMeta,
+    public boolean evalVisible(String entityType, final FieldMeta fieldMeta,
                                       final BaseObject baseObject, final String operationType) {
         Class<? extends Condition> vc = fieldMeta.getVisibleCondition();
         return Evaluator.eval(vc, entityType, baseObject, fieldMeta, operationType);
     }
 
-    public static boolean evalEditable(String entityType, final FieldMeta fieldMeta,
-                                      final BaseObject baseObject, final String operationType) {
+    public boolean evalEditable(String entityType, final FieldMeta fieldMeta,
+                                final BaseObject baseObject, final String operationType) {
         Class<? extends Condition> vc = fieldMeta.getEditableCondition();
         return Evaluator.eval(vc, entityType, baseObject, fieldMeta, operationType);
+    }
+
+    public static Evaluator getInstance() {
+        return instance;
+    }
+
+    public static void setInstance(Evaluator instance) {
+        Evaluator.instance = instance;
     }
 }

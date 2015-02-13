@@ -1,6 +1,7 @@
 package io.betterlife.framework.application.manager;
 
 import io.betterlife.framework.annotation.Triggers;
+import io.betterlife.framework.meta.EntityMeta;
 import io.betterlife.framework.trigger.EntityTrigger;
 
 import javax.persistence.metamodel.ManagedType;

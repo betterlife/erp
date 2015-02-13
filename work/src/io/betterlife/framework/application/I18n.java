@@ -34,11 +34,15 @@ public class I18n {
     }
 
     public String get(String key, String locale) {
+        if (null == key) {
+            key = "null";
+        }
         String result = translations.get(locale).get(key);
         return (null == result) ? BLStringUtils.capitalize(key) : result;
     }
 
-    private void loadTranslations(InputStream stream, String locale) throws IOException {
+    private int loadTranslations(InputStream stream, String locale) throws IOException {
+        int count = 0;
         final HashMap<String, String> localeTrans = new HashMap<>();
         translations.put(locale, localeTrans);
         List<String> entries = IOUtils.readLines(stream);
@@ -46,27 +50,34 @@ public class I18n {
             for (String entry : entries) {
                 String[] pair = entry.split(BLStringUtils.COMMA);
                 localeTrans.put(pair[0], pair[1]);
+                count ++;
             }
         }
+        return count;
     }
 
-    public String getFieldLabel(String entityType, String key, String locale) {
+    private String getFieldLabel(String entityType, String key, String locale) {
         String result;
         if (null == key) {
-            result = BLStringUtils.EMPTY;
-        } else {
-            final String keyWithEntity = BLStringUtils.capitalize(entityType) + "." + key;
-            result = get(keyWithEntity, locale);
-            if (null == result || keyWithEntity.equals(result)) {
-                result = get(key, locale);
-            }
+            key = "null";
         }
-        return null == result ? BLStringUtils.capitalize(key) : result;
+        final String keyWithEntity = BLStringUtils.capitalize(entityType) + "." + key;
+        result = get(keyWithEntity, locale);
+        if (null == result || keyWithEntity.equals(result)) {
+            result = get(key, locale);
+        }
+        return result;
     }
 
-    public void initResources(ServletContext servletContext) throws IOException {
+    public int initResources(ServletContext servletContext) throws IOException {
         final String resourceName = "/WEB-INF/classes/resources/i18n/" + ApplicationConfig.getLocale() + ".csv";
         InputStream stream = servletContext.getResourceAsStream(resourceName);
-        loadTranslations(stream, ApplicationConfig.getLocale());
+        int count = loadTranslations(stream, ApplicationConfig.getLocale());
+        logger.info("Number of translation loaded: " + count);
+        return count;
+    }
+
+    public String getFieldLabel(String entityType, String key) {
+        return I18n.getInstance().getFieldLabel(entityType, key, ApplicationConfig.getLocale());
     }
 }
