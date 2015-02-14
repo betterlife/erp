@@ -3,10 +3,10 @@
 }
 body {
     padding-top: 0;
-    font-family: "Microsoft YaHei";
+    font-family: "Microsoft YaHei", sans-serif;
 }
 .navbar-nav {
-    width: 90%;
+    width: 100%;
 }
 .nav, .pagination, .carousel, .panel-title a {
     cursor: pointer;
@@ -16,7 +16,13 @@ body {
 }
 .footer {
     text-align:center;
-    margin: 20px auto auto;
+}
+html, body {
+    height: 100%;
+}
+.wrapper {
+    min-height: 100%;
+    height: 100%;
 }
 .boolean-controller {
     margin-top:11px !important;
@@ -34,10 +40,6 @@ body {
 .menu-title {
     color: #333;
     font-size:16px;
-    background-color: #EEE;
-    border: 1px solid #CCC;
-    border-right: 4px #EEE;
-    border-left: 4px #EEE;
     padding-bottom:10px;
     padding-top:10px;
 }
@@ -45,10 +47,45 @@ body {
     padding-right:10px;
 }
 .dropdown-menu>li>a {
-    line-height:180%;
-    padding-left:40px;
+    line-height:200%;
+    padding-left:50px;
 }
 .dashboard-container {
-    margin-top:50px;
-    margin-bottom: 60px;
+    margin-top:150px;
+    margin-bottom: 100px;
+}
+
+.dashboard-button, .dashboard-container > div > div > a {
+    color: #428bca;
+}
+
+.dashboard-row .btn-default {
+    border-color: #428bca;
+    background-image: none;
+}
+
+.dashboard-row {
+    margin-bottom: 80px;
+}
+
+.dashboard-cell {
+    margin-right: 80px;
+}
+
+.navbar > li, .navbar-nav > li {
+    float:none;
+    display:inline-block;
+    *display:inline; /* ie7 fix */
+     zoom:1; /* hasLayout ie7 trigger */
+}
+
+.navbar, .navbar-nav, .navbar-header {
+    text-align:center;
+}
+
+.grid {
+    height: 668px;
+    min-width: 1024px;
+    width:98%;
+    margin:auto;
 }

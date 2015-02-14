@@ -1,11 +1,11 @@
 package io.betterlife.util.converter;
 
+import io.betterlife.framework.converter.DoubleBigDecimalConverter;
 import org.junit.Test;
 
 import java.math.BigDecimal;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
 public class DoubleBigDecimalConverterTest {
 

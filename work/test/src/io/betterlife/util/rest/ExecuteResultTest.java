@@ -2,7 +2,8 @@ package io.betterlife.util.rest;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.betterlife.util.JsonUtils;
+import io.betterlife.framework.rest.ExecuteResult;
+import io.betterlife.framework.util.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 

@@ -8,11 +8,13 @@ var editCtrl = function ($scope, $http, $location, loginService, $routeParams) {
     $scope.captalizedEntityType = $scope.entityType.charAt(0).toUpperCase() + $scope.entityType.substr(1);
     $scope.id = $routeParams.id;
     $scope.entity = {};
-
-    $scope.open = function ($event) {
-        $event.preventDefault();
-        $event.stopPropagation();
-        $scope.opened = true;
+    $scope.calendar = {
+        opened: {},
+        open: function ($event, which) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.calendar.opened[which] = true;
+        }
     };
 
     $scope.reset = function () {

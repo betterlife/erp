@@ -1,7 +1,7 @@
 // Declare app level module which depends on filters, and services
 (function () {
     "use strict";
-    angular.module('mainApp', ['ngRoute', 'ngCookies', 'ui.bootstrap', 'ui.grid','ui.grid.resizeColumns'])
+    angular.module('mainApp', ['ngRoute', 'ngCookies', 'ui.bootstrap', 'ui.grid', 'ui.grid.resizeColumns', 'ui.grid.pagination'])
         .filter('to_trusted', ['$sce', function ($sce) {
             return function (text) {
                 return $sce.trustAsHtml(text);

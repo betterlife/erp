@@ -12,18 +12,6 @@
 		<param-name>log4jConfiguration</param-name>
 		<param-value>log4j2.xml</param-value>
 	</context-param>
-	<filter>
-		<filter-name>IndexFilter</filter-name>
-		<filter-class>io.betterlife.application.filter.IndexFilter</filter-class>
-		<init-param>
-			<param-name>url-pattern</param-name>
-			<param-value>/dashboard,/user/*,/login/*,/logout/*,/fund/*,/expenseCategory/*,/costCenter/*,/incomingCategory/*</param-value>
-		</init-param>
-	</filter>
-	<filter-mapping>
-		<filter-name>IndexFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>

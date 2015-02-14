@@ -4,24 +4,25 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
 	<persistence-unit name="betterlife" transaction-type="RESOURCE_LOCAL">
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-		<class>io.betterlife.domains.BaseObject</class>
-		<class>io.betterlife.domains.security.User</class>
-		<class>io.betterlife.domains.financial.Incoming</class>
-		<class>io.betterlife.domains.financial.CostCenter</class>
-		<class>io.betterlife.domains.financial.Expense</class>
-		<class>io.betterlife.domains.financial.ExpenseCategory</class>
-		<class>io.betterlife.domains.financial.IncomingCategory</class>
-		<class>io.betterlife.domains.catalog.Product</class>
-		<class>io.betterlife.domains.catalog.ProductCategory</class>
-		<class>io.betterlife.domains.common.Supplier</class>
-		<class>io.betterlife.domains.order.PurchaseOrder</class>
-		<class>io.betterlife.domains.order.SalesOrder</class>
+		<class>io.betterlife.framework.domains.BaseObject</class>
+		<class>io.betterlife.framework.domains.security.User</class>
+		<class>io.betterlife.erp.domains.financial.Incoming</class>
+		<class>io.betterlife.erp.domains.financial.CostCenter</class>
+		<class>io.betterlife.erp.domains.financial.Expense</class>
+		<class>io.betterlife.erp.domains.financial.ExpenseCategory</class>
+		<class>io.betterlife.erp.domains.financial.IncomingCategory</class>
+        <class>io.betterlife.erp.domains.financial.DefaultFinancialSetting</class>
+		<class>io.betterlife.erp.domains.catalog.Product</class>
+		<class>io.betterlife.erp.domains.catalog.ProductCategory</class>
+		<class>io.betterlife.erp.domains.common.Supplier</class>
+		<class>io.betterlife.erp.domains.order.PurchaseOrder</class>
+		<class>io.betterlife.erp.domains.order.SalesOrder</class>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		<properties>
 			<property name="eclipselink.ddl-generation" value="create-tables"/>
 			<property name="eclipselink.target-database" value="org.eclipse.persistence.platform.database.PostgreSQLPlatform"/>
 			<property name="javax.persistence.nonJtaDataSource" value="java:comp/env/jdbc/PostgreSQLDS"/>
-		    <property name="eclipselink.logging.level" value="FINEST"/>
+		    <property name="eclipselink.logging.level" value="CONFIG"/>
 		</properties>
 
 	</persistence-unit>
