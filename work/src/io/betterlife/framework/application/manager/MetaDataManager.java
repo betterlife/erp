@@ -1,6 +1,5 @@
 package io.betterlife.framework.application.manager;
 
-import io.betterlife.framework.application.EntityManagerConsumer;
 import io.betterlife.framework.domains.BaseObject;
 import io.betterlife.framework.meta.EntityMeta;
 import io.betterlife.framework.meta.FieldMeta;
@@ -8,6 +7,7 @@ import io.betterlife.framework.util.BLStringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.persistence.EntityManager;
 import java.util.Map;
 
 /**
@@ -15,7 +15,7 @@ import java.util.Map;
  * Date: 11/7/14
  */
 
-public class MetaDataManager extends EntityManagerConsumer {
+public class MetaDataManager {
     private static final Logger logger = LogManager.getLogger(MetaDataManager.class.getName());
     private static MetaDataManager instance = new MetaDataManager();
     private static FieldMetaDataContainer fieldMetaDataContainer = new FieldMetaDataContainer();
@@ -57,9 +57,16 @@ public class MetaDataManager extends EntityManagerConsumer {
     }
 
     public void setAllFieldMetaData() {
-        fieldMetaDataContainer.loadMeta();
-        entityMetaDataContainer.loadMeta();
-        restMetaDataContainer.loadMeta();
+        EntityManager entityManager = SharedEntityManager.getInstance().getEntityManager();
+        try {
+            fieldMetaDataContainer.loadMeta(entityManager);
+            entityMetaDataContainer.loadMeta(entityManager);
+            restMetaDataContainer.loadMeta(entityManager);
+        } finally {
+            if (null != entityManager && entityManager.isOpen()) {
+                entityManager.close();
+            }
+        }
     }
 
 }
