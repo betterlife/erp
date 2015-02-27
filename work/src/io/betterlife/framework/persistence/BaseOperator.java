@@ -1,7 +1,5 @@
 package io.betterlife.framework.persistence;
 
-import io.betterlife.erp.domains.order.PurchaseOrder;
-import io.betterlife.framework.application.EntityManagerConsumer;
 import io.betterlife.framework.application.manager.SharedEntityManager;
 import io.betterlife.framework.domains.BaseObject;
 import io.betterlife.framework.trigger.Invoker;
@@ -18,7 +16,7 @@ import java.util.*;
  * Author: Lawrence Liu(lawrence@betterlife.io)
  * Date: 10/31/14
  */
-public class BaseOperator extends EntityManagerConsumer {
+public class BaseOperator {
     private static final Logger logger = LogManager.getLogger(BaseOperator.class.getName());
     private static BaseOperator instance = new BaseOperator();
 
@@ -28,7 +26,7 @@ public class BaseOperator extends EntityManagerConsumer {
 
     public static BaseOperator getInstance() {
         if (instance.entityManager == null || !instance.entityManager.isOpen()) {
-            instance.entityManager = instance.newEntityManager();
+            instance.entityManager = SharedEntityManager.getInstance().getEntityManager();
         }
         return instance;
     }
@@ -82,7 +80,9 @@ public class BaseOperator extends EntityManagerConsumer {
                 entityManager.getTransaction().rollback();
             }
         } finally {
-            closeEntityManager();
+            if (null != entityManager && entityManager.isOpen()) {
+                entityManager.close();
+            }
         }
     }
 

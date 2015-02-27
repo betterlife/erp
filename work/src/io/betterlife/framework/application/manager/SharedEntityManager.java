@@ -29,6 +29,10 @@ public class SharedEntityManager {
         return instance;
     }
 
+    public static void setInstance(SharedEntityManager instance) {
+        SharedEntityManager.instance = instance;
+    }
+
     private SharedEntityManager() {}
 
     public synchronized void initEntityManagerFactory() {
