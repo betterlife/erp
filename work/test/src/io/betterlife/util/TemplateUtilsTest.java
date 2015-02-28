@@ -166,8 +166,16 @@ public class TemplateUtilsTest {
 
     @Test
     public void testGetBaseObjectController() throws Exception {
-        String input = "<select name=\"$name\" class=\"form-control\" ng-model=\"$ngModel\">$options</select>";
-        String expect = "<select name=\"children\" class=\"form-control\" ng-model=\"entity.children.id\">\n\t<option value='13'>Object2-name</option>\n\t<option value='12'>Object1-name</option>\n</select>";
+        String input = "<input type=\"hidden\" ng-model=\"$ngModel.id\" name=\"$name\">\n" +
+            "<input type=\"text\" typeahead=\"baseObject.description for baseObject in getBaseObjects('$entityType', '$representField', $viewValue)\"\n" +
+            "       typeahead-on-select=\"onTypeHeadSelect($item, $model, $label, '$name')\"\n" +
+            "       ng-model=\"$ngModel.$representField\" typeahead-loading=\"loading$name\" class=\"form-control\">\n" +
+            "<span ng-show=\"loading$name\" class=\"glyphicon glyphicon-refresh\"></span>";
+        String expect = "<input type=\"hidden\" ng-model=\"entity.children.id\" name=\"children\">\n" +
+            "<input type=\"text\" typeahead=\"baseObject.description for baseObject in getBaseObjects('baseObject', 'name', $viewValue)\"\n" +
+            "       typeahead-on-select=\"onTypeHeadSelect($item, $model, $label, 'children')\"\n" +
+            "       ng-model=\"entity.children.name\" typeahead-loading=\"loadingchildren\" class=\"form-control\">\n" +
+            "<span ng-show=\"loadingchildren\" class=\"glyphicon glyphicon-refresh\"></span>";
         ServletContext context = mockServletContext(input, "/templates/fields/baseobject.tpl.html");
         FieldMeta meta = EntityMockUtil.getInstance().mockFieldMeta("children", BaseObject.class);
         when(meta.getRepresentField()).thenReturn("name");

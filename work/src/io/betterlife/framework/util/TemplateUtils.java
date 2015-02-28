@@ -43,11 +43,11 @@ public class TemplateUtils {
             if (!filePath.startsWith("/")) {
                 filePath = "/" + filePath;
             }
-            //if (null == cachedTemplates.get(filePath)) {
-            InputStream inputStream = context.getResourceAsStream(filePath);
-            final String string = IOUtil.getInstance().inputStreamToString(inputStream);
-            cachedTemplates.put(filePath, string);
-            //}
+            if (null == cachedTemplates.get(filePath)) {
+                InputStream inputStream = context.getResourceAsStream(filePath);
+                final String string = IOUtil.getInstance().inputStreamToString(inputStream);
+                cachedTemplates.put(filePath, string);
+            }
             return cachedTemplates.get(filePath);
         } catch (Exception e) {
             logger.warn(String.format("Failed to get resource for file[%s], Returning empty string", filePath));
