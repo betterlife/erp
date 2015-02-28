@@ -185,7 +185,7 @@ public class TemplateUtilsTest {
         allChild.add(object2);
         allChild.add(object);
 
-        when(operator.getBaseObjects("BaseObject.getAll")).thenReturn(allChild);
+        when(operator.getBaseObjects("BaseObject.getAll", null)).thenReturn(allChild);
         BaseOperator.setInstance(operator);
         String result = templateUtils.getBaseObjectController(context, meta, BaseObject.class);
         assertEquals(expect, result);

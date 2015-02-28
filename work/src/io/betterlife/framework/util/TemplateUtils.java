@@ -43,11 +43,11 @@ public class TemplateUtils {
             if (!filePath.startsWith("/")) {
                 filePath = "/" + filePath;
             }
-            if (null == cachedTemplates.get(filePath)) {
-                InputStream inputStream = context.getResourceAsStream(filePath);
-                final String string = IOUtil.getInstance().inputStreamToString(inputStream);
-                cachedTemplates.put(filePath, string);
-            }
+            //if (null == cachedTemplates.get(filePath)) {
+            InputStream inputStream = context.getResourceAsStream(filePath);
+            final String string = IOUtil.getInstance().inputStreamToString(inputStream);
+            cachedTemplates.put(filePath, string);
+            //}
             return cachedTemplates.get(filePath);
         } catch (Exception e) {
             logger.warn(String.format("Failed to get resource for file[%s], Returning empty string", filePath));
@@ -122,20 +122,13 @@ public class TemplateUtils {
     }
 
     public String getBaseObjectController(ServletContext context, FieldMeta fieldMeta, Class<? extends BaseObject> clazz) {
-        List<BaseObject> objects = BaseOperator.getInstance().getBaseObjects(
-            NamedQueryRules.getInstance().getAllQueryForEntity(clazz.getSimpleName())
-        );
-        StringBuilder sb = new StringBuilder();
-        for (BaseObject baseObject : objects) {
-            sb.append(String.format("%n\t<option value='%s'>%s</option>", baseObject.getId(),
-                                    baseObject.getValue(fieldMeta.getRepresentField())));
-        }
-        sb.append("\n");
         String template = getHtmlTemplate(context, "templates/fields/baseobject.tpl.html");
+        final String ngModelField = EntityUtils.getInstance().getNgModelNameForField(fieldMeta.getName());
         return template
             .replaceAll("\\$name", fieldMeta.getName())
-            .replaceAll("\\$ngModel", EntityUtils.getInstance().getNgModelNameForField(fieldMeta.getName()) + ".id")
-            .replaceAll("\\$options", sb.toString());
+            .replaceAll("\\$ngModel", ngModelField)
+            .replaceAll("\\$entityType", BLStringUtils.uncapitalize(clazz.getSimpleName()))
+            .replaceAll("\\$representField", fieldMeta.getRepresentField());
     }
 
     public String getBooleanController(ServletContext context, String key) {

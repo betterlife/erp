@@ -16,7 +16,8 @@ import javax.persistence.*;
 @NamedQueries({
     @NamedQuery(name = "User.getById", query = "SELECT u FROM UserEntity u WHERE u.id = :id AND u.active = TRUE"),
     @NamedQuery(name = "User.getAll",  query = "SELECT u FROM UserEntity u WHERE u.active = TRUE"),
-    @NamedQuery(name = User.GetByUserNameAndPasswordQuery, query = "SELECT u from UserEntity u WHERE u.username = :username AND u.password = :password AND u.active = TRUE")
+    @NamedQuery(name = User.GetByUserNameAndPasswordQuery, query = "SELECT u from UserEntity u WHERE u.username = :username AND u.password = :password AND u.active = TRUE"),
+    @NamedQuery(name = "User.getByKeyword", query = "SELECT u from UserEntity u WHERE (u.displayName like :keyword or u.username like :keyword) AND u.active = TRUE")
 })
 public class User extends BaseObject {
 

@@ -1,1 +1,7 @@
-<select name="$name" class="form-control" ng-model="$ngModel">$options</select>
+<!--<select name="$name" class="form-control" ng-model="$ngModel">$options</select>-->
+<!--$options-->
+<input type="hidden" ng-model="$ngModel.id" name="$name">
+<input type="text" typeahead="baseObject.description for baseObject in getBaseObjects('$entityType', '$representField', $viewValue)"
+       typeahead-on-select="onTypeHeadSelect($item, $model, $label, '$name')"
+       ng-model="$ngModel.$representField" typeahead-loading="loading$name" class="form-control">
+<span ng-show="loading$name" class="glyphicon glyphicon-refresh"></span>
