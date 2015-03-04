@@ -133,4 +133,10 @@ public class BaseOperator {
         final T singleResult = (T) q.getSingleResult();
         return singleResult;
     }
+
+    public long getObjectCount(Class<? extends BaseObject> clazz) {
+        final String tableName = clazz.getSimpleName().equals("User")? "UserEntity" : clazz.getSimpleName();
+        Query query = getEntityManager().createQuery("SELECT COUNT(p.id) from " + tableName + " p", clazz);
+        return getSingleResult(query);
+    }
 }
