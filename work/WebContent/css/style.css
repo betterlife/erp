@@ -102,3 +102,9 @@ html, body {
     text-align:center;
     margin:auto;
 }
+
+.select-controller{
+    width:94%;
+    display:inline;
+    margin-right: 5px;
+}

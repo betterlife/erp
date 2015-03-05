@@ -155,12 +155,16 @@ public class TemplateUtils {
 
     public String getBaseObjectSelectController(ServletContext context, FieldMeta fieldMeta,
                                                 Class<? extends BaseObject> clazz) {
-        String result;List<BaseObject> objects = BaseOperator.getInstance().getBaseObjects(
-            NamedQueryRules.getInstance().getAllQueryForEntity(clazz.getSimpleName()), null
+        String result;
+        final String simpleName = clazz.getSimpleName();
+        List<BaseObject> objects = BaseOperator.getInstance().getBaseObjects(
+            NamedQueryRules.getInstance().getAllQueryForEntity(simpleName), null
         );
         StringBuilder sb = new StringBuilder();
         final String representField = fieldMeta.getRepresentField();
         final String methodName = "get" + BLStringUtils.capitalize(representField);
+        final String fieldName = fieldMeta.getName();
+        final String ngModelNameForField = EntityUtils.getInstance().getNgModelNameForField(fieldName);
         for (BaseObject baseObject : objects) {
             try {
                 Object value = baseObject.getValue(representField);
@@ -176,12 +180,13 @@ public class TemplateUtils {
         sb.append("\n");
         String template = getHtmlTemplate(context, "templates/fields/baseobject.select.tpl.html");
         result = template
-            .replaceAll("\\$name", fieldMeta.getName())
-            .replaceAll("\\$ngModel", EntityUtils.getInstance().getNgModelNameForField(fieldMeta.getName()) + ".id")
-            .replaceAll("\\$options", sb.toString());
+            .replaceAll("\\$name", fieldName)
+            .replaceAll("\\$ngModel", ngModelNameForField + ".id")
+            .replaceAll("\\$options", sb.toString())
+            .replaceAll("\\$representField", representField)
+            .replaceAll("\\$entityType", BLStringUtils.uncapitalize(simpleName));
         return result;
     }
-
 
     public String getBooleanController(ServletContext context, String key) {
         String template = getHtmlTemplate(context, "templates/fields/boolean.tpl.html");
