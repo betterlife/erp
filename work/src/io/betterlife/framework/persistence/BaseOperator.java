@@ -136,7 +136,8 @@ public class BaseOperator {
 
     public long getObjectCount(Class<? extends BaseObject> clazz) {
         final String tableName = clazz.getSimpleName().equals("User")? "UserEntity" : clazz.getSimpleName();
-        Query query = getEntityManager().createQuery("SELECT COUNT(p.id) from " + tableName + " p", clazz);
+        Query query = getEntityManager().createQuery("SELECT COUNT(p.id) from " + tableName + " p where p.active = :active", clazz);
+        query.setParameter("active", true);
         return getSingleResult(query);
     }
 }
