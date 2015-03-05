@@ -25,9 +25,6 @@ public class BaseOperator {
     private EntityManager entityManager;
 
     public static BaseOperator getInstance() {
-        if (instance.entityManager == null || !instance.entityManager.isOpen()) {
-            instance.entityManager = SharedEntityManager.getInstance().getEntityManager();
-        }
         return instance;
     }
 
@@ -58,11 +55,11 @@ public class BaseOperator {
 
     public <T extends BaseObject> void saveBaseObjectWithTransaction(T obj, int operation) {
         try {
-            entityManager.getTransaction().begin();
+            getEntityManager().getTransaction().begin();
             if (UPDATE_OPERA == operation) {
-                obj = entityManager.merge(obj);
+                obj = getEntityManager().merge(obj);
             } else {
-                entityManager.persist(obj);
+                getEntityManager().persist(obj);
             }
             if (logger.isTraceEnabled()) {
                 logger.trace(String.format("Saving Object: [%s]", obj));
@@ -71,18 +68,16 @@ public class BaseOperator {
             if (operation == UPDATE_OPERA) {
                  original = getOriginalBaseObject(obj.getId(), obj.getClass());
             }
-            Invoker.invokeSaveTrigger(entityManager, obj, original);
-            entityManager.getTransaction().commit();
+            Invoker.invokeSaveTrigger(getEntityManager(), obj, original);
+            getEntityManager().getTransaction().commit();
         } catch (Exception e) {
             logger.error("Error to save object " + obj);
             logger.error(e);
-            if (entityManager.getTransaction().isActive()) {
-                entityManager.getTransaction().rollback();
+            if (getEntityManager().getTransaction().isActive()) {
+                getEntityManager().getTransaction().rollback();
             }
         } finally {
-            if (null != entityManager && entityManager.isOpen()) {
-                entityManager.close();
-            }
+            instance.entityManager = null;
         }
     }
 
@@ -103,9 +98,14 @@ public class BaseOperator {
         return getSingleResult(q);
     }
 
-    public <T extends BaseObject> List<T> getBaseObjects(String queryName) {
+    public <T extends BaseObject> List<T> getBaseObjects(String queryName, Map<String, String> queryParams) {
         List<T> result = new ArrayList<>();
         Query q = getQuery(queryName);
+        if (null != queryParams && 0 != queryParams.size()) {
+            for (Map.Entry<String, ?> entry : queryParams.entrySet()) {
+                q.setParameter(entry.getKey(), "%" + entry.getValue() + "%");
+            }
+        }
         Collection coll = q.getResultList();
         if (coll != null) {
             @SuppressWarnings("unchecked")
@@ -118,12 +118,25 @@ public class BaseOperator {
     }
 
     public Query getQuery(String queryName) {
-        return entityManager.createNamedQuery(queryName);
+        return getEntityManager().createNamedQuery(queryName);
+    }
+
+    private EntityManager getEntityManager() {
+        if (null == instance.entityManager) {
+            instance.entityManager = SharedEntityManager.getInstance().getEntityManager();
+        }
+        return instance.entityManager;
     }
 
     public <T> T getSingleResult(Query q) {
         @SuppressWarnings("unchecked")
         final T singleResult = (T) q.getSingleResult();
         return singleResult;
+    }
+
+    public long getObjectCount(Class<? extends BaseObject> clazz) {
+        final String tableName = clazz.getSimpleName().equals("User")? "UserEntity" : clazz.getSimpleName();
+        Query query = getEntityManager().createQuery("SELECT COUNT(p.id) from " + tableName + " p", clazz);
+        return getSingleResult(query);
     }
 }

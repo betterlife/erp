@@ -2,7 +2,7 @@
  * Created by larry on 11/24/14.
  */
 
-var editCtrl = function ($scope, $http, $location, loginService, $routeParams) {
+var editCtrl = function ($scope, $http, $location, loginService, typeHeadService, $routeParams) {
     "use strict";
     $scope.entityType = $routeParams.entityType;
     $scope.captalizedEntityType = $scope.entityType.charAt(0).toUpperCase() + $scope.entityType.substr(1);
@@ -22,7 +22,6 @@ var editCtrl = function ($scope, $http, $location, loginService, $routeParams) {
     };
 
     $http.get("/rest/" + $scope.captalizedEntityType + "/" + $scope.id, {}).success(function (data) {
-        console.log(data);
         $scope.entity = data.result;
         $scope.originalEntity = angular.copy(data.result);
     });
@@ -31,13 +30,20 @@ var editCtrl = function ($scope, $http, $location, loginService, $routeParams) {
         $http.put("/rest/" + $scope.entityType + "/" + $scope.id, {
             'entity': $scope.entity
         }, {}).success(function (data) {
-            console.log(data);
             $location.path("/" + $scope.entityType + "/list");
         }).error(function (data, status) {
         });
     };
+
+    $scope.onTypeHeadSelect = function($item, $model, $label, baseObjectFieldName) {
+        $scope.entity[baseObjectFieldName] = typeHeadService.onTypeHeadSelect($item, $model, $label, baseObjectFieldName);
+    };
+
+    $scope.getBaseObjects = function(entityType, representField, val) {
+        return typeHeadService.getBaseObjects(entityType, representField, val);
+    };
 };
 
-editCtrl.$inject = ['$scope', '$http', '$location', 'loginService', '$routeParams'];
+editCtrl.$inject = ['$scope', '$http', '$location', 'loginService', 'typeHeadService', '$routeParams'];
 
 angular.module('mainApp').controller('editCtrl', editCtrl);

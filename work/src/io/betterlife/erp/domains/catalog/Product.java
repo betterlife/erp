@@ -15,7 +15,8 @@ import java.math.BigDecimal;
 @Entity
 @NamedQueries({
     @NamedQuery(name = "Product.getById", query = "SELECT c FROM Product c WHERE c.id = :id AND c.active = TRUE"),
-    @NamedQuery(name = "Product.getAll",  query = "SELECT c FROM Product c WHERE c.active = TRUE")
+    @NamedQuery(name = "Product.getAll",  query = "SELECT c FROM Product c WHERE c.active = TRUE"),
+    @NamedQuery(name = "Product.getByKeyword",  query = "SELECT c FROM Product c WHERE c.active = TRUE and (c.code like :keyword or c.name like :keyword or c.distinguishingFeature like :keyword or c.link like :keyword)")
 })
 public class Product extends BaseObject {
 

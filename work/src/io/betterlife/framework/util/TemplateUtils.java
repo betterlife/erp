@@ -2,6 +2,7 @@ package io.betterlife.framework.util;
 
 import io.betterlife.framework.application.I18n;
 import io.betterlife.framework.application.config.ApplicationConfig;
+import io.betterlife.framework.application.manager.SharedEntityManager;
 import io.betterlife.framework.meta.FieldMeta;
 import io.betterlife.framework.domains.BaseObject;
 import io.betterlife.framework.persistence.BaseOperator;
@@ -12,6 +13,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.persistence.EntityManager;
+import javax.persistence.NamedQuery;
+import javax.persistence.Query;
 import javax.servlet.ServletContext;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -122,21 +126,35 @@ public class TemplateUtils {
     }
 
     public String getBaseObjectController(ServletContext context, FieldMeta fieldMeta, Class<? extends BaseObject> clazz) {
-        List<BaseObject> objects = BaseOperator.getInstance().getBaseObjects(
-            NamedQueryRules.getInstance().getAllQueryForEntity(clazz.getSimpleName())
-        );
-        StringBuilder sb = new StringBuilder();
-        for (BaseObject baseObject : objects) {
-            sb.append(String.format("%n\t<option value='%s'>%s</option>", baseObject.getId(),
-                                    baseObject.getValue(fieldMeta.getRepresentField())));
+        long number = BaseOperator.getInstance().getObjectCount(clazz);
+        String result = "";
+        if (number <= ApplicationConfig.MaxNumberOfObjectForSelectController) {
+            List<BaseObject> objects = BaseOperator.getInstance().getBaseObjects(
+                NamedQueryRules.getInstance().getAllQueryForEntity(clazz.getSimpleName()), null
+            );
+            StringBuilder sb = new StringBuilder();
+            for (BaseObject baseObject : objects) {
+                sb.append(String.format("%n\t<option value='%s'>%s</option>", baseObject.getId(),
+                                        baseObject.getValue(fieldMeta.getRepresentField())));
+            }
+            sb.append("\n");
+            String template = getHtmlTemplate(context, "templates/fields/baseobject.select.tpl.html");
+            result = template
+                .replaceAll("\\$name", fieldMeta.getName())
+                .replaceAll("\\$ngModel", EntityUtils.getInstance().getNgModelNameForField(fieldMeta.getName()) + ".id")
+                .replaceAll("\\$options", sb.toString());
+        } else {
+            String template = getHtmlTemplate(context, "templates/fields/baseobject.typehead.tpl.html");
+            final String ngModelField = EntityUtils.getInstance().getNgModelNameForField(fieldMeta.getName());
+            result = template
+                .replaceAll("\\$name", fieldMeta.getName())
+                .replaceAll("\\$ngModel", ngModelField)
+                .replaceAll("\\$entityType", BLStringUtils.uncapitalize(clazz.getSimpleName()))
+                .replaceAll("\\$representField", fieldMeta.getRepresentField());
         }
-        sb.append("\n");
-        String template = getHtmlTemplate(context, "templates/fields/baseobject.tpl.html");
-        return template
-            .replaceAll("\\$name", fieldMeta.getName())
-            .replaceAll("\\$ngModel", EntityUtils.getInstance().getNgModelNameForField(fieldMeta.getName()) + ".id")
-            .replaceAll("\\$options", sb.toString());
+        return result;
     }
+
 
     public String getBooleanController(ServletContext context, String key) {
         String template = getHtmlTemplate(context, "templates/fields/boolean.tpl.html");

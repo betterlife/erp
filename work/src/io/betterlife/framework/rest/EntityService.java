@@ -106,12 +106,35 @@ public class EntityService {
     @Produces(MediaType.APPLICATION_JSON)
     public String getAllByObjectType(@PathParam("entityType") String entityType) throws IOException {
         List<BaseObject> result = getBaseOperator().getBaseObjects(
-            getNamedQueryRule().getAllQueryForEntity(entityType)
-        );
+            getNamedQueryRule().getAllQueryForEntity(entityType),
+            null);
         if (logger.isTraceEnabled()) {
             logger.trace(String.format("Returning %s list %s", entityType, result));
         }
         return new ExecuteResult<List<BaseObject>>().getRestString(result);
+    }
+
+    @GET
+    @Path("/q/{entityType}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String queryByObjectTypeAndKeyword(@PathParam("entityType") String entityType,
+                                              @QueryParam("keyword") String keyword,
+                                              @Context HttpServletRequest request,
+                                              InputStream requestBody) throws IOException {
+        Map<String, String> params = new HashMap<>(1);
+        params.put("keyword", keyword);
+        List<BaseObject> result = getObjectsByKeywords(entityType, params);
+        return new ExecuteResult<List<BaseObject>>().getRestString(result);
+    }
+
+    private List<BaseObject> getObjectsByKeywords(String entityType, Map<String, String> parameters) {
+        List<BaseObject> result = getBaseOperator().getBaseObjects(
+            getNamedQueryRule().getKeywordQueryForEntity(entityType), parameters
+        );
+        if (logger.isTraceEnabled()) {
+            logger.trace(String.format("Returning %s list %s", entityType, result));
+        }
+        return result;
     }
 
     @PUT
@@ -153,6 +176,6 @@ public class EntityService {
     }
 
     public BaseOperator getBaseOperator() {
-            return BaseOperator.getInstance();
+        return BaseOperator.getInstance();
     }
 }

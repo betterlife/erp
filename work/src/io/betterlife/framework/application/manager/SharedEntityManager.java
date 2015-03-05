@@ -57,7 +57,7 @@ public class SharedEntityManager {
         if (null == factory) {
             logger.error("Entity Manager Factory is not set");
         } else {
-            if (em == null) {
+            if (em == null || !em.isOpen()) {
                 em = instance.factory.createEntityManager();
                 em.setFlushMode(FlushModeType.COMMIT);
                 threadLocal.set(em);

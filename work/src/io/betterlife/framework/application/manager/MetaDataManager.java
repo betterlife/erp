@@ -13,6 +13,10 @@ import java.util.Map;
 /**
  * Author: Lawrence Liu(lawrence@betterlife.io)
  * Date: 11/7/14
+ * A unify interface for all the meta data, includes entity meta data, field meta data and rest service meta data.
+ * @see io.betterlife.framework.application.manager.EntityMetaDataContainer
+ * @see io.betterlife.framework.application.manager.FieldMetaDataContainer
+ * @see io.betterlife.framework.application.manager.RestMetaDataContainer
  */
 
 public class MetaDataManager {

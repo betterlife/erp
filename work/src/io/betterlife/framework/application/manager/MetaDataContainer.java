@@ -14,6 +14,7 @@ import java.util.Set;
 /**
  * Author: Lawrence Liu
  * Date: 2/6/15
+ * Abstract class for all the meta data.
  */
 public abstract class MetaDataContainer {
 
