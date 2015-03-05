@@ -163,7 +163,10 @@ public class TemplateUtils {
         final String methodName = "get" + BLStringUtils.capitalize(representField);
         for (BaseObject baseObject : objects) {
             try {
-                final Object value = MethodUtils.invokeExactMethod(baseObject, methodName);
+                Object value = baseObject.getValue(representField);
+                if (null == value) {
+                    value = MethodUtils.invokeExactMethod(baseObject, methodName);
+                }
                 sb.append(String.format("%n\t<option value='%s'>%s</option>", baseObject.getId(), value));
             } catch (Exception e) {
                 logger.error("Failed to get field[%s] of Object[%s] via method[%s]",
