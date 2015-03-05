@@ -76,7 +76,7 @@ public class Expense extends BaseObject {
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @FormField(RepresentField = "id", DisplayRank = 25)
+    @FormField(RepresentField = "representField", DisplayRank = 25)
     @JsonManagedReference
     public PurchaseOrder getPurchaseOrder() {
         return getValue("purchaseOrder");
@@ -87,7 +87,7 @@ public class Expense extends BaseObject {
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @FormField(RepresentField = "id", DisplayRank = 30)
+    @FormField(RepresentField = "representField", DisplayRank = 30)
     @JsonManagedReference
     public SalesOrder getSalesOrder() {
         return getValue("salesOrder");

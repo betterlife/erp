@@ -14,6 +14,7 @@ import io.betterlife.framework.domains.security.User;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -147,5 +148,16 @@ public class PurchaseOrder extends BaseObject {
 
     public void setExpenses(List<Expense> expenses) {
         setValue("expenses", expenses);
+    }
+
+    @FormField(Visible = FalseCondition.class)
+    @Transient
+    public String getRepresentField() {
+        final StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(getId()).append("-").append(getProduct().getName()).append("-").append(getAmount());
+        if (getOrderDate() != null){
+            stringBuilder.append("-").append(new SimpleDateFormat("yyyy/MM/dd").format(getOrderDate()));
+        }
+        return stringBuilder.toString();
     }
 }
