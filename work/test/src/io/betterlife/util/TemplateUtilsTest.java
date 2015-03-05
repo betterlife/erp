@@ -165,7 +165,35 @@ public class TemplateUtilsTest {
     }
 
     @Test
-    public void testGetBaseObjectController() throws Exception {
+    public void testGetBaseObjectSelectController() throws Exception {
+        String input = "<select name=\"$name\" class=\"form-control\" ng-model=\"$ngModel\">$options</select>";
+        String expect = "<select name=\"children\" class=\"form-control\" ng-model=\"entity.children.id\">\n\t<option value='13'>Object2-name</option>\n\t<option value='12'>Object1-name</option>\n</select>";
+        ServletContext context = mockServletContext(input, "/templates/fields/baseobject.select.tpl.html");
+        FieldMeta meta = EntityMockUtil.getInstance().mockFieldMeta("children", BaseObject.class);
+        when(meta.getRepresentField()).thenReturn("name");
+        BaseOperator operator = Mockito.mock(BaseOperator.class);
+        when(operator.getObjectCount(BaseObject.class)).thenReturn(2L);
+
+        BaseObject object = Mockito.mock(BaseObject.class);
+        when(object.getId()).thenReturn(12L);
+        when(object.getActive()).thenReturn(false);
+        when(object.getValue("name")).thenReturn("Object1-name");
+        BaseObject object2 = Mockito.mock(BaseObject.class);
+        when(object2.getId()).thenReturn(13L);
+        when(object2.getValue("name")).thenReturn("Object2-name");
+        when(object2.getActive()).thenReturn(true);
+        List<BaseObject> allChild = new ArrayList<>(2);
+        allChild.add(object2);
+        allChild.add(object);
+
+        when(operator.getBaseObjects("BaseObject.getAll", null)).thenReturn(allChild);
+        BaseOperator.setInstance(operator);
+        String result = templateUtils.getBaseObjectController(context, meta, BaseObject.class);
+        assertEquals(expect, result);
+    }
+
+    @Test
+    public void testGetBaseObjectTypeHeadController() throws Exception {
         String input = "<input type=\"hidden\" ng-model=\"$ngModel.id\" name=\"$name\">\n" +
             "<input type=\"text\" typeahead=\"baseObject.description for baseObject in getBaseObjects('$entityType', '$representField', $viewValue)\"\n" +
             "       typeahead-on-select=\"onTypeHeadSelect($item, $model, $label, '$name')\"\n" +
@@ -176,11 +204,11 @@ public class TemplateUtilsTest {
             "       typeahead-on-select=\"onTypeHeadSelect($item, $model, $label, 'children')\"\n" +
             "       ng-model=\"entity.children.name\" typeahead-loading=\"loadingchildren\" class=\"form-control\">\n" +
             "<span ng-show=\"loadingchildren\" class=\"glyphicon glyphicon-refresh\"></span>";
-        ServletContext context = mockServletContext(input, "/templates/fields/baseobject.tpl.html");
+        ServletContext context = mockServletContext(input, "/templates/fields/baseobject.typehead.tpl.html");
         FieldMeta meta = EntityMockUtil.getInstance().mockFieldMeta("children", BaseObject.class);
         when(meta.getRepresentField()).thenReturn("name");
         BaseOperator operator = Mockito.mock(BaseOperator.class);
-
+        when(operator.getObjectCount(BaseObject.class)).thenReturn(10L);
         BaseObject object = Mockito.mock(BaseObject.class);
         when(object.getId()).thenReturn(12L);
         when(object.getActive()).thenReturn(false);
