@@ -306,11 +306,13 @@ public class TemplateUtilsTest {
         String label = I18n.getInstance().getFieldLabel(entity, fieldKey);
         String expect = "<input type='" + type + "' class='form-control' ng-model='entity." + fieldKey + "' name='" + fieldKey + "' placeholder='" + label + "' size='20'/>";
         ServletContext context = mockServletContext(template, "/templates/fields/string.tpl.html");
-        String result = templateUtils.getStringController(context, fieldKey, label);
+        String result = "";
         if ("number".equals(type)) {
             result = templateUtils.getNumberController(context, fieldKey, label);
         } else if ("hidden".equals(type)) {
             result = templateUtils.getIdController(context, fieldKey, label);
+        } else {
+            result = templateUtils.getStringController(context, fieldKey, label);
         }
         assertEquals(expect, result);
     }

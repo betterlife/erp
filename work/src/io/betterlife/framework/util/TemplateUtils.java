@@ -49,7 +49,7 @@ public class TemplateUtils {
             if (!filePath.startsWith("/")) {
                 filePath = "/" + filePath;
             }
-            if (null == cachedTemplates.get(filePath)) {
+            if (null == cachedTemplates.get(filePath) || ApplicationConfig.isDevelopmentMode()) {
                 InputStream inputStream = context.getResourceAsStream(filePath);
                 final String string = IOUtil.getInstance().inputStreamToString(inputStream);
                 cachedTemplates.put(filePath, string);
