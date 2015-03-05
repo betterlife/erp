@@ -24,6 +24,8 @@ html, body {
 }
 .wrapper {
     min-height: 100%;
+    width:98%;
+    margin:auto;
 }
 .boolean-controller {
     margin-top:11px !important;
@@ -85,8 +87,18 @@ html, body {
 }
 
 .grid {
-    height: 668px;
+    height: 648px;
     min-width: 1024px;
-    width:98%;
+    width:100%;
+    margin:auto;
+}
+
+.breadcrumb-container {
+    margin:auto;
+    text-align: right;
+}
+
+.list-operation-cell{
+    text-align:center;
     margin:auto;
 }

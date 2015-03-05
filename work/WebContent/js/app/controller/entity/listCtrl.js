@@ -37,9 +37,9 @@ var listCtrl = function ($scope, $http, $location, $modal, loginService, i18nSer
         $scope.gridOptions.columnDefs = metaData.result;
         $scope.gridOptions.columnDefs.push({
             name : "operation", displayName : "操作", enableCellEdit : false, width: 100,
-            cellTemplate : '<div class="ui-grid-cell-contents">' +
+            cellTemplate : '<div class="ui-grid-cell-contents list-operation-cell">' +
             '<a href="/' + $scope.entityType + '/edit/{{row.entity.id}}" class="glyphicon glyphicon-edit"></a>' +
-            '<span style="padding-left: 10px;cursor: hand"><a ng-click="grid.appScope.deActive(row)"  class="glyphicon glyphicon-remove"></a></span>' +
+            '<span style="padding-left: 10px;cursor: hand"><a ng-click="grid.appScope.deActive(row)"  href="#" class="glyphicon glyphicon-remove"></a></span>' +
             '</div>'
         });
         $http.get("/rest/" + $scope.captalizedEntityType, {}).success(function (entityData) {

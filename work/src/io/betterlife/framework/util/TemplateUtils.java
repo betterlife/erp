@@ -241,8 +241,11 @@ public class TemplateUtils {
         );
     }
 
-    public String getListController(ServletContext context) {
-        return getHtmlTemplate(context, "templates/list.tpl.html");
+    public String getListController(ServletContext context, String entityType) {
+        final String label = I18n.getInstance().get(BLStringUtils.capitalize(entityType), ApplicationConfig.getLocale());
+        return getHtmlTemplate(context, "templates/list.tpl.html")
+            .replaceAll("\\$entityType", BLStringUtils.uncapitalize(entityType))
+            .replaceAll("\\$entityLabel", label);
     }
 
 }
