@@ -27,18 +27,7 @@ var editCtrl = function ($scope, $http, $location, loginService, typeHeadService
     });
 
     $scope.refreshOptions = function(fieldEntityType, representField, fieldName) {
-        $http.get("/rest/" + fieldEntityType, {}).success(function (entityData) {
-            var selectElem = $('#' + fieldName);
-            selectElem.find('option').remove().end();
-            var data = entityData.result;
-            $('<option>').val('? undefined:undefined ?').text("").appendTo(selectElem);
-            for(var idx = 0; idx < data.length; idx++){
-                var item = data[idx];
-                var option = $('<option>');
-                option.val(item.id).text(item[representField]).appendTo(selectElem);
-            }
-            selectElem.val($scope.entity[fieldName].id);
-        })
+        typeHeadService.refreshOptions(fieldEntityType, representField, fieldName, $scope.entity[fieldName].id);
     };
 
     $scope.update = function () {
