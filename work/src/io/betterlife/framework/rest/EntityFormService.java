@@ -66,38 +66,11 @@ public class EntityFormService {
     public String getForm(String entityType, ServletContext context, final String operationType) {
         Map<String, FieldMeta> meta = MetaDataManager.getInstance().getMetaFromEntityType(entityType);
         LinkedHashMap<String, FieldMeta> sortedMeta = EntityUtils.getInstance().sortEntityMetaByDisplayRank(meta);
-        StringBuilder form = new StringBuilder();
         final String locale = ApplicationConfig.getLocale();
         final String label = I18n.getInstance().get(BLStringUtils.capitalize(entityType), locale);
         final String operationLabel = I18n.getInstance().get(BLStringUtils.capitalize(operationType), locale);
-        form.append(
-            ("<div class=\"breadcrumb-container\">\n" +
-                "    <ol class=\"breadcrumb\">\n" +
-                "        <li><a href=\"/\">主页</a></li>\n" +
-                "        <li><a href=\"/$entityType/list\">$entityLabel</a></li>\n" +
-                "        <li class=\"active\">$operationLabel</li>\n" +
-                "        <li><a href=\"/$entityType/list\">返回列表</a></li>\n" +
-                "    </ol>\n" +
-                "</div>")
-                .replaceAll("\\$entityType", BLStringUtils.uncapitalize(entityType))
-                .replaceAll("\\$entityLabel", label)
-                .replaceAll("\\$operationLabel", operationLabel)
-        );
-        form.append("<div class='form-group form-horizontal'>");
-        for (Map.Entry<String, FieldMeta> entry : sortedMeta.entrySet()) {
-            final FieldMeta fieldMeta = entry.getValue();
-            final String key = entry.getKey();
-            if (!Evaluator.getInstance().evalVisible(entityType, entry.getValue(), null, operationType)) continue;
-            form.append("<div class='form-group'>\n");
-            form.append(getTemplateUtils().getFieldLabelHtml(entityType, key));
-            form.append(getTemplateUtils().getFieldController(context, operationType, entityType, fieldMeta,
-                                                              I18n.getInstance().getFieldLabel(entityType, key)));
-            form.append("</div>");
-        }
-        form.append(getTemplateUtils().getButtonsController(context, entityType, operationType));
-        form.append("</div>");
-        form.append("<br/>");
-        final String formString = form.toString();
+        String formString = getTemplateUtils().getFormHtmlFromTemplate(entityType, context, operationType,
+                                                                       sortedMeta, label, operationLabel);
         if (logger.isTraceEnabled()) {
             logger.trace(String.format("%s form template for EntityType[%s]:%n\t%s", operationType, entityType, formString));
         }

@@ -127,8 +127,10 @@ public class TemplateUtilsTest {
     public void testGetReadOnlyControllerSimple() {
         FieldMeta meta = EntityMockUtil.getInstance().mockFieldMeta("name", String.class);
         Class clazz = String.class;
+        String input = "<input type='text' class='form-control' ng-model='$ngModel' name='$name' size='20' disabled/>";
         String expected = "<input type='text' class='form-control' ng-model='entity.name' name='name' size='20' disabled/>";
-        assertEquals(expected, templateUtils.getReadOnlyController(meta, clazz));
+        ServletContext context = mockServletContext(input, "/templates/readonly.tpl.html");
+        assertEquals(expected, templateUtils.getReadOnlyController(context, meta, clazz));
     }
 
     class MockBaseObject extends BaseObject{}
@@ -136,10 +138,13 @@ public class TemplateUtilsTest {
     @Test
     public void testGetReadOnlyControllerBaseObject() {
         FieldMeta meta = EntityMockUtil.getInstance().mockFieldMeta("object", MockBaseObject.class);
-        when(meta.getRepresentField()).thenReturn("name");
+        final String representField = "name";
+        when(meta.getRepresentField()).thenReturn(representField);
         Class clazz = MockBaseObject.class;
-        String expected = "<input type='text' class='form-control' ng-model='entity.object.name' name='object' size='20' disabled/>";
-        assertEquals(expected, templateUtils.getReadOnlyController(meta, clazz));
+        String input = "<input type='text' class='form-control' ng-model='$ngModel' name='$name' size='20' disabled/>";
+        String expected = "<input type='text' class='form-control' ng-model='entity.object." + representField + "' name='object' size='20' disabled/>";
+        ServletContext context = mockServletContext(input, "/templates/readonly.tpl.html");
+        assertEquals(expected, templateUtils.getReadOnlyController(context, meta, clazz));
     }
 
     @Test
@@ -347,16 +352,22 @@ public class TemplateUtilsTest {
     @Test
     public void testGetFieldLabelHtml() throws Exception {
         String entityType = "Expense";
+        String input = "<label for='$key' class='col-md-offset-2 col-md-2 control-label $key-label'>$label</label>\n";
+        ServletContext context = mockServletContext(input, "/templates/label.tpl.html");
         assertEquals("<label for='user' class='col-md-offset-2 col-md-2 control-label user-label'>用户</label>\n",
-                     templateUtils.getFieldLabelHtml(entityType, "user"));
+                     templateUtils.getFieldLabelHtml(context, entityType, "user"));
+        context = mockServletContext(input, "/templates/label.tpl.html");
         assertEquals("<label for='expense' class='col-md-offset-2 col-md-2 control-label expense-label'>Expense</label>\n",
-                     templateUtils.getFieldLabelHtml(entityType, "expense"));
+                     templateUtils.getFieldLabelHtml(context, entityType, "expense"));
+        context = mockServletContext(input, "/templates/label.tpl.html");
         assertEquals("<label for='expenseCategory' class='col-md-offset-2 col-md-2 control-label expenseCategory-label'>支出分类</label>\n",
-                     templateUtils.getFieldLabelHtml(entityType, "expenseCategory"));
+                     templateUtils.getFieldLabelHtml(context, entityType, "expenseCategory"));
+        context = mockServletContext(input, "/templates/label.tpl.html");
         assertEquals("<label for='' class='col-md-offset-2 col-md-2 control-label -label'></label>\n",
-                     templateUtils.getFieldLabelHtml(entityType, null));
+                     templateUtils.getFieldLabelHtml(context, entityType, null));
+        context = mockServletContext(input, "/templates/label.tpl.html");
         assertEquals("<label for='' class='col-md-offset-2 col-md-2 control-label -label'></label>\n",
-                     templateUtils.getFieldLabelHtml(entityType, ""));
+                     templateUtils.getFieldLabelHtml(context, entityType, ""));
     }
 
     @Test

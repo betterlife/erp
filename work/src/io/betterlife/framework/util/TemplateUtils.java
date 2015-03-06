@@ -2,30 +2,22 @@ package io.betterlife.framework.util;
 
 import io.betterlife.framework.application.I18n;
 import io.betterlife.framework.application.config.ApplicationConfig;
-import io.betterlife.framework.application.manager.SharedEntityManager;
-import io.betterlife.framework.meta.FieldMeta;
+import io.betterlife.framework.condition.Evaluator;
 import io.betterlife.framework.domains.BaseObject;
+import io.betterlife.framework.meta.FieldMeta;
 import io.betterlife.framework.persistence.BaseOperator;
 import io.betterlife.framework.persistence.NamedQueryRules;
-import io.betterlife.framework.condition.Evaluator;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.persistence.EntityManager;
-import javax.persistence.NamedQuery;
-import javax.persistence.Query;
 import javax.servlet.ServletContext;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Author: Lawrence Liu(lawrence@betterlife.io)
@@ -67,9 +59,11 @@ public class TemplateUtils {
         StringBuilder form = new StringBuilder();
         Class clazz = fieldMeta.getType();
         String key = fieldMeta.getName();
+        form.append("<div class='form-group'>\n");
+        form.append(getFieldLabelHtml(context, entityType, key));
         form.append("<div class='col-md-4'>");
         if (!Evaluator.getInstance().evalEditable(entityType, fieldMeta, null, operationType)) {
-            form.append(getReadOnlyController(fieldMeta, clazz));
+            form.append(getReadOnlyController(context, fieldMeta, clazz));
         } else if (EntityUtils.getInstance().isIdField(key)) {
             form.append(getIdController(context, key, label));
         } else if (String.class.equals(clazz)) {
@@ -88,16 +82,17 @@ public class TemplateUtils {
             form.append(getEnumController(context, key, clazz));
         }
         form.append("</div>");
+        form.append("</div>");
         return form.toString();
     }
 
-    public String getReadOnlyController(FieldMeta fieldMeta, Class clazz) {
+    public String getReadOnlyController(ServletContext context, FieldMeta fieldMeta, Class clazz) {
         String ngModel = EntityUtils.getInstance().getNgModelNameForField(fieldMeta.getName());
         if (ClassUtils.getAllSuperclasses(clazz).contains(BaseObject.class)) {
             ngModel += "." + fieldMeta.getRepresentField();
         }
-        return String.format("<input type='text' class='form-control' ng-model='%s' name='%s' size='20' disabled/>",
-                             ngModel, fieldMeta.getName());
+        String template = getHtmlTemplate(context, "templates/readonly.tpl.html");
+        return template.replaceAll("\\$ngModel", ngModel).replaceAll("\\$name", fieldMeta.getName());
     }
 
     public String getIdController(ServletContext context, String key, String label) {
@@ -157,6 +152,9 @@ public class TemplateUtils {
                                                 Class<? extends BaseObject> clazz) {
         String result;
         final String simpleName = clazz.getSimpleName();
+        //TODO.xqliu The list retrieved from DB was not updated according to latest DB.
+        //TODO.xqliu Change to angularJS way, template does not owns list of data, it only owns display style of the data.
+        //<!-- ng-options="item.id as item.description for item in getAllBaseObjects('$entityType', '$representField', '$name')" -->
         List<BaseObject> objects = BaseOperator.getInstance().getBaseObjects(
             NamedQueryRules.getInstance().getAllQueryForEntity(simpleName), null
         );
@@ -237,13 +235,11 @@ public class TemplateUtils {
             .replaceAll("\\$entityType", I18n.getInstance().get(BLStringUtils.capitalize(entityType), locale));
     }
 
-    public String getFieldLabelHtml(String entityType, String key) {
+    public String getFieldLabelHtml(ServletContext context, String entityType, String key) {
         final String label = I18n.getInstance().getFieldLabel(entityType, key);
-        return String.format(
-            "<label for='%s' class='col-md-offset-2 col-md-2 control-label %s-label'>%s</label>%n",
-            null == key ? BLStringUtils.EMPTY : key,
-            null == key ? BLStringUtils.EMPTY : key, label
-        );
+        String template = getHtmlTemplate(context, "templates/label.tpl.html");
+        final String k = null == key ? BLStringUtils.EMPTY : key;
+        return template.replaceAll("\\$key", k).replaceAll("\\$label", label);
     }
 
     public String getListController(ServletContext context, String entityType) {
@@ -253,4 +249,33 @@ public class TemplateUtils {
             .replaceAll("\\$entityLabel", label);
     }
 
+    public String getFormHtmlFromTemplate(String entityType, ServletContext context, String operationType,
+                            LinkedHashMap<String, FieldMeta> sortedMeta, String label, String operationLabel) {
+        String frame = getFrameTemplate(context);
+        String breadCrumb = getBreadCrumb(context, entityType, label, operationLabel);
+        StringBuilder fields = new StringBuilder();
+        for (Map.Entry<String, FieldMeta> entry : sortedMeta.entrySet()) {
+            final FieldMeta fieldMeta = entry.getValue();
+            final String key = entry.getKey();
+            if (!Evaluator.getInstance().evalVisible(entityType, entry.getValue(), null, operationType)) continue;
+            fields.append(getFieldController(context, operationType, entityType, fieldMeta,
+                                             I18n.getInstance().getFieldLabel(entityType, key)));
+        }
+        final String buttons = getButtonsController(context, entityType, operationType);
+        final String fieldsList = fields.toString();
+        final String withBreadCrumb = frame.replace("$breadcrumb", breadCrumb);
+        final String withButtons = withBreadCrumb.replace("$buttons", buttons);
+        return withButtons.replace("$fieldsList", fieldsList);
+    }
+
+    public String getFrameTemplate(ServletContext context) {
+        return getHtmlTemplate(context, "templates/form.tpl.html");
+    }
+
+    public String getBreadCrumb(ServletContext context, String entityType, String label, String operationLabel) {
+        return getHtmlTemplate(context, "templates/breadcrumb.tpl.html")
+            .replaceAll("\\$entityType", BLStringUtils.uncapitalize(entityType))
+            .replaceAll("\\$entityLabel", label)
+            .replaceAll("\\$operationLabel", operationLabel);
+    }
 }
