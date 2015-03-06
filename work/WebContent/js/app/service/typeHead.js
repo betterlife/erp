@@ -37,6 +37,21 @@ var typeHeadService = function ($rootScope, $http) {
         });
     };
 
+    internal.refreshOptions = function(fieldEntityType, representField, fieldName, currentVal){
+        $http.get("/rest/" + fieldEntityType, {}).success(function (entityData) {
+            var selectElem = $('#' + fieldName);
+            selectElem.find('option').remove().end();
+            var data = entityData.result;
+            $('<option>').val('? undefined:undefined ?').text("").appendTo(selectElem);
+            for(var idx = 0; idx < data.length; idx++){
+                var item = data[idx];
+                var option = $('<option>');
+                option.val(item.id).text(item[representField]).appendTo(selectElem);
+            }
+            selectElem.val(currentVal);
+        })
+    };
+
     return internal;
 };
 

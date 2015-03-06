@@ -26,6 +26,10 @@ var editCtrl = function ($scope, $http, $location, loginService, typeHeadService
         $scope.originalEntity = angular.copy(data.result);
     });
 
+    $scope.refreshOptions = function(fieldEntityType, representField, fieldName) {
+        typeHeadService.refreshOptions(fieldEntityType, representField, fieldName, $scope.entity[fieldName].id);
+    };
+
     $scope.update = function () {
         $http.put("/rest/" + $scope.entityType + "/" + $scope.id, {
             'entity': $scope.entity
@@ -37,6 +41,18 @@ var editCtrl = function ($scope, $http, $location, loginService, typeHeadService
 
     $scope.onTypeHeadSelect = function($item, $model, $label, baseObjectFieldName) {
         $scope.entity[baseObjectFieldName] = typeHeadService.onTypeHeadSelect($item, $model, $label, baseObjectFieldName);
+    };
+
+    $scope.getAllBaseObjects = function (entityType, representField, name) {
+        /**
+        var defer = $q.defer();
+        $http.get('/rest/' + entityType, {}).then(function (response) {
+            console.log(response);
+            defer.resolve(response);
+        });
+        var message = defer.promise;
+        console.log(message);*/
+        return [{id: 1, description: "abc"}, {id: 2, description: "def"}];
     };
 
     $scope.getBaseObjects = function(entityType, representField, val) {

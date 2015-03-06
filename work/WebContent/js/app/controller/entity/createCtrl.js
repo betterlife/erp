@@ -32,6 +32,10 @@ var createCtrl = function ($scope, $http, $location, loginService, typeHeadServi
         });
     };
 
+    $scope.refreshOptions = function(fieldEntityType, representField, fieldName) {
+        typeHeadService.refreshOptions(fieldEntityType, representField, fieldName, '? undefined:undefined ?');
+    };
+
     $scope.onTypeHeadSelect = function($item, $model, $label, baseObjectFieldName) {
         $scope.entity[baseObjectFieldName] = typeHeadService.onTypeHeadSelect($item, $model, $label, baseObjectFieldName);
     };

@@ -363,7 +363,7 @@ public class TemplateUtilsTest {
     public void testGetListController() throws Exception {
         final String input = "<div id=\"grid1\" ui-grid=\"gridOptions\" ui-grid-pagination class=\"grid\" external-scopes=\"myViewModel\"></div>";
         ServletContext context = mockServletContext(input, "/templates/list.tpl.html");
-        assertEquals(input, templateUtils.getListController(context));
+        assertEquals(input, templateUtils.getListController(context, "user"));
     }
 
     private ServletContext mockServletContext(String input, final String absolutePath) {
