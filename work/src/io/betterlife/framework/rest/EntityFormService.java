@@ -1,11 +1,7 @@
 package io.betterlife.framework.rest;
 
-import io.betterlife.framework.application.I18n;
-import io.betterlife.framework.application.config.ApplicationConfig;
 import io.betterlife.framework.meta.FieldMeta;
 import io.betterlife.framework.application.manager.MetaDataManager;
-import io.betterlife.framework.condition.Evaluator;
-import io.betterlife.framework.util.BLStringUtils;
 import io.betterlife.framework.util.EntityUtils;
 import io.betterlife.framework.util.TemplateUtils;
 import org.apache.logging.log4j.LogManager;
@@ -66,7 +62,7 @@ public class EntityFormService {
     public String getForm(String entityType, ServletContext context, final String operationType) {
         Map<String, FieldMeta> meta = MetaDataManager.getInstance().getMetaFromEntityType(entityType);
         LinkedHashMap<String, FieldMeta> sortedMeta = EntityUtils.getInstance().sortEntityMetaByDisplayRank(meta);
-        String formString = getTemplateUtils().getFormHtmlFromTemplate(entityType, context, operationType, sortedMeta);
+        String formString = getTemplateUtils().getFormHtml(entityType, context, operationType, sortedMeta);
         if (logger.isTraceEnabled()) {
             logger.trace(String.format("%s form template for EntityType[%s]:%n\t%s", operationType, entityType, formString));
         }

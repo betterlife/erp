@@ -249,8 +249,8 @@ public class TemplateUtils {
             .replaceAll("\\$entityLabel", label);
     }
 
-    public String getFormHtmlFromTemplate(String entityType, ServletContext context, String operationType,
-                                          LinkedHashMap<String, FieldMeta> sortedMeta) {
+    public String getFormHtml(String entityType, ServletContext context, String operationType,
+                              LinkedHashMap<String, FieldMeta> sortedMeta) {
         String frame = getFrameTemplate(context);
         String breadCrumb = getBreadCrumb(context, entityType, operationType);
         StringBuilder fields = new StringBuilder();
