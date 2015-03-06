@@ -26,4 +26,8 @@ public class NamedQueryRules {
     public String getAllQueryForEntity(String entityName) {
         return StringUtils.capitalize(entityName) + ".getAll";
     }
+
+    public String getKeywordQueryForEntity(String entityName) {
+        return StringUtils.capitalize(entityName) + ".getByKeyword";
+    }
 }

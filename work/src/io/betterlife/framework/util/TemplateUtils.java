@@ -2,6 +2,7 @@ package io.betterlife.framework.util;
 
 import io.betterlife.framework.application.I18n;
 import io.betterlife.framework.application.config.ApplicationConfig;
+import io.betterlife.framework.application.manager.SharedEntityManager;
 import io.betterlife.framework.meta.FieldMeta;
 import io.betterlife.framework.domains.BaseObject;
 import io.betterlife.framework.persistence.BaseOperator;
@@ -9,11 +10,16 @@ import io.betterlife.framework.persistence.NamedQueryRules;
 import io.betterlife.framework.condition.Evaluator;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.reflect.MethodUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.persistence.EntityManager;
+import javax.persistence.NamedQuery;
+import javax.persistence.Query;
 import javax.servlet.ServletContext;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -43,7 +49,7 @@ public class TemplateUtils {
             if (!filePath.startsWith("/")) {
                 filePath = "/" + filePath;
             }
-            if (null == cachedTemplates.get(filePath)) {
+            if (null == cachedTemplates.get(filePath) || ApplicationConfig.isDevelopmentMode()) {
                 InputStream inputStream = context.getResourceAsStream(filePath);
                 final String string = IOUtil.getInstance().inputStreamToString(inputStream);
                 cachedTemplates.put(filePath, string);
@@ -121,21 +127,65 @@ public class TemplateUtils {
             .replaceAll("\\$options", sb.toString());
     }
 
-    public String getBaseObjectController(ServletContext context, FieldMeta fieldMeta, Class<? extends BaseObject> clazz) {
+    public String getBaseObjectController(ServletContext context, FieldMeta fieldMeta,
+                                          Class<? extends BaseObject> clazz) {
+        long number = BaseOperator.getInstance().getObjectCount(clazz);
+        String result = "";
+        if (number <= ApplicationConfig.MaxNumberOfObjectForSelectController)
+            result = getBaseObjectSelectController(context, fieldMeta, clazz);
+        else {
+            result = getBaseObjectTypeHeadController(context, fieldMeta, clazz);
+        }
+        return result;
+    }
+
+    public String getBaseObjectTypeHeadController(ServletContext context, FieldMeta fieldMeta,
+                                                  Class<? extends BaseObject> clazz) {
+        String result;
+        String template = getHtmlTemplate(context, "templates/fields/baseobject.typehead.tpl.html");
+        final String ngModelField = EntityUtils.getInstance().getNgModelNameForField(fieldMeta.getName());
+        result = template
+            .replaceAll("\\$name", fieldMeta.getName())
+            .replaceAll("\\$ngModel", ngModelField)
+            .replaceAll("\\$placeholder", I18n.getInstance().get(fieldMeta.getName(), ApplicationConfig.getLocale()))
+            .replaceAll("\\$entityType", BLStringUtils.uncapitalize(clazz.getSimpleName()))
+            .replaceAll("\\$representField", fieldMeta.getRepresentField());
+        return result;
+    }
+
+    public String getBaseObjectSelectController(ServletContext context, FieldMeta fieldMeta,
+                                                Class<? extends BaseObject> clazz) {
+        String result;
+        final String simpleName = clazz.getSimpleName();
         List<BaseObject> objects = BaseOperator.getInstance().getBaseObjects(
-            NamedQueryRules.getInstance().getAllQueryForEntity(clazz.getSimpleName())
+            NamedQueryRules.getInstance().getAllQueryForEntity(simpleName), null
         );
         StringBuilder sb = new StringBuilder();
+        final String representField = fieldMeta.getRepresentField();
+        final String methodName = "get" + BLStringUtils.capitalize(representField);
+        final String fieldName = fieldMeta.getName();
+        final String ngModelNameForField = EntityUtils.getInstance().getNgModelNameForField(fieldName);
         for (BaseObject baseObject : objects) {
-            sb.append(String.format("%n\t<option value='%s'>%s</option>", baseObject.getId(),
-                                    baseObject.getValue(fieldMeta.getRepresentField())));
+            try {
+                Object value = baseObject.getValue(representField);
+                if (null == value) {
+                    value = MethodUtils.invokeExactMethod(baseObject, methodName);
+                }
+                sb.append(String.format("%n\t<option value='%s'>%s</option>", baseObject.getId(), value));
+            } catch (Exception e) {
+                logger.error("Failed to get field[%s] of Object[%s] via method[%s]",
+                             representField, baseObject, methodName);
+            }
         }
         sb.append("\n");
-        String template = getHtmlTemplate(context, "templates/fields/baseobject.tpl.html");
-        return template
-            .replaceAll("\\$name", fieldMeta.getName())
-            .replaceAll("\\$ngModel", EntityUtils.getInstance().getNgModelNameForField(fieldMeta.getName()) + ".id")
-            .replaceAll("\\$options", sb.toString());
+        String template = getHtmlTemplate(context, "templates/fields/baseobject.select.tpl.html");
+        result = template
+            .replaceAll("\\$name", fieldName)
+            .replaceAll("\\$ngModel", ngModelNameForField + ".id")
+            .replaceAll("\\$options", sb.toString())
+            .replaceAll("\\$representField", representField)
+            .replaceAll("\\$entityType", BLStringUtils.uncapitalize(simpleName));
+        return result;
     }
 
     public String getBooleanController(ServletContext context, String key) {
@@ -196,8 +246,11 @@ public class TemplateUtils {
         );
     }
 
-    public String getListController(ServletContext context) {
-        return getHtmlTemplate(context, "templates/list.tpl.html");
+    public String getListController(ServletContext context, String entityType) {
+        final String label = I18n.getInstance().get(BLStringUtils.capitalize(entityType), ApplicationConfig.getLocale());
+        return getHtmlTemplate(context, "templates/list.tpl.html")
+            .replaceAll("\\$entityType", BLStringUtils.uncapitalize(entityType))
+            .replaceAll("\\$entityLabel", label);
     }
 
 }

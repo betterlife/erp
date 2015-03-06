@@ -1,9 +1,11 @@
 package io.betterlife.framework.rest;
 
 import io.betterlife.framework.application.I18n;
+import io.betterlife.framework.application.config.ApplicationConfig;
 import io.betterlife.framework.meta.FieldMeta;
 import io.betterlife.framework.application.manager.MetaDataManager;
 import io.betterlife.framework.condition.Evaluator;
+import io.betterlife.framework.util.BLStringUtils;
 import io.betterlife.framework.util.EntityUtils;
 import io.betterlife.framework.util.TemplateUtils;
 import org.apache.logging.log4j.LogManager;
@@ -65,6 +67,22 @@ public class EntityFormService {
         Map<String, FieldMeta> meta = MetaDataManager.getInstance().getMetaFromEntityType(entityType);
         LinkedHashMap<String, FieldMeta> sortedMeta = EntityUtils.getInstance().sortEntityMetaByDisplayRank(meta);
         StringBuilder form = new StringBuilder();
+        final String locale = ApplicationConfig.getLocale();
+        final String label = I18n.getInstance().get(BLStringUtils.capitalize(entityType), locale);
+        final String operationLabel = I18n.getInstance().get(BLStringUtils.capitalize(operationType), locale);
+        form.append(
+            ("<div class=\"breadcrumb-container\">\n" +
+                "    <ol class=\"breadcrumb\">\n" +
+                "        <li><a href=\"/\">主页</a></li>\n" +
+                "        <li><a href=\"/$entityType/list\">$entityLabel</a></li>\n" +
+                "        <li class=\"active\">$operationLabel</li>\n" +
+                "        <li><a href=\"/$entityType/list\">返回列表</a></li>\n" +
+                "    </ol>\n" +
+                "</div>")
+                .replaceAll("\\$entityType", BLStringUtils.uncapitalize(entityType))
+                .replaceAll("\\$entityLabel", label)
+                .replaceAll("\\$operationLabel", operationLabel)
+        );
         form.append("<div class='form-group form-horizontal'>");
         for (Map.Entry<String, FieldMeta> entry : sortedMeta.entrySet()) {
             final FieldMeta fieldMeta = entry.getValue();
@@ -91,7 +109,7 @@ public class EntityFormService {
     public String getListForm(@PathParam("entityType") String entityType, @Context HttpServletRequest request) {
         HttpSession session = request.getSession();
         ServletContext context = session.getServletContext();
-        final String formString = getTemplateUtils().getListController(context);
+        final String formString = getTemplateUtils().getListController(context, entityType);
         if (logger.isTraceEnabled()) {
             logger.trace(String.format("List template for EntityType[%s]:%n\t%s", entityType, formString));
         }

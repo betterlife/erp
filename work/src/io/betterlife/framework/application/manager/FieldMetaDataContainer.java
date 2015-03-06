@@ -20,6 +20,7 @@ import java.util.Set;
 /**
  * Author: Lawrence Liu
  * Date: 2/6/15
+ * Stores all field meta, includes their name, type, represent field, boolean label etc.
  */
 public class FieldMetaDataContainer extends MetaDataContainer {
 

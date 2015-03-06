@@ -11,6 +11,7 @@ import java.util.Map;
 /**
  * Author: Lawrence Liu
  * Date: 2/6/15
+ * Stores entity meta data, includes triggers defined in entity level, such as save trigger.
  */
 public class EntityMetaDataContainer extends MetaDataContainer {
 

@@ -54,7 +54,7 @@ public class Incoming extends BaseObject {
     }
 
     @OneToOne(fetch=FetchType.LAZY)
-    @FormField(DisplayRank = 20, RepresentField = "id")
+    @FormField(DisplayRank = 20, RepresentField = "representField")
     @JsonManagedReference
     public SalesOrder getSalesOrder() {
         return getValue("salesOrder");
