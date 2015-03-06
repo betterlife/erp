@@ -31,6 +31,7 @@ var editCtrl = function ($scope, $http, $location, loginService, typeHeadService
             var selectElem = $('#' + fieldName);
             selectElem.find('option').remove().end();
             var data = entityData.result;
+            $('<option>').val('? undefined:undefined ?').text("").appendTo(selectElem);
             for(var idx = 0; idx < data.length; idx++){
                 var item = data[idx];
                 var option = $('<option>');
