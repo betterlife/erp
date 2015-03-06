@@ -250,9 +250,9 @@ public class TemplateUtils {
     }
 
     public String getFormHtmlFromTemplate(String entityType, ServletContext context, String operationType,
-                            LinkedHashMap<String, FieldMeta> sortedMeta, String label, String operationLabel) {
+                                          LinkedHashMap<String, FieldMeta> sortedMeta) {
         String frame = getFrameTemplate(context);
-        String breadCrumb = getBreadCrumb(context, entityType, label, operationLabel);
+        String breadCrumb = getBreadCrumb(context, entityType, operationType);
         StringBuilder fields = new StringBuilder();
         for (Map.Entry<String, FieldMeta> entry : sortedMeta.entrySet()) {
             final FieldMeta fieldMeta = entry.getValue();
@@ -272,7 +272,10 @@ public class TemplateUtils {
         return getHtmlTemplate(context, "templates/form.tpl.html");
     }
 
-    public String getBreadCrumb(ServletContext context, String entityType, String label, String operationLabel) {
+    public String getBreadCrumb(ServletContext context, String entityType, String operationType) {
+        final String locale = ApplicationConfig.getLocale();
+        final String label = I18n.getInstance().get(BLStringUtils.capitalize(entityType), locale);
+        final String operationLabel = I18n.getInstance().get(BLStringUtils.capitalize(operationType), locale);
         return getHtmlTemplate(context, "templates/breadcrumb.tpl.html")
             .replaceAll("\\$entityType", BLStringUtils.uncapitalize(entityType))
             .replaceAll("\\$entityLabel", label)

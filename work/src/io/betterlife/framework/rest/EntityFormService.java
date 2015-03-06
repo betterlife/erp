@@ -66,11 +66,7 @@ public class EntityFormService {
     public String getForm(String entityType, ServletContext context, final String operationType) {
         Map<String, FieldMeta> meta = MetaDataManager.getInstance().getMetaFromEntityType(entityType);
         LinkedHashMap<String, FieldMeta> sortedMeta = EntityUtils.getInstance().sortEntityMetaByDisplayRank(meta);
-        final String locale = ApplicationConfig.getLocale();
-        final String label = I18n.getInstance().get(BLStringUtils.capitalize(entityType), locale);
-        final String operationLabel = I18n.getInstance().get(BLStringUtils.capitalize(operationType), locale);
-        String formString = getTemplateUtils().getFormHtmlFromTemplate(entityType, context, operationType,
-                                                                       sortedMeta, label, operationLabel);
+        String formString = getTemplateUtils().getFormHtmlFromTemplate(entityType, context, operationType, sortedMeta);
         if (logger.isTraceEnabled()) {
             logger.trace(String.format("%s form template for EntityType[%s]:%n\t%s", operationType, entityType, formString));
         }
