@@ -50,7 +50,7 @@ Special Thanks
 --------------
 
 - [Atlassian](https://www.atlassian.com/) for providing free license of [Clover](https://www.atlassian.com/software/clover/overview), [Jira](https://www.atlassian.com/software/jira) and [Confluene](https://www.atlassian.com/software/confluence).
-- [Sprint.ly](https://sprint.ly/) for providing free plan to manage issues.
+- [Blossom](https://www.blossom.io/) for providing platform to manage feature cards.
 - [Codeship](https://codeship.com/) for providing free CI plan.
 - [Code Climate](https://codeclimate.com) for providing free plan to do JavaScript code analysis.
 - [Openshift](https://www.openshift.com) for providing PAAS platform.
