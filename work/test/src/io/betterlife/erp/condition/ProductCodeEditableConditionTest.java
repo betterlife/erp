@@ -1,5 +1,6 @@
 package io.betterlife.erp.condition;
 
+import io.betterlife.framework.constant.Operation;
 import io.betterlife.framework.meta.FieldMeta;
 import io.betterlife.framework.condition.Condition;
 import org.junit.Before;
@@ -22,18 +23,18 @@ public class ProductCodeEditableConditionTest {
 
     @Test
     public void shouldEditableWhenCreate() throws Exception {
-        assertTrue(condition.evaluate("product", meta, null, "Create"));
+        assertTrue(condition.evaluate("product", meta, null, Operation.CREATE));
     }
 
     @Test
     public void shouldNonEditableWhenUpdating() {
-        assertFalse(condition.evaluate("product", meta, null, "Update"));
+        assertFalse(condition.evaluate("product", meta, null, Operation.UPDATE));
     }
 
     @Test
     public void shouldEditableWhenNotProduct(){
-        assertTrue(condition.evaluate("User", meta, null, "Create"));
-        assertTrue(condition.evaluate("User", meta, null, "Update"));
-        assertTrue(condition.evaluate("User", meta, null, "List"));
+        assertTrue(condition.evaluate("User", meta, null, Operation.CREATE));
+        assertTrue(condition.evaluate("User", meta, null, Operation.UPDATE));
+        assertTrue(condition.evaluate("User", meta, null, Operation.LIST));
     }
 }

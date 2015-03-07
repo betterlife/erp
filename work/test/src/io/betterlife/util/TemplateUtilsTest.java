@@ -1,6 +1,7 @@
 package io.betterlife.util;
 
 import io.betterlife.framework.application.I18n;
+import io.betterlife.framework.constant.Operation;
 import io.betterlife.framework.meta.FieldMeta;
 import io.betterlife.framework.domains.BaseObject;
 import io.betterlife.framework.persistence.BaseOperator;
@@ -48,8 +49,8 @@ public class TemplateUtilsTest {
         when(i18n.getFieldLabel("Expense", "expenseCategory")).thenReturn("支出分类");
         when(i18n.getFieldLabel("User", "password")).thenReturn("密码");
         when(i18n.getFieldLabel("PurchaseOrder", "id")).thenReturn("编号");
-        when(i18n.get("Update", "zh_CN")).thenReturn("更新");
-        when(i18n.get("Create", "zh_CN")).thenReturn("创建");
+        when(i18n.get(Operation.UPDATE, "zh_CN")).thenReturn("更新");
+        when(i18n.get(Operation.CREATE, "zh_CN")).thenReturn("创建");
         when(i18n.get("Reset", "zh_CN")).thenReturn("重置");
         when(i18n.get("User", "zh_CN")).thenReturn("用户");
         when(i18n.get("Expense", "zh_CN")).thenReturn("支出");
@@ -314,8 +315,6 @@ public class TemplateUtilsTest {
         String result = "";
         if ("number".equals(type)) {
             result = templateUtils.getNumberController(context, fieldKey, label);
-        } else if ("hidden".equals(type)) {
-            result = templateUtils.getIdController(context, fieldKey, label);
         } else {
             result = templateUtils.getStringController(context, fieldKey, label);
         }
@@ -324,12 +323,12 @@ public class TemplateUtilsTest {
 
     @Test
     public void testGetButtonsControllerForCreate() {
-        internalTestGetButtonController("Expense", "Create");
+        internalTestGetButtonController("Expense", Operation.CREATE);
     }
 
     @Test
     public void testGetButtonsControllerForUpdate() throws Exception {
-        internalTestGetButtonController("User", "Update");
+        internalTestGetButtonController("User", Operation.UPDATE);
     }
 
     protected void internalTestGetButtonController(final String entity, final String operation) {
