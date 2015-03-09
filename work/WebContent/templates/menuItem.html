@@ -1,7 +1,7 @@
-<li class="dropdown" ng-class="{active: (isActive('/{{entityname}}'))}">
-    <a class="dropdown-toggle" data-toggle="dropdown">{{entitylabel}}<span class="caret"></span></a>
-    <ul class="dropdown-menu" role="menu">
-        <li><a href="/{{entityname}}/create">创建{{entitylabel}}</a></li>
-        <li><a href="/{{entityname}}/list">列出{{entitylabel}}</a></li>
-    </ul>
- </li>
+<li class="dropdown-header menu-title">
+    <span class="glyphicon {{icon}}" style="width:110px"> {{entitylabel}} </span>
+    <span>
+        <a href="/{{entityname}}/create" class="glyphicon glyphicon-plus" style="color:#AAAAAA"></a>
+        <a href="/{{entityname}}/list" class="glyphicon glyphicon-list" style="color:#AAAAAA"></a>
+    </span>
+</li>

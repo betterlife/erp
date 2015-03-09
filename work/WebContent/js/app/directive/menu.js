@@ -9,7 +9,8 @@
         replace: true,
         scope: {
             entitylabel : '@entitylabel',
-            entityname  : '@entityname'
+            entityname  : '@entityname',
+            icon        : '@icon'
         }
     }
 };
