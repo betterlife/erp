@@ -3,6 +3,7 @@ package io.betterlife.framework.util;
 import io.betterlife.framework.application.I18n;
 import io.betterlife.framework.application.config.ApplicationConfig;
 import io.betterlife.framework.condition.Evaluator;
+import io.betterlife.framework.constant.Operation;
 import io.betterlife.framework.domains.BaseObject;
 import io.betterlife.framework.meta.FieldMeta;
 import io.betterlife.framework.persistence.BaseOperator;
@@ -64,9 +65,7 @@ public class TemplateUtils {
         form.append("<div class='col-md-4'>");
         if (!Evaluator.getInstance().evalEditable(entityType, fieldMeta, null, operationType)) {
             form.append(getReadOnlyController(context, fieldMeta, clazz));
-        } else if (EntityUtils.getInstance().isIdField(key)) {
-            form.append(getIdController(context, key, label));
-        } else if (String.class.equals(clazz)) {
+        }  else if (String.class.equals(clazz)) {
             form.append(getStringController(context, key, label));
         } else if (Date.class.equals(clazz)) {
             form.append(getDateController(context, key, new Date()));
@@ -93,15 +92,6 @@ public class TemplateUtils {
         }
         String template = getHtmlTemplate(context, "templates/readonly.tpl.html");
         return template.replaceAll("\\$ngModel", ngModel).replaceAll("\\$name", fieldMeta.getName());
-    }
-
-    public String getIdController(ServletContext context, String key, String label) {
-        String template = getHtmlTemplate(context, "templates/fields/string.tpl.html");
-        return template
-            .replaceAll("\\$name", key)
-            .replaceAll("\\$ngModel", EntityUtils.getInstance().getNgModelNameForField(key))
-            .replaceAll("\\$placeholder", label)
-            .replaceAll("\\$type", "hidden");
     }
 
     public String getEnumController(ServletContext context, String key, Class clazz) {
@@ -225,7 +215,7 @@ public class TemplateUtils {
             .replaceAll("\\$placeholder", label);
     }
 
-    public String getButtonsController(ServletContext context, String entityType, final String operationType) {
+    public String getEditButtons(ServletContext context, String entityType, final String operationType) {
         String template = getHtmlTemplate(context, "templates/fields/buttons.tpl.html");
         final String locale = ApplicationConfig.getLocale();
         return template
@@ -261,11 +251,20 @@ public class TemplateUtils {
             fields.append(getFieldController(context, operationType, entityType, fieldMeta,
                                              I18n.getInstance().getFieldLabel(entityType, key)));
         }
-        final String buttons = getButtonsController(context, entityType, operationType);
+        String buttons = "";
+        if (!Operation.DETAIL.equals(operationType)){
+            buttons = getEditButtons(context, entityType, operationType);
+        } else {
+            buttons = getDetailButtons(context, entityType, operationType);
+        }
         final String fieldsList = fields.toString();
         final String withBreadCrumb = frame.replace("$breadcrumb", breadCrumb);
         final String withButtons = withBreadCrumb.replace("$buttons", buttons);
         return withButtons.replace("$fieldsList", fieldsList);
+    }
+
+    private String getDetailButtons(ServletContext context, String entityType, String operationType) {
+        return getHtmlTemplate(context, "templates/detail.buttons.tpl.html").replaceAll("\\$entityType", entityType);
     }
 
     public String getFrameTemplate(ServletContext context) {

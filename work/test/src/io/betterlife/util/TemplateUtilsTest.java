@@ -345,7 +345,7 @@ public class TemplateUtilsTest {
             "    </div>\n" +
             "</div>";
         ServletContext context = mockServletContext(input, "/templates/fields/buttons.tpl.html");
-        assertEquals(expect, templateUtils.getButtonsController(context, entity, operation));
+        assertEquals(expect, templateUtils.getEditButtons(context, entity, operation));
     }
 
     @Test
