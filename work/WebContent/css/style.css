@@ -16,6 +16,7 @@ body {
     text-align:center;
     clear:both;
     padding-top:20px;
+    padding-bottom: 20px;
 }
 html, body {
     height: 100%;
@@ -122,4 +123,8 @@ html, body {
 
 .menu-item-plus {
     color: #AAAAAA;
+}
+
+.login-panel {
+    margin-top:150px;
 }
