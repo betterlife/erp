@@ -284,7 +284,7 @@ public class TemplateUtilsTest {
 
     @Test
     public void testGetIdController() {
-        internalTestGetStringController("PurchaseOrder", "id", "hidden");
+        internalTestGetStringController("PurchaseOrder", "id", "text");
     }
 
     @Test
