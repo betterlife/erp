@@ -2,6 +2,7 @@ package io.betterlife.framework.annotation;
 
 import io.betterlife.framework.application.config.ApplicationConfig;
 import io.betterlife.framework.condition.Condition;
+import io.betterlife.framework.condition.DefaultEditableCondition;
 import io.betterlife.framework.condition.TrueCondition;
 import io.betterlife.framework.converter.Converter;
 import io.betterlife.framework.converter.DefaultConverter;
@@ -28,7 +29,7 @@ public @interface FormField {
 
     Class<? extends Converter> Converter() default DefaultConverter.class;
 
-    Class<? extends Condition> Editable() default TrueCondition.class;
+    Class<? extends Condition> Editable() default DefaultEditableCondition.class;
 
     Class<? extends FieldTrigger> ValueChangeTrigger() default DoNothingFieldTrigger.class;
 

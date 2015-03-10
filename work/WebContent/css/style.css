@@ -11,9 +11,7 @@ body {
 .nav, .pagination, .carousel, .panel-title a {
     cursor: pointer;
 }
-.id-label {
-    display:none;
-}
+
 .footer {
     text-align:center;
     clear:both;
@@ -107,4 +105,9 @@ html, body {
     width:94%;
     display:inline;
     margin-right: 5px;
+}
+
+.list-click-icon {
+    padding-left: 10px;
+    cursor: hand
 }

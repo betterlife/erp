@@ -51,7 +51,7 @@
                     })
                     .when('/:entityType/detail/:id',{
                         templateUrl: function ($routeParams){
-                            return '/rest/form/' + $routeParams.entityType + '/detail';
+                            return '/rest/form/' + $routeParams.entityType + '/detail/' + $routeParams.id;
                         },
                         controller: detailCtrl,
                         authenticate: true

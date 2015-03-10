@@ -61,58 +61,42 @@
                         <li ng-class="{active: (isActive('/costCenter'))}" ng-show="isLoggedIn()">
                             <a class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-wrench"></span> 基础数据<span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li class="dropdown-header menu-title"><span class="glyphicon glyphicon-globe"></span> 部门/项目</li>
-                                <li><a href="/costCenter/create">创建部门/项目</a></li>
-                                <li><a href="/costCenter/list">列出部门/项目</a></li>
-                                <li class="dropdown-header menu-title"><span class="glyphicon glyphicon-user"></span> 用户</li>
-                                <li><a href="/user/create">创建用户</a></li>
-                                <li><a href="/user/list">列出用户</a></li>
+                                <menuitem entityLabel="部门/项目" entityName="costCenter" icon="glyphicon-globe"></menuitem>
+                                <menuitem entityLabel="用户" entityName="user" icon="glyphicon-user"></menuitem>
                             </ul>
                          </li>
                         <li ng-class="{active: (isActive('/expenseCategory') || isActive('/incomingCategory') || isActive('/incoming') || isActive('/expense'))}" ng-show="isLoggedIn()">
                             <a class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-usd"></span> 财务<span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li class="dropdown-header menu-title"><span class="glyphicon glyphicon-tag"></span> 支出分类</li>
-                                <li><a href="/expenseCategory/create">创建支出分类</a></li>
-                                <li><a href="/expenseCategory/list">列出支出分类</a></li>
-                                <li class="dropdown-header menu-title"><span class="glyphicon glyphicon-minus-sign"></span> 支出</li>
-                                <li><a href="/expense/create">增加支出</a></li>
-                                <li><a href="/expense/list">列出支出</a></li>
-                                <li class="dropdown-header menu-title"><span class="glyphicon glyphicon-tag"></span> 收入分类</li>
-                                <li><a href="/incomingCategory/create">创建收入分类</a></li>
-                                <li><a href="/incomingCategory/list">列出收入分类</a></li>
-                                <li class="dropdown-header menu-title"><span class="glyphicon glyphicon-usd"></span> 收入</li>
-                                <li><a href="/incoming/create">增加收入</a></li>
-                                <li><a href="/incoming/list">列出收入</a></li>
-                                <li class="dropdown-header menu-title"><span class="glyphicon glyphicon-wrench"></span> 财务设置</li>
+                                <menuitem entityLabel="支出分类" entityName="expenseCategory" icon="glyphicon-tag"></menuitem>
+                                <menuitem entityLabel="收入分类" entityName="incomingCategory" icon="glyphicon-tag"></menuitem>
+                                <menuitem entityLabel="收入" entityName="incoming" icon="glyphicon-signal"></menuitem>
+                                <menuitem entityLabel="支出" entityName="expense" icon="glyphicon-minus"></menuitem>
+                                <menuitem entityLabel="付款方式" entityName="incoming" icon="glyphicon-usd"></menuitem>
+                                <li class="dropdown-header menu-title">
+                                    <span class="glyphicon glyphicon-wrench">
+                                        <a href="/defaultFinancialSetting/edit/1">编辑财务设置</a>
+                                    </span>
+                                <li>
+                                <!--
                                 <li><a href="/defaultFinancialSetting/create">初始化财务设置</a></li>
-                                <li><a href="/defaultFinancialSetting/edit/1">编辑财务设置</a></li>
                                 <li><a href="/defaultFinancialSetting/list">列出财务设置</a></li>
+                                -->
                             </ul>
                          </li>
                         <li ng-class="{active: (isActive('/product') || isActive('/productCategory'))}" ng-show="isLoggedIn()">
                             <a class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-barcode"></span> 产品及供应商<span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li class="dropdown-header menu-title"><span class="glyphicon glyphicon-tag"></span> 产品分类</li>
-                                <li><a href="/productCategory/create">增加产品分类</a></li>
-                                <li><a href="/productCategory/list">列出产品分类</a></li>
-                                <li class="dropdown-header menu-title"><span class="glyphicon glyphicon-user"></span> 供应商</li>
-                                <li><a href="/supplier/create">增加供应商</a></li>
-                                <li><a href="/supplier/list">列出供应商</a></li>
-                                <li class="dropdown-header menu-title"><span class="glyphicon glyphicon-barcode"></span> 产品</li>
-                                <li><a href="/product/create">增加产品</a></li>
-                                <li><a href="/product/list">列出产品</a></li>
+                                <menuitem entityLabel="产品分类" entityName="productCategory" icon="glyphicon-tag"></menuitem>
+                                <menuitem entityLabel="供应商" entityName="supplier" icon="glyphicon-user"></menuitem>
+                                <menuitem entityLabel="产品" entityName="supplier" icon="glyphicon-barcode"></menuitem>
                             </ul>
                          </li>
                         <li ng-class="{active: (isActive('/purchaseOrder') || isActive('/salesOrder'))}" ng-show="isLoggedIn()">
                             <a class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-shopping-cart"></span> 订单<span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li class="dropdown-header menu-title"><span class="glyphicon glyphicon-shopping-cart"></span> 采购订单</li>
-                                <li><a href="/purchaseOrder/create">新增采购订单</a></li>
-                                <li><a href="/purchaseOrder/list">列出采购订单</a></li>
-                                <li class="dropdown-header menu-title"><span class="glyphicon glyphicon-send"></span> 销售订单</li>
-                                <li><a href="/salesOrder/create">新增销售订单</a></li>
-                                <li><a href="/salesOrder/list">列出销售订单</a></li>
+                                <menuitem entityLabel="采购订单" entityName="purchaseOrder" icon="glyphicon-shopping-cart"></menuitem>
+                                <menuitem entityLabel="销售订单" entityName="salesOrder" icon="glyphicon-send"></menuitem>
                             </ul>
                          </li>
                         <li><a href="/login" ng-show="!isLoggedIn()">登陆</a></li>

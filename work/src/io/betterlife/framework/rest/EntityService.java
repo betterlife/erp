@@ -2,6 +2,7 @@ package io.betterlife.framework.rest;
 
 import io.betterlife.framework.application.I18n;
 import io.betterlife.framework.application.config.ApplicationConfig;
+import io.betterlife.framework.constant.Operation;
 import io.betterlife.framework.meta.FieldMeta;
 import io.betterlife.framework.application.manager.MetaDataManager;
 import io.betterlife.framework.condition.Evaluator;
@@ -59,7 +60,7 @@ public class EntityService {
         List<Map<String, Object>> list = new ArrayList<>(sortedMeta.size());
         for (Map.Entry<String, FieldMeta> entry : sortedMeta.entrySet()) {
             final FieldMeta fieldMeta = entry.getValue();
-            if (!Evaluator.getInstance().evalVisible(entityType, fieldMeta, null, "List")) continue;
+            if (!Evaluator.getInstance().evalVisible(entityType, fieldMeta, null, Operation.LIST)) continue;
             String field = entry.getKey();
             if (EntityUtils.getInstance().isBaseObject(fieldMeta.getType())) {
                 field = EntityUtils.getInstance().getRepresentFieldWithDot(fieldMeta);
