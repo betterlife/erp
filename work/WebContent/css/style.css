@@ -111,3 +111,15 @@ html, body {
     padding-left: 10px;
     cursor: hand
 }
+
+.menu-item-title {
+    font-family: 'Microsoft YaHei', ​sans-serif, serif;
+    font-size:16px;
+    text-decoration-style:solid;
+    color:#777777;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.menu-item-plus {
+    color: #AAAAAA;
+}
