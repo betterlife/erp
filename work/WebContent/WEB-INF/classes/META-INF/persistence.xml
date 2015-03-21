@@ -19,7 +19,7 @@
 		<class>io.betterlife.erp.domains.order.SalesOrder</class>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		<properties>
-			<property name="eclipselink.ddl-generation" value="create-tables"/>
+            <property name="eclipselink.ddl-generation" value="create-or-extend-tables" />
 			<property name="eclipselink.target-database" value="org.eclipse.persistence.platform.database.PostgreSQLPlatform"/>
 			<property name="javax.persistence.nonJtaDataSource" value="java:comp/env/jdbc/PostgreSQLDS"/>
 		    <property name="eclipselink.logging.level" value="CONFIG"/>
