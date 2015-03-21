@@ -1,9 +1,8 @@
 package io.betterlife.framework.rest;
 
-import io.betterlife.framework.application.I18n;
+import io.betterlife.framework.constant.Operation;
 import io.betterlife.framework.meta.FieldMeta;
 import io.betterlife.framework.application.manager.MetaDataManager;
-import io.betterlife.framework.condition.Evaluator;
 import io.betterlife.framework.util.EntityUtils;
 import io.betterlife.framework.util.TemplateUtils;
 import org.apache.logging.log4j.LogManager;
@@ -48,7 +47,7 @@ public class EntityFormService {
     public String getCreateForm(@PathParam("entityType") String entityType, @Context HttpServletRequest request) {
         HttpSession session = request.getSession();
         ServletContext context = session.getServletContext();
-        return getForm(entityType, context, "Create");
+        return getForm(entityType, context, Operation.CREATE);
     }
 
     @GET @Path("/{entityType}/edit/{id}")
@@ -58,28 +57,13 @@ public class EntityFormService {
                               @PathParam("id") int id) {
         HttpSession session = request.getSession();
         ServletContext context = session.getServletContext();
-        return getForm(entityType, context, "Update");
+        return getForm(entityType, context, Operation.UPDATE);
     }
 
     public String getForm(String entityType, ServletContext context, final String operationType) {
         Map<String, FieldMeta> meta = MetaDataManager.getInstance().getMetaFromEntityType(entityType);
         LinkedHashMap<String, FieldMeta> sortedMeta = EntityUtils.getInstance().sortEntityMetaByDisplayRank(meta);
-        StringBuilder form = new StringBuilder();
-        form.append("<div class='form-group form-horizontal'>");
-        for (Map.Entry<String, FieldMeta> entry : sortedMeta.entrySet()) {
-            final FieldMeta fieldMeta = entry.getValue();
-            final String key = entry.getKey();
-            if (!Evaluator.getInstance().evalVisible(entityType, entry.getValue(), null, operationType)) continue;
-            form.append("<div class='form-group'>\n");
-            form.append(getTemplateUtils().getFieldLabelHtml(entityType, key));
-            form.append(getTemplateUtils().getFieldController(context, operationType, entityType, fieldMeta,
-                                                              I18n.getInstance().getFieldLabel(entityType, key)));
-            form.append("</div>");
-        }
-        form.append(getTemplateUtils().getButtonsController(context, entityType, operationType));
-        form.append("</div>");
-        form.append("<br/>");
-        final String formString = form.toString();
+        String formString = getTemplateUtils().getFormHtml(entityType, context, operationType, sortedMeta);
         if (logger.isTraceEnabled()) {
             logger.trace(String.format("%s form template for EntityType[%s]:%n\t%s", operationType, entityType, formString));
         }
@@ -91,17 +75,27 @@ public class EntityFormService {
     public String getListForm(@PathParam("entityType") String entityType, @Context HttpServletRequest request) {
         HttpSession session = request.getSession();
         ServletContext context = session.getServletContext();
-        final String formString = getTemplateUtils().getListController(context);
+        final String formString = getTemplateUtils().getListController(context, entityType);
         if (logger.isTraceEnabled()) {
             logger.trace(String.format("List template for EntityType[%s]:%n\t%s", entityType, formString));
         }
         return formString;
     }
 
-    @GET @Path("/{entityName}/detail")
+    @GET @Path("/{entityType}/detail/{id}")
     @Produces(MediaType.TEXT_HTML)
-    public String getDetailForm(@PathParam("entityName") String entityName) {
-        return "Detail Form";
+    public String getDetailForm(@PathParam("entityType") String entityType,
+                                @Context HttpServletRequest request,
+                                @PathParam("id") int id) {
+        HttpSession session = request.getSession();
+        ServletContext context = session.getServletContext();
+        Map<String, FieldMeta> meta = MetaDataManager.getInstance().getMetaFromEntityType(entityType);
+        LinkedHashMap<String, FieldMeta> sortedMeta = EntityUtils.getInstance().sortEntityMetaByDisplayRank(meta);
+        String formString = getTemplateUtils().getFormHtml(entityType, context, Operation.DETAIL, sortedMeta);
+        if (logger.isTraceEnabled()) {
+            logger.trace(String.format("%s form template for EntityType[%s]:%n\t%s", Operation.DETAIL, entityType, formString));
+        }
+        return formString;
     }
 
 }

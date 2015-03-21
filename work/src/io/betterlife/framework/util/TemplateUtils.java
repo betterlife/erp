@@ -2,13 +2,15 @@ package io.betterlife.framework.util;
 
 import io.betterlife.framework.application.I18n;
 import io.betterlife.framework.application.config.ApplicationConfig;
-import io.betterlife.framework.meta.FieldMeta;
+import io.betterlife.framework.condition.Evaluator;
+import io.betterlife.framework.constant.Operation;
 import io.betterlife.framework.domains.BaseObject;
+import io.betterlife.framework.meta.FieldMeta;
 import io.betterlife.framework.persistence.BaseOperator;
 import io.betterlife.framework.persistence.NamedQueryRules;
-import io.betterlife.framework.condition.Evaluator;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.reflect.MethodUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,10 +18,7 @@ import javax.servlet.ServletContext;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Author: Lawrence Liu(lawrence@betterlife.io)
@@ -43,7 +42,7 @@ public class TemplateUtils {
             if (!filePath.startsWith("/")) {
                 filePath = "/" + filePath;
             }
-            if (null == cachedTemplates.get(filePath)) {
+            if (null == cachedTemplates.get(filePath) || ApplicationConfig.isDevelopmentMode()) {
                 InputStream inputStream = context.getResourceAsStream(filePath);
                 final String string = IOUtil.getInstance().inputStreamToString(inputStream);
                 cachedTemplates.put(filePath, string);
@@ -61,12 +60,12 @@ public class TemplateUtils {
         StringBuilder form = new StringBuilder();
         Class clazz = fieldMeta.getType();
         String key = fieldMeta.getName();
+        form.append("<div class='form-group'>\n");
+        form.append(getFieldLabelHtml(context, entityType, key));
         form.append("<div class='col-md-4'>");
         if (!Evaluator.getInstance().evalEditable(entityType, fieldMeta, null, operationType)) {
-            form.append(getReadOnlyController(fieldMeta, clazz));
-        } else if (EntityUtils.getInstance().isIdField(key)) {
-            form.append(getIdController(context, key, label));
-        } else if (String.class.equals(clazz)) {
+            form.append(getReadOnlyController(context, fieldMeta, clazz));
+        }  else if (String.class.equals(clazz)) {
             form.append(getStringController(context, key, label));
         } else if (Date.class.equals(clazz)) {
             form.append(getDateController(context, key, new Date()));
@@ -82,25 +81,17 @@ public class TemplateUtils {
             form.append(getEnumController(context, key, clazz));
         }
         form.append("</div>");
+        form.append("</div>");
         return form.toString();
     }
 
-    public String getReadOnlyController(FieldMeta fieldMeta, Class clazz) {
+    public String getReadOnlyController(ServletContext context, FieldMeta fieldMeta, Class clazz) {
         String ngModel = EntityUtils.getInstance().getNgModelNameForField(fieldMeta.getName());
         if (ClassUtils.getAllSuperclasses(clazz).contains(BaseObject.class)) {
             ngModel += "." + fieldMeta.getRepresentField();
         }
-        return String.format("<input type='text' class='form-control' ng-model='%s' name='%s' size='20' disabled/>",
-                             ngModel, fieldMeta.getName());
-    }
-
-    public String getIdController(ServletContext context, String key, String label) {
-        String template = getHtmlTemplate(context, "templates/fields/string.tpl.html");
-        return template
-            .replaceAll("\\$name", key)
-            .replaceAll("\\$ngModel", EntityUtils.getInstance().getNgModelNameForField(key))
-            .replaceAll("\\$placeholder", label)
-            .replaceAll("\\$type", "hidden");
+        String template = getHtmlTemplate(context, "templates/readonly.tpl.html");
+        return template.replaceAll("\\$ngModel", ngModel).replaceAll("\\$name", fieldMeta.getName());
     }
 
     public String getEnumController(ServletContext context, String key, Class clazz) {
@@ -121,21 +112,68 @@ public class TemplateUtils {
             .replaceAll("\\$options", sb.toString());
     }
 
-    public String getBaseObjectController(ServletContext context, FieldMeta fieldMeta, Class<? extends BaseObject> clazz) {
+    public String getBaseObjectController(ServletContext context, FieldMeta fieldMeta,
+                                          Class<? extends BaseObject> clazz) {
+        long number = BaseOperator.getInstance().getObjectCount(clazz);
+        String result = "";
+        if (number <= ApplicationConfig.MaxNumberOfObjectForSelectController)
+            result = getBaseObjectSelectController(context, fieldMeta, clazz);
+        else {
+            result = getBaseObjectTypeHeadController(context, fieldMeta, clazz);
+        }
+        return result;
+    }
+
+    public String getBaseObjectTypeHeadController(ServletContext context, FieldMeta fieldMeta,
+                                                  Class<? extends BaseObject> clazz) {
+        String result;
+        String template = getHtmlTemplate(context, "templates/fields/baseobject.typehead.tpl.html");
+        final String ngModelField = EntityUtils.getInstance().getNgModelNameForField(fieldMeta.getName());
+        result = template
+            .replaceAll("\\$name", fieldMeta.getName())
+            .replaceAll("\\$ngModel", ngModelField)
+            .replaceAll("\\$placeholder", I18n.getInstance().get(fieldMeta.getName(), ApplicationConfig.getLocale()))
+            .replaceAll("\\$entityType", BLStringUtils.uncapitalize(clazz.getSimpleName()))
+            .replaceAll("\\$representField", fieldMeta.getRepresentField());
+        return result;
+    }
+
+    public String getBaseObjectSelectController(ServletContext context, FieldMeta fieldMeta,
+                                                Class<? extends BaseObject> clazz) {
+        String result;
+        final String simpleName = clazz.getSimpleName();
+        //TODO.xqliu The list retrieved from DB was not updated according to latest DB.
+        //TODO.xqliu Change to angularJS way, template does not owns list of data, it only owns display style of the data.
+        //<!-- ng-options="item.id as item.description for item in getAllBaseObjects('$entityType', '$representField', '$name')" -->
         List<BaseObject> objects = BaseOperator.getInstance().getBaseObjects(
-            NamedQueryRules.getInstance().getAllQueryForEntity(clazz.getSimpleName())
+            NamedQueryRules.getInstance().getAllQueryForEntity(simpleName), null
         );
         StringBuilder sb = new StringBuilder();
+        final String representField = fieldMeta.getRepresentField();
+        final String methodName = "get" + BLStringUtils.capitalize(representField);
+        final String fieldName = fieldMeta.getName();
+        final String ngModelNameForField = EntityUtils.getInstance().getNgModelNameForField(fieldName);
         for (BaseObject baseObject : objects) {
-            sb.append(String.format("%n\t<option value='%s'>%s</option>", baseObject.getId(),
-                                    baseObject.getValue(fieldMeta.getRepresentField())));
+            try {
+                Object value = baseObject.getValue(representField);
+                if (null == value) {
+                    value = MethodUtils.invokeExactMethod(baseObject, methodName);
+                }
+                sb.append(String.format("%n\t<option value='%s'>%s</option>", baseObject.getId(), value));
+            } catch (Exception e) {
+                logger.error("Failed to get field[%s] of Object[%s] via method[%s]",
+                             representField, baseObject, methodName);
+            }
         }
         sb.append("\n");
-        String template = getHtmlTemplate(context, "templates/fields/baseobject.tpl.html");
-        return template
-            .replaceAll("\\$name", fieldMeta.getName())
-            .replaceAll("\\$ngModel", EntityUtils.getInstance().getNgModelNameForField(fieldMeta.getName()) + ".id")
-            .replaceAll("\\$options", sb.toString());
+        String template = getHtmlTemplate(context, "templates/fields/baseobject.select.tpl.html");
+        result = template
+            .replaceAll("\\$name", fieldName)
+            .replaceAll("\\$ngModel", ngModelNameForField + ".id")
+            .replaceAll("\\$options", sb.toString())
+            .replaceAll("\\$representField", representField)
+            .replaceAll("\\$entityType", BLStringUtils.uncapitalize(simpleName));
+        return result;
     }
 
     public String getBooleanController(ServletContext context, String key) {
@@ -177,7 +215,7 @@ public class TemplateUtils {
             .replaceAll("\\$placeholder", label);
     }
 
-    public String getButtonsController(ServletContext context, String entityType, final String operationType) {
+    public String getEditButtons(ServletContext context, String entityType, final String operationType) {
         String template = getHtmlTemplate(context, "templates/fields/buttons.tpl.html");
         final String locale = ApplicationConfig.getLocale();
         return template
@@ -187,17 +225,59 @@ public class TemplateUtils {
             .replaceAll("\\$entityType", I18n.getInstance().get(BLStringUtils.capitalize(entityType), locale));
     }
 
-    public String getFieldLabelHtml(String entityType, String key) {
+    public String getFieldLabelHtml(ServletContext context, String entityType, String key) {
         final String label = I18n.getInstance().getFieldLabel(entityType, key);
-        return String.format(
-            "<label for='%s' class='col-md-offset-2 col-md-2 control-label %s-label'>%s</label>%n",
-            null == key ? BLStringUtils.EMPTY : key,
-            null == key ? BLStringUtils.EMPTY : key, label
-        );
+        String template = getHtmlTemplate(context, "templates/label.tpl.html");
+        final String k = null == key ? BLStringUtils.EMPTY : key;
+        return template.replaceAll("\\$key", k).replaceAll("\\$label", label);
     }
 
-    public String getListController(ServletContext context) {
-        return getHtmlTemplate(context, "templates/list.tpl.html");
+    public String getListController(ServletContext context, String entityType) {
+        final String label = I18n.getInstance().get(BLStringUtils.capitalize(entityType), ApplicationConfig.getLocale());
+        return getHtmlTemplate(context, "templates/list.tpl.html")
+            .replaceAll("\\$entityType", BLStringUtils.uncapitalize(entityType))
+            .replaceAll("\\$entityLabel", label);
     }
 
+    public String getFormHtml(String entityType, ServletContext context, String operationType,
+                              LinkedHashMap<String, FieldMeta> sortedMeta) {
+        String frame = getFrameTemplate(context);
+        String breadCrumb = getBreadCrumb(context, entityType, operationType);
+        StringBuilder fields = new StringBuilder();
+        for (Map.Entry<String, FieldMeta> entry : sortedMeta.entrySet()) {
+            final FieldMeta fieldMeta = entry.getValue();
+            final String key = entry.getKey();
+            if (!Evaluator.getInstance().evalVisible(entityType, entry.getValue(), null, operationType)) continue;
+            fields.append(getFieldController(context, operationType, entityType, fieldMeta,
+                                             I18n.getInstance().getFieldLabel(entityType, key)));
+        }
+        String buttons = "";
+        if (!Operation.DETAIL.equals(operationType)){
+            buttons = getEditButtons(context, entityType, operationType);
+        } else {
+            buttons = getDetailButtons(context, entityType, operationType);
+        }
+        final String fieldsList = fields.toString();
+        final String withBreadCrumb = frame.replace("$breadcrumb", breadCrumb);
+        final String withButtons = withBreadCrumb.replace("$buttons", buttons);
+        return withButtons.replace("$fieldsList", fieldsList);
+    }
+
+    private String getDetailButtons(ServletContext context, String entityType, String operationType) {
+        return getHtmlTemplate(context, "templates/detail.buttons.tpl.html").replaceAll("\\$entityType", entityType);
+    }
+
+    public String getFrameTemplate(ServletContext context) {
+        return getHtmlTemplate(context, "templates/form.tpl.html");
+    }
+
+    public String getBreadCrumb(ServletContext context, String entityType, String operationType) {
+        final String locale = ApplicationConfig.getLocale();
+        final String label = I18n.getInstance().get(BLStringUtils.capitalize(entityType), locale);
+        final String operationLabel = I18n.getInstance().get(BLStringUtils.capitalize(operationType), locale);
+        return getHtmlTemplate(context, "templates/breadcrumb.tpl.html")
+            .replaceAll("\\$entityType", BLStringUtils.uncapitalize(entityType))
+            .replaceAll("\\$entityLabel", label)
+            .replaceAll("\\$operationLabel", operationLabel);
+    }
 }

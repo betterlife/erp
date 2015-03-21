@@ -1,3 +1,7 @@
+creator,创建用户
+createDate,创建时间
+lastModify,最后更新用户
+lastModifyDate,最后更新时间
 True,是
 False,否
 Can,可以
@@ -14,6 +18,7 @@ INCOME,收入
 EXPEND,支出
 Create,创建
 Update,更新
+Detail,详细信息
 Reset,重置
 supplier,供应商
 product,商品
