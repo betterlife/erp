@@ -106,4 +106,12 @@ public class Expense extends BaseObject {
         return getValue("remark");
     }
 
+    @FormField(DisplayRank = 40, TrueLabel = "hasInvoice", FalseLabel = "noInvoice")
+    public boolean getHasInvoice() {
+        return getValue("hasInvoice");
+    }
+
+    public void setHasInvoice(boolean hasInvoice) {
+        setValue("hasInvoice", hasInvoice);
+    }
 }

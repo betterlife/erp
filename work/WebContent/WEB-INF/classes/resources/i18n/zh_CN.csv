@@ -1,3 +1,5 @@
+hasInvoice,有发票
+noInvoice,没有发票
 creator,创建用户
 createDate,创建时间
 lastModify,最后更新用户
