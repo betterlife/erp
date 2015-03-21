@@ -1,5 +1,6 @@
 package io.betterlife.framework.domains;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.betterlife.framework.application.config.ApplicationConfig;
 import io.betterlife.framework.meta.FieldMeta;
@@ -70,7 +71,8 @@ public class BaseObject {
     }
 
     @Temporal(value=TemporalType.DATE)
-    @FormField(Visible = CommonFieldsVisibleCondition.class)
+    @FormField(DisplayRank = 99, Visible = CommonFieldsVisibleCondition.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd", timezone = "CST")
     public Date getLastModifyDate() {
         return getValue("lastModifyDate");
     }
@@ -80,7 +82,7 @@ public class BaseObject {
     }
 
     @ManyToOne
-    @FormField(Visible = CommonFieldsVisibleCondition.class)
+    @FormField(DisplayRank = 98, Visible = CommonFieldsVisibleCondition.class)
     public User getLastModify() {
         return getValue("lastModify");
     }
@@ -90,7 +92,8 @@ public class BaseObject {
     }
 
     @Temporal(value=TemporalType.DATE)
-    @FormField(Visible = CommonFieldsVisibleCondition.class)
+    @FormField(DisplayRank = 97, Visible = CommonFieldsVisibleCondition.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd", timezone = "CST")
     public Date getCreateDate() {
         return getValue("createDate");
     }
@@ -100,7 +103,7 @@ public class BaseObject {
     }
 
     @ManyToOne
-    @FormField(Visible = CommonFieldsVisibleCondition.class)
+    @FormField(DisplayRank = 96, Visible = CommonFieldsVisibleCondition.class)
     public User getCreator() {
         return getValue("creator");
     }

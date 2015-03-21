@@ -1,6 +1,7 @@
 package io.betterlife.util;
 
 import io.betterlife.framework.application.I18n;
+import io.betterlife.framework.constant.Operation;
 import io.betterlife.framework.meta.FieldMeta;
 import io.betterlife.framework.domains.BaseObject;
 import io.betterlife.framework.persistence.BaseOperator;
@@ -48,8 +49,8 @@ public class TemplateUtilsTest {
         when(i18n.getFieldLabel("Expense", "expenseCategory")).thenReturn("支出分类");
         when(i18n.getFieldLabel("User", "password")).thenReturn("密码");
         when(i18n.getFieldLabel("PurchaseOrder", "id")).thenReturn("编号");
-        when(i18n.get("Update", "zh_CN")).thenReturn("更新");
-        when(i18n.get("Create", "zh_CN")).thenReturn("创建");
+        when(i18n.get(Operation.UPDATE, "zh_CN")).thenReturn("更新");
+        when(i18n.get(Operation.CREATE, "zh_CN")).thenReturn("创建");
         when(i18n.get("Reset", "zh_CN")).thenReturn("重置");
         when(i18n.get("User", "zh_CN")).thenReturn("用户");
         when(i18n.get("Expense", "zh_CN")).thenReturn("支出");
@@ -127,8 +128,10 @@ public class TemplateUtilsTest {
     public void testGetReadOnlyControllerSimple() {
         FieldMeta meta = EntityMockUtil.getInstance().mockFieldMeta("name", String.class);
         Class clazz = String.class;
+        String input = "<input type='text' class='form-control' ng-model='$ngModel' name='$name' size='20' disabled/>";
         String expected = "<input type='text' class='form-control' ng-model='entity.name' name='name' size='20' disabled/>";
-        assertEquals(expected, templateUtils.getReadOnlyController(meta, clazz));
+        ServletContext context = mockServletContext(input, "/templates/readonly.tpl.html");
+        assertEquals(expected, templateUtils.getReadOnlyController(context, meta, clazz));
     }
 
     class MockBaseObject extends BaseObject{}
@@ -136,10 +139,13 @@ public class TemplateUtilsTest {
     @Test
     public void testGetReadOnlyControllerBaseObject() {
         FieldMeta meta = EntityMockUtil.getInstance().mockFieldMeta("object", MockBaseObject.class);
-        when(meta.getRepresentField()).thenReturn("name");
+        final String representField = "name";
+        when(meta.getRepresentField()).thenReturn(representField);
         Class clazz = MockBaseObject.class;
-        String expected = "<input type='text' class='form-control' ng-model='entity.object.name' name='object' size='20' disabled/>";
-        assertEquals(expected, templateUtils.getReadOnlyController(meta, clazz));
+        String input = "<input type='text' class='form-control' ng-model='$ngModel' name='$name' size='20' disabled/>";
+        String expected = "<input type='text' class='form-control' ng-model='entity.object." + representField + "' name='object' size='20' disabled/>";
+        ServletContext context = mockServletContext(input, "/templates/readonly.tpl.html");
+        assertEquals(expected, templateUtils.getReadOnlyController(context, meta, clazz));
     }
 
     @Test
@@ -278,7 +284,7 @@ public class TemplateUtilsTest {
 
     @Test
     public void testGetIdController() {
-        internalTestGetStringController("PurchaseOrder", "id", "hidden");
+        internalTestGetStringController("PurchaseOrder", "id", "text");
     }
 
     @Test
@@ -309,8 +315,6 @@ public class TemplateUtilsTest {
         String result = "";
         if ("number".equals(type)) {
             result = templateUtils.getNumberController(context, fieldKey, label);
-        } else if ("hidden".equals(type)) {
-            result = templateUtils.getIdController(context, fieldKey, label);
         } else {
             result = templateUtils.getStringController(context, fieldKey, label);
         }
@@ -319,12 +323,12 @@ public class TemplateUtilsTest {
 
     @Test
     public void testGetButtonsControllerForCreate() {
-        internalTestGetButtonController("Expense", "Create");
+        internalTestGetButtonController("Expense", Operation.CREATE);
     }
 
     @Test
     public void testGetButtonsControllerForUpdate() throws Exception {
-        internalTestGetButtonController("User", "Update");
+        internalTestGetButtonController("User", Operation.UPDATE);
     }
 
     protected void internalTestGetButtonController(final String entity, final String operation) {
@@ -341,22 +345,28 @@ public class TemplateUtilsTest {
             "    </div>\n" +
             "</div>";
         ServletContext context = mockServletContext(input, "/templates/fields/buttons.tpl.html");
-        assertEquals(expect, templateUtils.getButtonsController(context, entity, operation));
+        assertEquals(expect, templateUtils.getEditButtons(context, entity, operation));
     }
 
     @Test
     public void testGetFieldLabelHtml() throws Exception {
         String entityType = "Expense";
+        String input = "<label for='$key' class='col-md-offset-2 col-md-2 control-label $key-label'>$label</label>\n";
+        ServletContext context = mockServletContext(input, "/templates/label.tpl.html");
         assertEquals("<label for='user' class='col-md-offset-2 col-md-2 control-label user-label'>用户</label>\n",
-                     templateUtils.getFieldLabelHtml(entityType, "user"));
+                     templateUtils.getFieldLabelHtml(context, entityType, "user"));
+        context = mockServletContext(input, "/templates/label.tpl.html");
         assertEquals("<label for='expense' class='col-md-offset-2 col-md-2 control-label expense-label'>Expense</label>\n",
-                     templateUtils.getFieldLabelHtml(entityType, "expense"));
+                     templateUtils.getFieldLabelHtml(context, entityType, "expense"));
+        context = mockServletContext(input, "/templates/label.tpl.html");
         assertEquals("<label for='expenseCategory' class='col-md-offset-2 col-md-2 control-label expenseCategory-label'>支出分类</label>\n",
-                     templateUtils.getFieldLabelHtml(entityType, "expenseCategory"));
+                     templateUtils.getFieldLabelHtml(context, entityType, "expenseCategory"));
+        context = mockServletContext(input, "/templates/label.tpl.html");
         assertEquals("<label for='' class='col-md-offset-2 col-md-2 control-label -label'></label>\n",
-                     templateUtils.getFieldLabelHtml(entityType, null));
+                     templateUtils.getFieldLabelHtml(context, entityType, null));
+        context = mockServletContext(input, "/templates/label.tpl.html");
         assertEquals("<label for='' class='col-md-offset-2 col-md-2 control-label -label'></label>\n",
-                     templateUtils.getFieldLabelHtml(entityType, ""));
+                     templateUtils.getFieldLabelHtml(context, entityType, ""));
     }
 
     @Test

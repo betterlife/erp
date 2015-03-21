@@ -1,5 +1,6 @@
 package io.betterlife.erp.condition;
 
+import io.betterlife.framework.constant.Operation;
 import io.betterlife.framework.meta.FieldMeta;
 import io.betterlife.framework.condition.Condition;
 import io.betterlife.framework.condition.PasswordVisibleCondition;
@@ -23,23 +24,23 @@ public class PasswordVisibleConditionTest {
 
     @Test
     public void shouldVisibleWhenCreating() throws Exception {
-        assertTrue(condition.evaluate("user", meta, null, "Create"));
+        assertTrue(condition.evaluate("user", meta, null, Operation.CREATE));
     }
 
     @Test
     public void shouldVisibleWhenUpdating() throws Exception {
-        assertTrue(condition.evaluate("user", meta, null, "Update"));
+        assertTrue(condition.evaluate("user", meta, null, Operation.UPDATE));
     }
 
     @Test
     public void shouldVisibleWhenListing() throws Exception {
-        assertFalse(condition.evaluate("user", meta, null, "List"));
+        assertFalse(condition.evaluate("user", meta, null, Operation.LIST));
     }
 
     @Test
     public void shouldVisibleWhenObjectIsNotUser() {
-        assertTrue(condition.evaluate("product", meta, null, "Create"));
-        assertTrue(condition.evaluate("product", meta, null, "Update"));
-        assertTrue(condition.evaluate("product", meta, null, "List"));
+        assertTrue(condition.evaluate("product", meta, null, Operation.CREATE));
+        assertTrue(condition.evaluate("product", meta, null, Operation.UPDATE));
+        assertTrue(condition.evaluate("product", meta, null, Operation.LIST));
     }
 }

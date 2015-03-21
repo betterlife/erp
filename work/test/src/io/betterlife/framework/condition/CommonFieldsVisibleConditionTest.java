@@ -1,6 +1,7 @@
 package io.betterlife.framework.condition;
 
 import io.betterlife.framework.application.config.FormConfig;
+import io.betterlife.framework.constant.Operation;
 import io.betterlife.framework.meta.FieldMeta;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -24,9 +25,9 @@ public class CommonFieldsVisibleConditionTest {
         when(formConfig.getEditFormIgnoreFields()).thenReturn(new ArrayList<String>());
         FormConfig.setInstance(formConfig);
         CommonFieldsVisibleCondition condition = new CommonFieldsVisibleCondition();
-        assertFalse(condition.evaluate(null, fieldMeta, null, "Create"));
-        assertTrue(condition.evaluate(null, fieldMeta, null, "Update"));
-        assertTrue(condition.evaluate(null, fieldMeta, null, "List"));
-        assertTrue(condition.evaluate(null, fieldMeta, null, "Detail"));
+        assertFalse(condition.evaluate(null, fieldMeta, null, Operation.CREATE));
+        assertTrue(condition.evaluate(null, fieldMeta, null, Operation.UPDATE));
+        assertTrue(condition.evaluate(null, fieldMeta, null, Operation.LIST));
+        assertTrue(condition.evaluate(null, fieldMeta, null, Operation.DETAIL));
     }
 }

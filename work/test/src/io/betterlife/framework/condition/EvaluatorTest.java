@@ -1,5 +1,6 @@
 package io.betterlife.framework.condition;
 
+import io.betterlife.framework.constant.Operation;
 import io.betterlife.framework.domains.BaseObject;
 import io.betterlife.framework.meta.FieldMeta;
 import org.junit.Test;
@@ -41,7 +42,7 @@ public class EvaluatorTest {
         String entityType = "User";
         BaseObject baseObject = null;
         FieldMeta fieldMeta = new FieldMeta();
-        String operationType = "Update";
+        String operationType = Operation.UPDATE;
         boolean result = evaluator.eval(condition.getClass(), entityType, baseObject, fieldMeta, operationType);
         assertEquals(expected, result);
     }
@@ -50,7 +51,7 @@ public class EvaluatorTest {
     public void testEvalVisible() throws Exception {
         String entityType = "User";
         BaseObject baseObject = null;
-        String operationType = "Update";
+        String operationType = Operation.UPDATE;
         FieldMeta fieldMeta = mock(FieldMeta.class);
         Class clazz = MockFalseCondition.class;
         when(fieldMeta.getVisibleCondition()).thenReturn(clazz);
@@ -62,7 +63,7 @@ public class EvaluatorTest {
     public void testEvalEditable() throws Exception {
         String entityType = "User";
         BaseObject baseObject = null;
-        String operationType = "Update";
+        String operationType = Operation.UPDATE;
         FieldMeta fieldMeta = mock(FieldMeta.class);
         Class clazz = MockTrueCondition.class;
         when(fieldMeta.getEditableCondition()).thenReturn(clazz);
