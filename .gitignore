@@ -13,3 +13,4 @@ work/WebContent/js/bower_components
 rebel*.xml
 node_modules
 *.log
+build.xml
