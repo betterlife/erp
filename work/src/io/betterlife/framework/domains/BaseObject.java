@@ -183,19 +183,21 @@ public class BaseObject {
     }
 
     private void baseObjectDefaultConvert(String key, Object value, Class clazz) {
-        final String idQueryForEntity = NamedQueryRules.getInstance().getIdQueryForEntity(clazz.getSimpleName());
-        if (value instanceof LinkedHashMap) {
-            value = ((LinkedHashMap) value).get("id");
-        }
-        if (value instanceof String) {
-            value = Long.parseLong((String) value);
-        }
-        if (value instanceof Integer) {
-            value = (long) ((Integer) value);
-        }
-        BaseObject baseObj = BaseOperator.getInstance().getBaseObjectById((Long) value, idQueryForEntity);
-        if (null != baseObj) {
-            setValue(key, baseObj);
+        if (value != null) {
+            final String idQueryForEntity = NamedQueryRules.getInstance().getIdQueryForEntity(clazz.getSimpleName());
+            if (value instanceof LinkedHashMap) {
+                value = ((LinkedHashMap) value).get("id");
+            }
+            if (value instanceof String) {
+                value = Long.parseLong((String) value);
+            }
+            if (value instanceof Integer) {
+                value = (long) ((Integer) value);
+            }
+            BaseObject baseObj = BaseOperator.getInstance().getBaseObjectById((Long) value, idQueryForEntity);
+            if (null != baseObj) {
+                setValue(key, baseObj);
+            }
         }
     }
 
