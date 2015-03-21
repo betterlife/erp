@@ -9,6 +9,7 @@ import io.betterlife.framework.trigger.EntityTrigger;
 public class EntityMeta {
     private Class type;
     private Class<? extends EntityTrigger> saveTrigger;
+    private String detailField;
 
     public Class<? extends EntityTrigger> getSaveTrigger() {
         return saveTrigger;
@@ -24,5 +25,13 @@ public class EntityMeta {
 
     public void setType(Class type) {
         this.type = type;
+    }
+
+    public void setDetailField(String detailField) {
+        this.detailField = detailField;
+    }
+
+    public String getDetailField() {
+        return detailField;
     }
 }
