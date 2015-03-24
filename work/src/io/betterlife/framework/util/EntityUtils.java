@@ -3,6 +3,7 @@ package io.betterlife.framework.util;
 import io.betterlife.framework.meta.FieldMeta;
 import io.betterlife.framework.domains.BaseObject;
 import org.apache.commons.lang3.ClassUtils;
+import org.apache.commons.lang3.reflect.TypeUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -83,5 +84,10 @@ public class EntityUtils {
 
     public String getNgModelNameForField(String key) {
         return "entity." + key;
+    }
+
+    public boolean isEnumField(FieldMeta fieldMeta) {
+        final Class type = fieldMeta.getType();
+        return null != type && type.isEnum();
     }
 }
