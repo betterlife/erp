@@ -32,6 +32,8 @@ public class EntityService {
 
     private static final Logger logger = LogManager.getLogger(EntityService.class.getName());
     public static final String BooleanCellTemplate = "<div class='ui-grid-cell-contents'><span ng-show='row.entity.%s'>%s</span><span ng-show='!row.entity.%s'>%s</span></div>";
+    public static final String EnumCellTemplate = "<div class='ui-grid-cell-contents'>%s</div>";
+
 
     /**
      * Get entity meta data(for render the entity list page)
@@ -70,6 +72,9 @@ public class EntityService {
             if (EntityUtils.getInstance().isBooleanField(fieldMeta)) {
                 setBooleanFieldAdditionalMeta(fieldMeta, field, map);
             }
+            if (EntityUtils.getInstance().isEnumField(fieldMeta)){
+                setEnumFieldAdditionalMeta(fieldMeta, field, map);
+            }
             if (BLStringUtils.containsIgnoreCase(field, "amount")) {
                 map.put("aggregationType", 2);
             }
@@ -84,6 +89,18 @@ public class EntityService {
             logger.trace(String.format("Entity[%s]'s meta: %n\t%s", entityType, result));
         }
         return result;
+    }
+
+    private void setEnumFieldAdditionalMeta(FieldMeta fieldMeta, String field, Map<String, Object> map) {
+        String template = "<span ng-show=\"row.entity.%s=='%s'\">%s</span>";
+        StringBuilder result = new StringBuilder();
+        Object[] options = fieldMeta.getType().getEnumConstants();
+        for (Object option : options) {
+            final String translate = I18n.getInstance().get(option.toString(), ApplicationConfig.getLocale());
+            result.append(String.format(template, field, option, translate)).append("\n");
+        }
+        logger.debug("Enum(%s) options: %s", fieldMeta.getType(), options);
+        map.put("cellTemplate", String.format(EnumCellTemplate, result.toString()));
     }
 
     private void setBooleanFieldAdditionalMeta(FieldMeta fieldMeta, String field, Map<String, Object> map) {

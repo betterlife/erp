@@ -2,6 +2,7 @@ package io.betterlife.erp.domains.financial;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import io.betterlife.erp.enums.ExpenseStatus;
 import io.betterlife.framework.domains.BaseObject;
 import io.betterlife.erp.domains.order.PurchaseOrder;
 import io.betterlife.erp.domains.order.SalesOrder;
@@ -114,5 +115,14 @@ public class Expense extends BaseObject {
 
     public void setHasInvoice(boolean hasInvoice) {
         setValue("hasInvoice", hasInvoice);
+    }
+
+    @FormField(DisplayRank = 45)
+    public ExpenseStatus getStatus() {
+        return getValue("status");
+    }
+
+    public void setStatus(ExpenseStatus status) {
+        setValue("status", status);
     }
 }

@@ -1,3 +1,10 @@
+DRAFT,草稿
+SUBMITTED,已提交
+APPROVING,审批中
+APPROVED,已审批
+REJECTED,拒绝
+PAYMENT_IN_PROGRESS,报销中
+PAID,已报销
 hasInvoice,有发票
 noInvoice,没有发票
 creator,创建用户
@@ -35,6 +42,7 @@ User.password,密码
 CostCenter,部门/项目
 CostCenter.name,部门/项目名称
 Expense,支出
+Expense.status,状态
 Incoming,收入
 IncomingCategory,收入分类
 ExpenseCategory,支出分类
