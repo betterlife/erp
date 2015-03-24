@@ -69,18 +69,9 @@ public class EntityService {
             }
             Map<String, Object> map = new HashMap<>();
             map.put("field", field);
-            if (EntityUtils.getInstance().isBooleanField(fieldMeta)) {
-                setBooleanFieldAdditionalMeta(fieldMeta, field, map);
-            }
-            if (EntityUtils.getInstance().isEnumField(fieldMeta)){
-                setEnumFieldAdditionalMeta(fieldMeta, field, map);
-            }
-            if (BLStringUtils.containsIgnoreCase(field, "amount")) {
-                map.put("aggregationType", 2);
-            }
-            if (EntityUtils.getInstance().isIdField(field)) {
-                map.put("width", 60);
-            }
+            setFieldAdditionalMeta(fieldMeta, field, map);
+            setAggregationType(field, map);
+            setFieldFixWidth(fieldMeta, map);
             map.put("name", I18n.getInstance().getFieldLabel(entityType, entry.getKey()));
             list.add(map);
         }
@@ -89,6 +80,36 @@ public class EntityService {
             logger.trace(String.format("Entity[%s]'s meta: %n\t%s", entityType, result));
         }
         return result;
+    }
+
+    public void setFieldAdditionalMeta(FieldMeta fieldMeta, String field, Map<String, Object> map) {
+        if (EntityUtils.getInstance().isBooleanField(fieldMeta)) {
+            setBooleanFieldAdditionalMeta(fieldMeta, field, map);
+        }
+        if (EntityUtils.getInstance().isEnumField(fieldMeta)){
+            setEnumFieldAdditionalMeta(fieldMeta, field, map);
+        }
+    }
+
+    public void setAggregationType(String field, Map<String, Object> map) {
+        if (BLStringUtils.containsIgnoreCase(field, "amount")) {
+            map.put("aggregationType", 2);
+        }
+    }
+
+    private void setFieldFixWidth(FieldMeta fieldMeta, Map<String, Object> map) {
+        if (EntityUtils.getInstance().isDateField(fieldMeta)) {
+            map.put("width", 100);
+        }
+        if (EntityUtils.getInstance().isDecimalField(fieldMeta)) {
+            map.put("width", 80);
+        }
+        if (EntityUtils.getInstance().isIdField(fieldMeta.getName())) {
+            map.put("width", 60);
+        }
+        if (EntityUtils.getInstance().isUserField(fieldMeta)) {
+            map.put("width", 80);
+        }
     }
 
     private void setEnumFieldAdditionalMeta(FieldMeta fieldMeta, String field, Map<String, Object> map) {

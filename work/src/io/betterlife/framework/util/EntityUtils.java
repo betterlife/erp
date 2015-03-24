@@ -1,5 +1,6 @@
 package io.betterlife.framework.util;
 
+import io.betterlife.framework.domains.security.User;
 import io.betterlife.framework.meta.FieldMeta;
 import io.betterlife.framework.domains.BaseObject;
 import org.apache.commons.lang3.ClassUtils;
@@ -7,6 +8,8 @@ import org.apache.commons.lang3.reflect.TypeUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -89,5 +92,20 @@ public class EntityUtils {
     public boolean isEnumField(FieldMeta fieldMeta) {
         final Class type = fieldMeta.getType();
         return null != type && type.isEnum();
+    }
+
+    public boolean isDateField(FieldMeta fieldMeta) {
+        return ClassUtils.isAssignable(Date.class, fieldMeta.getType());
+    }
+
+    public boolean isDecimalField(FieldMeta fieldMeta) {
+        return ClassUtils.isAssignable(BigDecimal.class, fieldMeta.getType())
+            || ClassUtils.isAssignable(Float.class, fieldMeta.getType(), true)
+            || ClassUtils.isAssignable(Double.class, fieldMeta.getType(), true)
+            || ClassUtils.isAssignable(Integer.class, fieldMeta.getType(), true);
+    }
+
+    public boolean isUserField(FieldMeta fieldMeta) {
+        return ClassUtils.isAssignable(User.class, fieldMeta.getType());
     }
 }
