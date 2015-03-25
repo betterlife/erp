@@ -29,8 +29,8 @@ var listCtrl = function ($scope, $http, $location, $modal, loginService, i18nSer
         enablePaginationControls: true,
         enableHorizontalScrollbar: 0,
         enableVerticalScrollbar: 0,
-        paginationPageSizes : [10, 20, 40],
-        paginationPageSize : 20
+        paginationPageSizes : [10, 20, 40, 80],
+        paginationPageSize : 18
     };
 
     $scope.refreshData = function() {
