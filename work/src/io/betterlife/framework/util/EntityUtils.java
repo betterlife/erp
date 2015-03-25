@@ -108,4 +108,8 @@ public class EntityUtils {
     public boolean isUserField(FieldMeta fieldMeta) {
         return ClassUtils.isAssignable(User.class, fieldMeta.getType());
     }
+
+    public boolean isRemarkField(FieldMeta fieldMeta) {
+        return "Remark".equalsIgnoreCase(fieldMeta.getName());
+    }
 }

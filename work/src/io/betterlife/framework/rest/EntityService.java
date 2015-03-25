@@ -110,6 +110,9 @@ public class EntityService {
         if (EntityUtils.getInstance().isUserField(fieldMeta)) {
             map.put("width", 80);
         }
+        if (EntityUtils.getInstance().isRemarkField(fieldMeta)) {
+            map.put("width", 350);
+        }
     }
 
     private void setEnumFieldAdditionalMeta(FieldMeta fieldMeta, String field, Map<String, Object> map) {
