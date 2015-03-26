@@ -15,6 +15,14 @@
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
+    <filter>
+        <filter-name>AngularFilter</filter-name>
+        <filter-class>io.betterlife.framework.application.AngularFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AngularFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 	<resource-ref>
 		<description>PostgreSQL DB Connection</description>
 		<res-ref-name>jdbc/PostgreSQLDS</res-ref-name>

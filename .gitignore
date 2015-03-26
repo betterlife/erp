@@ -14,3 +14,4 @@ rebel*.xml
 node_modules
 *.log
 build.xml
+build.txt
