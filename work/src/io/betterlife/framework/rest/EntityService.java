@@ -3,6 +3,7 @@ package io.betterlife.framework.rest;
 import io.betterlife.framework.application.I18n;
 import io.betterlife.framework.application.config.ApplicationConfig;
 import io.betterlife.framework.constant.Operation;
+import io.betterlife.framework.meta.EntityMeta;
 import io.betterlife.framework.meta.FieldMeta;
 import io.betterlife.framework.application.manager.MetaDataManager;
 import io.betterlife.framework.condition.Evaluator;
@@ -15,12 +16,16 @@ import io.betterlife.framework.util.IOUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.persistence.Entity;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.GenericDeclaration;
+import java.lang.reflect.Method;
+import java.lang.reflect.TypeVariable;
 import java.util.*;
 
 /**
@@ -53,7 +58,7 @@ public class EntityService {
     @GET
     @Path("/entity/{entityType}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getEntityMeta(@PathParam("entityType") String entityType) {
+    public String getEntityMeta(@PathParam("entityType") String entityType) throws NoSuchMethodException {
         if (logger.isTraceEnabled()) {
             logger.trace("Getting entity meta data for " + entityType);
         }
@@ -75,7 +80,25 @@ public class EntityService {
             map.put("name", I18n.getInstance().getFieldLabel(entityType, entry.getKey()));
             list.add(map);
         }
-        String result = new ExecuteResult<List<Map<String, Object>>>().getRestString(list);
+        Map<String, Object> entityMetas = new HashMap<>(2);
+        entityMetas.put("fields", list);
+        EntityMeta entityMeta = MetaDataManager.getInstance().getEntityMeta(entityType);
+        if (null != entityMeta) {
+            Map<String, Object> detailFieldsInfo = new HashMap<>(2);
+            String detailField = entityMeta.getDetailField();
+            Method m = entityMeta.getType().getMethod("get" + BLStringUtils.capitalize(detailField));
+            if (m != null) {
+                Class detailClazz = m.getReturnType();
+                TypeVariable[] typeVariables = detailClazz.getTypeParameters();
+                TypeVariable type = typeVariables[0];
+                GenericDeclaration genericDeclaration = type.getGenericDeclaration();
+                detailFieldsInfo.put("fieldName", detailField);
+                final String detailEntity = getEntityMeta(detailClazz.getSimpleName());
+                detailFieldsInfo.put("fields", detailEntity);
+                entityMetas.put("detailFieldsInfo", detailFieldsInfo);
+            }
+        }
+        String result = new ExecuteResult<Map<String, Object>>().getRestString(entityMetas);
         if (logger.isTraceEnabled()) {
             logger.trace(String.format("Entity[%s]'s meta: %n\t%s", entityType, result));
         }
@@ -153,7 +176,11 @@ public class EntityService {
         if (logger.isTraceEnabled()) {
             logger.trace(String.format("Returning %s list %s", entityType, result));
         }
-        return new ExecuteResult<List<BaseObject>>().getRestString(result);
+        final String resultStr = new ExecuteResult<List<BaseObject>>().getRestString(result);
+        if (logger.isTraceEnabled()) {
+            logger.trace(String.format("Returning string: [%s]", resultStr));
+        }
+        return resultStr;
     }
 
     @GET

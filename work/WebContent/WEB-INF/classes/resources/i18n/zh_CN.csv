@@ -84,3 +84,8 @@ DefaultFinancialSetting.defPOLogisticExpCate,采购物流支出分类
 DefaultFinancialSetting.defPOOtherExpCate,采购其他支出分类
 DefaultFinancialSetting.defSOIncomingCate,销售款收入分类
 DefaultFinancialSetting.defSOLogisticExpCate,销售物流支出分类
+PaymentMethod,付款方式
+PaymentMethod.accountName,开户人
+PaymentMethod.bankName,开户银行
+PaymentMethod.openAccountBankBranch,开户分行
+PaymentMethod.accountNumber,账号

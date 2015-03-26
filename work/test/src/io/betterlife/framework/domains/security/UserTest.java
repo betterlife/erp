@@ -96,4 +96,18 @@ public class UserTest {
         EntityVerifyUtil.getInstance().verifyQueryDefined(User.class, User.class.getSimpleName() + "." + "getById");
     }
 
+    @Test
+    public void testGetEmail() throws Exception {
+        final String em = "abc@def.com";
+        user.setEmail(em);
+        final String nEm = "abc@def.net";
+        assertEquals(em, user.getEmail());
+        user.setEmail(nEm);
+        final String email = user.getEmail();
+        assertNotNull(email);
+        assertNotEquals(em, user.getEmail());
+        assertEquals(nEm, email);
+        assertSame(nEm, email);
+    }
+
 }

@@ -16,6 +16,7 @@ body {
     text-align:center;
     clear:both;
     padding-top:20px;
+    padding-bottom: 20px;
 }
 html, body {
     height: 100%;
@@ -110,4 +111,20 @@ html, body {
 .list-click-icon {
     padding-left: 10px;
     cursor: hand
+}
+
+.menu-item-title {
+    font-family: 'Microsoft YaHei', ​sans-serif, serif;
+    font-size:16px;
+    text-decoration-style:solid;
+    color:#777777;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.menu-item-plus {
+    color: #AAAAAA;
+}
+
+.login-panel {
+    margin-top:150px;
 }

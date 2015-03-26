@@ -30,12 +30,23 @@ var listCtrl = function ($scope, $http, $location, $modal, loginService, i18nSer
         enableHorizontalScrollbar: 0,
         enableVerticalScrollbar: 0,
         paginationPageSizes : [10, 20, 40, 80],
-        paginationPageSize : 18
+        paginationPageSize : 18,
+        expandableRowTemplate: '/templates/expandableRowTemplate.html',
+        expandableRowHeight: 150,
+        expandableRowScope: {
+            subGridVariable: 'subGridScopeVariable'
+        }
     };
 
     $scope.refreshData = function() {
         $http.get("/rest/entity/" + $scope.captalizedEntityType, {}).success(function (metaData) {
-            $scope.gridOptions.columnDefs = metaData.result;
+            $scope.gridOptions.columnDefs = metaData.result.fields;
+            if (metaData.result.detailField != null) {
+                $scope.gridOptions.subGridOptions = metaData.result.detailField;
+            } else {
+                $scope.gridOptions.subGridOptions = null;
+            }
+
             $scope.gridOptions.columnDefs.push({
                 name: "operation", displayName: "操作", enableCellEdit: false, width: 100,
                 cellTemplate: '<div class="ui-grid-cell-contents list-operation-cell">' +
@@ -46,6 +57,13 @@ var listCtrl = function ($scope, $http, $location, $modal, loginService, i18nSer
             });
             $http.get("/rest/" + $scope.captalizedEntityType, {}).success(function (entityData) {
                 $scope.gridOptions.data = entityData.result;
+                var length = $scope.gridOptions.data.length;
+                for(var i = 0; i < length; i++) {
+                    var currentData = $scope.gridOptions.data[i];
+                    if ($scope.gridOptions.subGridOptions != null) {
+                        currentData.subGridOptions = $scope.gridOptions.subGridOptions;
+                    }
+                }
             })
         });
     };

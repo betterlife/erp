@@ -1,6 +1,8 @@
 package io.betterlife.framework.application.manager;
 
+import io.betterlife.framework.annotation.EntityForm;
 import io.betterlife.framework.annotation.Triggers;
+import io.betterlife.framework.application.config.ApplicationConfig;
 import io.betterlife.framework.meta.EntityMeta;
 import io.betterlife.framework.trigger.EntityTrigger;
 
@@ -25,6 +27,13 @@ public class EntityMetaDataContainer extends MetaDataContainer {
         if (null != triggers) {
             Class<? extends EntityTrigger> saveTrigger = triggers.Save();
             entityMeta.setSaveTrigger(saveTrigger);
+        }
+        EntityForm entityForm = (EntityForm) (managedType.getJavaType()).getAnnotation(EntityForm.class);
+        if (null != entityForm) {
+            String detailField = entityForm.DetailField();
+            if (!ApplicationConfig.DefaultDetailField.equals(detailField)) {
+                entityMeta.setDetailField(detailField);
+            }
         }
         _entitiesMetaData.put(managedType.getJavaType().getSimpleName(), entityMeta);
     }
