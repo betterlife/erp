@@ -19,7 +19,7 @@ import java.util.Date;
 @Entity
 @NamedQueries({
     @NamedQuery(name = "Incoming.getById", query = "SELECT e FROM Incoming e WHERE e.id = :id AND e.active = TRUE"),
-    @NamedQuery(name = "Incoming.getAll",  query = "SELECT e FROM Incoming e WHERE e.active = TRUE")
+    @NamedQuery(name = "Incoming.getAll",  query = "SELECT e FROM Incoming e WHERE e.active = TRUE ORDER BY e.id DESC")
 })
 public class Incoming extends BaseObject {
 

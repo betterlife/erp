@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Entity
 @NamedQueries({
     @NamedQuery(name = "ExpenseCategory.getById", query = "SELECT e FROM ExpenseCategory e WHERE e.id = :id AND e.active = TRUE"),
-    @NamedQuery(name = "ExpenseCategory.getAll",  query = "SELECT e FROM ExpenseCategory e WHERE e.active = TRUE"),
+    @NamedQuery(name = "ExpenseCategory.getAll",  query = "SELECT e FROM ExpenseCategory e WHERE e.active = TRUE ORDER BY e.id DESC"),
     @NamedQuery(name = "ExpenseCategory.getByKeyword",  query = "SELECT e FROM ExpenseCategory e WHERE e.active = TRUE and (e.name like :keyword)")
 })
 public class ExpenseCategory extends BaseObject {

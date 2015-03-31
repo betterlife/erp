@@ -25,7 +25,7 @@ import java.util.List;
 @Entity
 @NamedQueries({
     @NamedQuery(name = "PurchaseOrder.getById", query = "SELECT c FROM PurchaseOrder c WHERE c.id = :id AND c.active = TRUE"),
-    @NamedQuery(name = "PurchaseOrder.getAll", query = "SELECT c FROM PurchaseOrder c WHERE c.active = TRUE")
+    @NamedQuery(name = "PurchaseOrder.getAll", query = "SELECT c FROM PurchaseOrder c WHERE c.active = TRUE ORDER BY c.id DESC")
 })
 @Triggers(Save = PurchaseOrderSaveTrigger.class)
 public class PurchaseOrder extends BaseObject {
