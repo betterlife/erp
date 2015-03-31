@@ -15,7 +15,7 @@ import javax.persistence.NamedQuery;
 @Entity
 @NamedQueries({
     @NamedQuery(name = "DefaultFinancialSetting.getById", query = "SELECT e FROM DefaultFinancialSetting e WHERE e.id = :id AND e.active = TRUE"),
-    @NamedQuery(name = "DefaultFinancialSetting.getAll",  query = "SELECT e FROM DefaultFinancialSetting e WHERE e.active = TRUE")
+    @NamedQuery(name = "DefaultFinancialSetting.getAll",  query = "SELECT e FROM DefaultFinancialSetting e WHERE e.active = TRUE ORDER BY e.id DESC")
 })
 public class DefaultFinancialSetting extends BaseObject {
 

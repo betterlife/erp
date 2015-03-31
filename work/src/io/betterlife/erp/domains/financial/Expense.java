@@ -22,7 +22,7 @@ import java.util.Date;
 @Entity
 @NamedQueries({
     @NamedQuery(name = "Expense.getById", query = "SELECT e FROM Expense e WHERE e.id = :id AND e.active = TRUE"),
-    @NamedQuery(name = "Expense.getAll", query = "SELECT e FROM Expense e WHERE e.active = TRUE")
+    @NamedQuery(name = "Expense.getAll", query = "SELECT e FROM Expense e WHERE e.active = TRUE order by e.id desc")
 })
 public class Expense extends BaseObject {
 
