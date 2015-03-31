@@ -35,9 +35,8 @@ public class ApplicationConfig {
     public static final String TableNamePrefix = "BL_";
     public static final String DefaultRepresentField = "name";
     public static final int DefaultFieldRank = 0;
-    public static final boolean DefaultVisible = true;
     public static final Class<? extends Converter> DefaultConverterClass = DefaultConverter.class;
-    public static final int MaxNumberOfObjectForSelectController = 5;
+    public static final int MaxNumberOfObjectForSelectController = 10;
 
     public static String getLocale() {return "zh_CN";}
 
