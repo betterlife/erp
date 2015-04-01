@@ -2,10 +2,12 @@ package io.betterlife.erp.domains.financial;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import io.betterlife.erp.enums.IncomingStatus;
 import io.betterlife.framework.domains.BaseObject;
 import io.betterlife.erp.domains.order.SalesOrder;
 import io.betterlife.framework.annotation.FormField;
 import io.betterlife.framework.condition.FalseCondition;
+import io.betterlife.framework.domains.security.User;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -33,6 +35,16 @@ public class Incoming extends BaseObject {
         return getValue("incomingCategory");
     }
 
+    @ManyToOne
+    @FormField(DisplayRank = 1, RepresentField="displayName")
+    public User getPayee() {
+        return getValue("payee");
+    }
+
+    public void setPayee(User payee) {
+        setValue("payee", payee);
+    }
+
     public void setAmount(BigDecimal amount) {
         setValue("amount", amount);
     }
@@ -51,6 +63,15 @@ public class Incoming extends BaseObject {
     @Temporal(value= TemporalType.DATE)
     public Date getDate() {
         return getValue("date");
+    }
+
+    @FormField(DisplayRank = 24)
+    public IncomingStatus getIncomingStatus() {
+        return getValue("incomingStatus");
+    }
+
+    public void setIncomingStatus(IncomingStatus incomingStatus) {
+        setValue("incomingStatus", incomingStatus);
     }
 
     @OneToOne(fetch=FetchType.LAZY)
