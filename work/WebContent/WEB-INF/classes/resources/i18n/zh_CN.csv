@@ -50,6 +50,7 @@ Expense.status,状态
 Incoming,收入
 Incoming.payee,收款人
 Incoming.incomingStatus,收入状态
+Incoming.payer,付款人
 IncomingCategory,收入分类
 ExpenseCategory,支出分类
 incomingCategory,收入分类

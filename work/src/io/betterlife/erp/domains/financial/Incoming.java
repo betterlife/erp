@@ -36,7 +36,7 @@ public class Incoming extends BaseObject {
     }
 
     @ManyToOne
-    @FormField(DisplayRank = 1, RepresentField="displayName")
+    @FormField(DisplayRank = 4, RepresentField="displayName")
     public User getPayee() {
         return getValue("payee");
     }
@@ -75,7 +75,7 @@ public class Incoming extends BaseObject {
     }
 
     @OneToOne(fetch=FetchType.LAZY)
-    @FormField(DisplayRank = 20, RepresentField = "representField")
+    @FormField(DisplayRank = 20, RepresentField = "representField", Visible = FalseCondition.class)
     @JsonManagedReference
     public SalesOrder getSalesOrder() {
         return getValue("salesOrder");
@@ -83,6 +83,15 @@ public class Incoming extends BaseObject {
 
     public void setSalesOrder(SalesOrder salesOrder) {
         setValue("salesOrder", salesOrder);
+    }
+
+    @FormField(DisplayRank = 5)
+    public String getPayer() {
+        return getValue("payer");
+    }
+
+    public void setPayer(String payer) {
+        setValue("payer", payer);
     }
 
     @FormField(DisplayRank = 25)
