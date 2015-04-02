@@ -1,3 +1,7 @@
+IN_THE_PAYEE,在收款人处
+IN_THE_OPERATING_PLATFORM,在运营平台处
+IN_COMPANY_BANK,公司银行存款
+IN_COMPANY_CASH,公司现金
 DRAFT,草稿
 SUBMITTED,已提交
 APPROVING,审批中
@@ -44,6 +48,9 @@ CostCenter.name,部门/项目名称
 Expense,支出
 Expense.status,状态
 Incoming,收入
+Incoming.payee,收款人
+Incoming.incomingStatus,收入状态
+Incoming.payer,付款人
 IncomingCategory,收入分类
 ExpenseCategory,支出分类
 incomingCategory,收入分类

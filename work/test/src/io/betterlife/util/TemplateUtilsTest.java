@@ -214,7 +214,7 @@ public class TemplateUtilsTest {
         FieldMeta meta = EntityMockUtil.getInstance().mockFieldMeta("children", BaseObject.class);
         when(meta.getRepresentField()).thenReturn("name");
         BaseOperator operator = Mockito.mock(BaseOperator.class);
-        when(operator.getObjectCount(BaseObject.class)).thenReturn(10L);
+        when(operator.getObjectCount(BaseObject.class)).thenReturn(12L);
         BaseObject object = Mockito.mock(BaseObject.class);
         when(object.getId()).thenReturn(12L);
         when(object.getActive()).thenReturn(false);
