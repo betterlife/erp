@@ -1,14 +1,14 @@
 <div class='form-group'>
     <div class='col-md-offset-4 col-md-4 row'>
         <div class="col-md-4">
-            <input type='button' class='btn' value='$operationType$entityType' ng-click='$operation()'/>
+            <input type='button' class='btn btn-default' value='$operationType$entityType' ng-click='$operation()'/>
         </div>
         <div class="col-md-4">
-            <input type='button' ng-show="'$operation' == 'create'" class='btn' value='保存并继续创建'
+            <input type='button' ng-show="'$operation' == 'create'" class='btn btn-default' value='保存并继续创建'
                    ng-click='$operation(true)'/>
         </div>
         <div class="col-md-4">
-            <input type='button' class='btn pull-right' value='$reset' ng-click='reset()'/>
+            <input type='button' class='btn btn-danger pull-right' value='$reset' ng-click='reset()'/>
         </div>
     </div>
 </div>
