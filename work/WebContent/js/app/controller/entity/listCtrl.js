@@ -61,7 +61,10 @@ var listCtrl = function ($scope, $http, $location, $modal, loginService, i18nSer
                 for(var i = 0; i < length; i++) {
                     var currentData = $scope.gridOptions.data[i];
                     if ($scope.gridOptions.subGridOptions != null) {
-                        currentData.subGridOptions = $scope.gridOptions.subGridOptions;
+                        currentData.subGridOptions = {
+                            columnDefs : $scope.gridOptions.subGridOptions.fields,
+                            data : currentData[$scope.gridOptions.subGridOptions.fieldName]
+                        }
                     }
                 }
             })
