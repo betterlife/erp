@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.betterlife.erp.domains.common.Supplier;
 import io.betterlife.framework.annotation.FormField;
+import io.betterlife.framework.condition.FalseCondition;
 import io.betterlife.framework.domains.BaseObject;
 
 import javax.persistence.*;
@@ -20,7 +21,7 @@ import javax.persistence.*;
 public class PaymentMethod extends BaseObject {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @FormField(RepresentField = "name", DisplayRank = 3)
+    @FormField(RepresentField = "name", Visible = FalseCondition.class)
     @JsonBackReference
     public Supplier getSupplier(){
         return getValue("supplier");

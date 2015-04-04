@@ -1,8 +1,6 @@
 package io.betterlife.erp.domains.common;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import io.betterlife.erp.domains.financial.Expense;
 import io.betterlife.erp.domains.financial.PaymentMethod;
 import io.betterlife.framework.annotation.EntityForm;
 import io.betterlife.framework.condition.FalseCondition;
@@ -22,7 +20,7 @@ import java.util.List;
     @NamedQuery(name = "Supplier.getAll", query = "SELECT c FROM Supplier c WHERE c.active = TRUE ORDER BY c.id DESC"),
     @NamedQuery(name = "Supplier.getByKeyword", query = "SELECT c FROM Supplier c WHERE c.active = TRUE and (c.name like :keyword or c.contact like :keyword or c.email like :keyword or c.phone like :keyword or c.qq like :keyword or c.website like :keyword or c.remark like :keyword)")
 })
-@EntityForm(DetailField = "paymentMethods")
+@EntityForm(DetailField = "paymentMethods", DetailFieldType = PaymentMethod.class)
 public class Supplier extends BaseObject {
 
     @FormField(DisplayRank = 5)
