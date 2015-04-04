@@ -31,7 +31,7 @@ public class EntityMetaDataContainer extends MetaDataContainer {
         EntityForm entityForm = (EntityForm) (managedType.getJavaType()).getAnnotation(EntityForm.class);
         if (null != entityForm) {
             String detailField = entityForm.DetailField();
-            if (!ApplicationConfig.DefaultDetailField.equals(detailField)) {
+            if (!ApplicationConfig.getInstance().DefaultDetailField.equals(detailField)) {
                 entityMeta.setDetailField(detailField);
             }
         }

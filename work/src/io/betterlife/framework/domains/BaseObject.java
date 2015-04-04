@@ -117,7 +117,7 @@ public class BaseObject {
         StringBuilder sb = new StringBuilder();
         sb.append("\n{Type : ").append(getClass().getName());
         for (Map.Entry<String, Object> entry : _map.entrySet()) {
-            if (ApplicationConfig.getToStringIgnoreFields().contains(entry.getKey())) {
+            if (ApplicationConfig.getInstance().getToStringIgnoreFields().contains(entry.getKey())) {
                 continue;
             }
             final Object value = entry.getValue();
@@ -146,7 +146,7 @@ public class BaseObject {
             }
             if (null != clazz) {
                 final Class<? extends Converter> converterClass = fieldMeta.getConverterClass();
-                if (converterClass != null && !ApplicationConfig.DefaultConverterClass.equals(converterClass)) {
+                if (converterClass != null && !ApplicationConfig.getInstance().DefaultConverterClass.equals(converterClass)) {
                     annotatedConvert(key, value, converterClass);
                 } else if (null != value && EntityUtils.getInstance().isBaseObject(clazz)) {
                     baseObjectDefaultConvert(key, value, clazz);

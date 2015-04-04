@@ -42,7 +42,7 @@ public class TemplateUtils {
             if (!filePath.startsWith("/")) {
                 filePath = "/" + filePath;
             }
-            if (null == cachedTemplates.get(filePath) || ApplicationConfig.isDevelopmentMode()) {
+            if (null == cachedTemplates.get(filePath) || ApplicationConfig.getInstance().isDevelopmentMode()) {
                 InputStream inputStream = context.getResourceAsStream(filePath);
                 final String string = IOUtil.getInstance().inputStreamToString(inputStream);
                 cachedTemplates.put(filePath, string);
@@ -101,7 +101,7 @@ public class TemplateUtils {
             sb.append(
                 String.format(
                     "<option value='%s'>%s</option>%n", enumVal.toString(),
-                    I18n.getInstance().get(enumVal.toString(), ApplicationConfig.getLocale())
+                    I18n.getInstance().get(enumVal.toString(), ApplicationConfig.getInstance().getLocale())
                 )
             );
         }
@@ -116,7 +116,7 @@ public class TemplateUtils {
                                           Class<? extends BaseObject> clazz) {
         long number = BaseOperator.getInstance().getObjectCount(clazz);
         String result = "";
-        if (number <= ApplicationConfig.MaxNumberOfObjectForSelectController)
+        if (number <= ApplicationConfig.getInstance().MaxNumberOfObjectForSelectController)
             result = getBaseObjectSelectController(context, fieldMeta, clazz);
         else {
             result = getBaseObjectTypeHeadController(context, fieldMeta, clazz);
@@ -132,7 +132,7 @@ public class TemplateUtils {
         result = template
             .replaceAll("\\$name", fieldMeta.getName())
             .replaceAll("\\$ngModel", ngModelField)
-            .replaceAll("\\$placeholder", I18n.getInstance().get(fieldMeta.getName(), ApplicationConfig.getLocale()))
+            .replaceAll("\\$placeholder", I18n.getInstance().get(fieldMeta.getName(), ApplicationConfig.getInstance().getLocale()))
             .replaceAll("\\$entityType", BLStringUtils.uncapitalize(clazz.getSimpleName()))
             .replaceAll("\\$representField", fieldMeta.getRepresentField());
         return result;
@@ -217,7 +217,7 @@ public class TemplateUtils {
 
     public String getEditButtons(ServletContext context, String entityType, final String operationType) {
         String template = getHtmlTemplate(context, "templates/fields/buttons.tpl.html");
-        final String locale = ApplicationConfig.getLocale();
+        final String locale = ApplicationConfig.getInstance().getLocale();
         return template
             .replaceAll("\\$operationType", I18n.getInstance().get(operationType, locale))
             .replaceAll("\\$operation", BLStringUtils.uncapitalize(operationType))
@@ -233,7 +233,8 @@ public class TemplateUtils {
     }
 
     public String getListController(ServletContext context, String entityType) {
-        final String label = I18n.getInstance().get(BLStringUtils.capitalize(entityType), ApplicationConfig.getLocale());
+        final String label = I18n.getInstance().get(BLStringUtils.capitalize(entityType),
+                                                    ApplicationConfig.getInstance().getLocale());
         return getHtmlTemplate(context, "templates/list.tpl.html")
             .replaceAll("\\$entityType", BLStringUtils.uncapitalize(entityType))
             .replaceAll("\\$entityLabel", label);
@@ -272,7 +273,7 @@ public class TemplateUtils {
     }
 
     public String getBreadCrumb(ServletContext context, String entityType, String operationType) {
-        final String locale = ApplicationConfig.getLocale();
+        final String locale = ApplicationConfig.getInstance().getLocale();
         final String label = I18n.getInstance().get(BLStringUtils.capitalize(entityType), locale);
         final String operationLabel = I18n.getInstance().get(BLStringUtils.capitalize(operationType), locale);
         return getHtmlTemplate(context, "templates/breadcrumb.tpl.html")

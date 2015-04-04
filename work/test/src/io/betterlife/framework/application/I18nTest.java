@@ -18,14 +18,19 @@ public class I18nTest {
 
     private I18n i18n = I18n.getInstance();
     private ServletContext context;
+    private ApplicationConfig config;
 
     @Before
     public void setup() throws IOException {
         context = Mockito.mock(ServletContext.class);
-        final String resourceName = "/WEB-INF/classes/resources/i18n/" + ApplicationConfig.getLocale() + ".csv";
+        config = Mockito.mock(ApplicationConfig.class);
+        when(config.getLocale()).thenReturn("zh_CN");
+        when(config.isDevelopmentMode()).thenReturn(false);
+        final String resourceName = "/WEB-INF/classes/resources/i18n/" + ApplicationConfig.getInstance().getLocale() + ".csv";
         String input = "True,是\nid,编号\nUser,用户\nUser.displayName,显示名称\nuser,一般用户\nUser.user,操作人";
         InputStream stream = IOUtil.getInstance().stringToInputStream(input);
         when(context.getResourceAsStream(resourceName)).thenReturn(stream);
+        i18n.setConfig(config);
     }
 
     @Test
@@ -43,19 +48,19 @@ public class I18nTest {
     @Test
     public void testGetKeyExists() throws Exception {
         i18n.initResources(context);
-        assertEquals("是", i18n.get("True", ApplicationConfig.getLocale()));
-        assertEquals("编号", i18n.get("id", ApplicationConfig.getLocale()));
-        assertEquals("用户", i18n.get("User", ApplicationConfig.getLocale()));
-        assertEquals("一般用户", i18n.get("user", ApplicationConfig.getLocale()));
-        assertEquals("操作人", i18n.get("User.user", ApplicationConfig.getLocale()));
-        assertEquals("显示名称", i18n.get("User.displayName", ApplicationConfig.getLocale()));
+        assertEquals("是", i18n.get("True", ApplicationConfig.getInstance().getLocale()));
+        assertEquals("编号", i18n.get("id", ApplicationConfig.getInstance().getLocale()));
+        assertEquals("用户", i18n.get("User", ApplicationConfig.getInstance().getLocale()));
+        assertEquals("一般用户", i18n.get("user", ApplicationConfig.getInstance().getLocale()));
+        assertEquals("操作人", i18n.get("User.user", ApplicationConfig.getInstance().getLocale()));
+        assertEquals("显示名称", i18n.get("User.displayName", ApplicationConfig.getInstance().getLocale()));
     }
 
     @Test
     public void testGetKeyNotExists() throws IOException {
         i18n.initResources(context);
-        assertEquals("Abc", i18n.get("abc", ApplicationConfig.getLocale()));
-        assertEquals("Null", i18n.get(null, ApplicationConfig.getLocale()));
+        assertEquals("Abc", i18n.get("abc", ApplicationConfig.getInstance().getLocale()));
+        assertEquals("Null", i18n.get(null, ApplicationConfig.getInstance().getLocale()));
     }
 
     @Test
@@ -67,7 +72,7 @@ public class I18nTest {
     @Test
     public void testInitResourcesEmptyFile() throws Exception {
         context = Mockito.mock(ServletContext.class);
-        final String resourceName = "/WEB-INF/classes/resources/i18n/" + ApplicationConfig.getLocale() + ".csv";
+        final String resourceName = "/WEB-INF/classes/resources/i18n/" + ApplicationConfig.getInstance().getLocale() + ".csv";
         String input = "";
         InputStream stream = IOUtil.getInstance().stringToInputStream(input);
         when(context.getResourceAsStream(resourceName)).thenReturn(stream);

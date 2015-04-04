@@ -143,7 +143,7 @@ public class EntityService {
         StringBuilder result = new StringBuilder();
         Object[] options = fieldMeta.getType().getEnumConstants();
         for (Object option : options) {
-            final String translate = I18n.getInstance().get(option.toString(), ApplicationConfig.getLocale());
+            final String translate = I18n.getInstance().get(option.toString(), ApplicationConfig.getInstance().getLocale());
             result.append(String.format(template, field, option, translate)).append("\n");
         }
         logger.debug("Enum(%s) options: %s", fieldMeta.getType(), options);
@@ -151,8 +151,8 @@ public class EntityService {
     }
 
     private void setBooleanFieldAdditionalMeta(FieldMeta fieldMeta, String field, Map<String, Object> map) {
-        String trueLabel = I18n.getInstance().get(fieldMeta.getTrueLabel(), ApplicationConfig.getLocale());
-        String falseLabel = I18n.getInstance().get(fieldMeta.getFalseLabel(), ApplicationConfig.getLocale());
+        String trueLabel = I18n.getInstance().get(fieldMeta.getTrueLabel(), ApplicationConfig.getInstance().getLocale());
+        String falseLabel = I18n.getInstance().get(fieldMeta.getFalseLabel(), ApplicationConfig.getInstance().getLocale());
         map.put("cellTemplate", String.format(BooleanCellTemplate, field, trueLabel, field, falseLabel));
     }
 

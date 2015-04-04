@@ -24,6 +24,7 @@ public class I18n {
     private Map<String, Map<String, String>> translations = new HashMap<>();
     private List<String> resources = new ArrayList<>(4);
     private ServletContext context;
+    private ApplicationConfig config;
 
     private static I18n instance = new I18n();
     private I18n(){}
@@ -40,7 +41,7 @@ public class I18n {
         if (null == key) {
             key = "null";
         }
-        if (ApplicationConfig.isDevelopmentMode()) {
+        if (getConfig().isDevelopmentMode()) {
             for (String resource : resources) {
                 try {
                     loadResource(context, resource);
@@ -82,7 +83,7 @@ public class I18n {
     }
 
     public int initResources(ServletContext servletContext) throws IOException {
-        final String resourceName = "/WEB-INF/classes/resources/i18n/" + ApplicationConfig.getLocale() + ".csv";
+        final String resourceName = "/WEB-INF/classes/resources/i18n/" + getConfig().getLocale() + ".csv";
         resources.add(resourceName);
         this.context = servletContext;
         return loadResource(servletContext, resourceName);
@@ -90,12 +91,23 @@ public class I18n {
 
     public int loadResource(ServletContext servletContext, String resourceName) throws IOException {
         InputStream stream = servletContext.getResourceAsStream(resourceName);
-        int count = loadTranslations(stream, ApplicationConfig.getLocale());
+        int count = loadTranslations(stream, getConfig().getLocale());
         logger.info("Number of translation loaded: " + count);
         return count;
     }
 
     public String getFieldLabel(String entityType, String key) {
-        return I18n.getInstance().getFieldLabel(entityType, key, ApplicationConfig.getLocale());
+        return I18n.getInstance().getFieldLabel(entityType, key, getConfig().getLocale());
+    }
+
+    public void setConfig(ApplicationConfig config) {
+        this.config = config;
+    }
+
+    public ApplicationConfig getConfig(){
+        if (null == this.config){
+            return ApplicationConfig.getInstance();
+        }
+        return this.config;
     }
 }

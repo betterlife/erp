@@ -16,37 +16,46 @@ public class ApplicationConfig {
     /**
      * Ignore field when output toString.
      */
-    private static List<String> toStringIgnoreFields;
+    private List<String> toStringIgnoreFields;
 
     /**
      * Application data source name
      */
-    public static final String DataSourceName = "jdbc/PostgreSQLDS";
+    public final String DataSourceName = "jdbc/PostgreSQLDS";
 
     /**
      * Application persistence unit name
      */
-    public static final String PersistenceUnitName = "betterlife";
+    public final String PersistenceUnitName = "betterlife";
 	
 
     /**
      * Table name prefix
      */
-    public static final String TableNamePrefix = "BL_";
-    public static final String DefaultRepresentField = "name";
-    public static final int DefaultFieldRank = 0;
-    public static final boolean DefaultVisible = true;
-    public static final Class<? extends Converter> DefaultConverterClass = DefaultConverter.class;
-    public static final int MaxNumberOfObjectForSelectController = 10;
-    public static final String DefaultDetailField = "detail";
+    public final String TableNamePrefix = "BL_";
+    public final static String DefaultRepresentField = "name";
+    public final static int DefaultFieldRank = 0;
+    public final static String DefaultDetailField = "detail";
+    public final boolean DefaultVisible = true;
+    public final Class<? extends Converter> DefaultConverterClass = DefaultConverter.class;
+    public final int MaxNumberOfObjectForSelectController = 10;
+    private static ApplicationConfig instance = new ApplicationConfig();
 
-    public static String getLocale() {return "zh_CN";}
+    public static ApplicationConfig getInstance(){
+        return instance;
+    }
 
-    public static boolean isDevelopmentMode() {
+    public static void setInstance(ApplicationConfig config) {
+        instance = config;
+    }
+
+    public String getLocale() {return "zh_CN";}
+
+    public boolean isDevelopmentMode() {
         return true;
     }
 
-    public static List<String> getToStringIgnoreFields() {
+    public List<String> getToStringIgnoreFields() {
         if (null == toStringIgnoreFields) {
             toStringIgnoreFields = new ArrayList<>();
             toStringIgnoreFields.add("lastModify");
