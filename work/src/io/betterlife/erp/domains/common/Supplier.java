@@ -19,7 +19,7 @@ import java.util.List;
 @Entity
 @NamedQueries({
     @NamedQuery(name = "Supplier.getById", query = "SELECT c FROM Supplier c WHERE c.id = :id AND c.active = TRUE"),
-    @NamedQuery(name = "Supplier.getAll", query = "SELECT c FROM Supplier c WHERE c.active = TRUE"),
+    @NamedQuery(name = "Supplier.getAll", query = "SELECT c FROM Supplier c WHERE c.active = TRUE ORDER BY c.id DESC"),
     @NamedQuery(name = "Supplier.getByKeyword", query = "SELECT c FROM Supplier c WHERE c.active = TRUE and (c.name like :keyword or c.contact like :keyword or c.email like :keyword or c.phone like :keyword or c.qq like :keyword or c.website like :keyword or c.remark like :keyword)")
 })
 @EntityForm(DetailField = "paymentMethods")

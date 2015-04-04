@@ -22,12 +22,16 @@ var createCtrl = function ($scope, $http, $location, loginService, typeHeadServi
         }
     };
 
-    $scope.create = function () {
+    $scope.create = function (createAnother) {
         $http.post("/rest/" + $scope.captalizedEntityType, {
             'entity' : $scope.entity
         },{}).success(function (data) {
             console.log(data);
-            $location.path("/" + $scope.entityType + "/list");
+            if (true == createAnother) {
+                $scope.reset();
+            } else {
+                $location.path("/" + $scope.entityType + "/list");
+            }
         }).error(function (data, status) {
         });
     };
