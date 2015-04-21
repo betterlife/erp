@@ -37,6 +37,10 @@ public class TemplateUtils {
         return instance;
     }
 
+    public static void setInstance(TemplateUtils utils) {
+        instance = utils;
+    }
+
     public String getHtmlTemplate(ServletContext context, String filePath) {
         try {
             if (!filePath.startsWith("/")) {
