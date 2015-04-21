@@ -91,9 +91,7 @@ public class I18n {
 
     public int loadResource(ServletContext servletContext, String resourceName) throws IOException {
         InputStream stream = servletContext.getResourceAsStream(resourceName);
-        int count = loadTranslations(stream, getConfig().getLocale());
-        logger.info("Number of translation loaded: " + count);
-        return count;
+        return loadTranslations(stream, getConfig().getLocale());
     }
 
     public String getFieldLabel(String entityType, String key) {

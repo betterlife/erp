@@ -5,10 +5,10 @@
     <title>Betterlife ERP Dashboard</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script type="text/javascript" src='/js/bower_components/angular/angular.min.js'></script>
+    <script type="text/javascript" src='/js/bower_components/angular/angular.js'></script>
     <script type="text/javascript" src="/js/bower_components/angular-cookies/angular-cookies.min.js"></script>
     <script type="text/javascript" src="/js/bower_components/angular-route/angular-route.min.js"></script>
-    <script type="text/javascript" src="/js/3rd/angular-ui-grid/ui-grid.min.js"></script>
+    <script type="text/javascript" src="/js/3rd/angular-ui-grid/ui-grid.js"></script>
     <script type="text/javascript" src="/js/bower_components/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="/js/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
@@ -31,6 +31,7 @@
     <script type="text/javascript" src="/js/app/controller/entity/editCtrl.js"></script>
     <script type="text/javascript" src="/js/app/controller/entity/detailCtrl.js"></script>
     <script type="text/javascript" src="/js/app/directive/menu.js"></script>
+    <script type="text/javascript" src="/js/app/directive/entity.js"></script>
     <script type="text/javascript" src="/js/app/filter/commonFilters.js"></script>
     <link rel="stylesheet" href="/css/style.css">
     <base href="/">
@@ -96,6 +97,7 @@
                             <a class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-shopping-cart"></span> 订单<span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <menuitem entityLabel="采购订单" entityName="purchaseOrder" icon="glyphicon-shopping-cart"></menuitem>
+                                <menuitem entityLabel="采购订单行" entityName="purchaseOrderLine" icon="glyphicon-shopping-cart"></menuitem>
                                 <menuitem entityLabel="销售订单" entityName="salesOrder" icon="glyphicon-send"></menuitem>
                             </ul>
                          </li>

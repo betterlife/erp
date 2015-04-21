@@ -43,6 +43,6 @@ public class SecurityService {
     @Produces(MediaType.APPLICATION_JSON)
     public String login(@Context HttpServletRequest request, InputStream requestBody) throws IOException {
          Map<String, Object> params = IOUtil.getInstance().inputStreamToJson(requestBody);
-        return LoginUtil.getInstance().login(params);
+        return LoginUtil.getInstance().login(request, params);
     }
 }

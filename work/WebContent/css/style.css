@@ -103,7 +103,7 @@ html, body {
 }
 
 .select-controller{
-    width:94%;
+    width:84%;
     display:inline;
     margin-right: 5px;
 }
@@ -127,4 +127,17 @@ html, body {
 
 .login-panel {
     margin-top:150px;
+}
+
+.detail-sub-grid {
+    width:100%;
+}
+
+.top-margin {
+    margin-top:20px;
+}
+
+.detail-field-container {
+    padding-top:10px;
+    padding-bottom: 10px;
 }

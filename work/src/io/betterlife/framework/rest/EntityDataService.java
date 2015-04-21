@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -84,6 +85,12 @@ public class EntityDataService {
                          @Context HttpServletRequest request,
                          InputStream requestBody)
         throws ClassNotFoundException, IllegalAccessException, InstantiationException, IOException {
+        HttpSession session = request.getSession();
+        Object obj = session.getAttribute("betterlifeLoginUser");
+        if (null == obj) {
+            //Failure
+            return new ExecuteResult<String>().getRestString("FAILED");
+        }
         Map<String, Object> parameters = IOUtil.getInstance().inputStreamToJson(requestBody);
         Map<String, Object> entityParams = (Map<String, Object>) parameters.get("entity");
         BaseObject existingObj = getBaseOperator().getBaseObjectById(
@@ -91,6 +98,7 @@ public class EntityDataService {
         );
         if (null != existingObj) {
             existingObj.setValues(entityParams);
+            existingObj.setValue("lastModify", obj);
         }
         getBaseOperator().save(existingObj, BaseOperator.UPDATE_OPERA);
         return new ExecuteResult<String>().getRestString("SUCCESS");

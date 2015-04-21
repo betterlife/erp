@@ -33,7 +33,7 @@ public class LoginUtilTest {
         params.put("password", PASSWORD);
         mockBaseOperator(params);
         mockBLStringUtils();
-        String result = loginUtil.login(params);
+        String result = loginUtil.login(request, params);
         JsonNode node = JsonUtils.getInstance().stringToJsonNode(result);
         assertEquals(ENCRYPTED_PASSWORD, node.get("result").get("password").asText());
         assertEquals(USER_NAME, node.get("result").get("username").asText());
@@ -76,7 +76,7 @@ public class LoginUtilTest {
         logic.action(operator, params);
         BaseOperator.setInstance(operator);
         mockBLStringUtils();
-        JsonNode node  = JsonUtils.getInstance().stringToJsonNode(loginUtil.login(params));
+        JsonNode node  = JsonUtils.getInstance().stringToJsonNode(loginUtil.login(request, params));
         assertNotNull(node);
         assertEquals(false, node.get("success").asBoolean());
         final ArrayNode errorMessages = (ArrayNode) node.get("errorMessages");

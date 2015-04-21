@@ -98,4 +98,20 @@ public class EntityFormService {
         return formString;
     }
 
+    @GET @Path("/{entityType}/relate/{id}")
+    @Produces(MediaType.TEXT_HTML)
+    public String getRelateForm(@PathParam("entityType") String entityType,
+                                @Context HttpServletRequest request,
+                                @PathParam("id") int id) {
+        HttpSession session = request.getSession();
+        ServletContext context = session.getServletContext();
+        Map<String, FieldMeta> meta = MetaDataManager.getInstance().getMetaFromEntityType(entityType);
+        LinkedHashMap<String, FieldMeta> sortedMeta = EntityUtils.getInstance().sortEntityMetaByDisplayRank(meta);
+        String formString = getTemplateUtils().getFormHtml(entityType, context, Operation.RELATE, sortedMeta);
+        if (logger.isTraceEnabled()) {
+            logger.trace(String.format("%s form template for EntityType[%s]:%n\t%s", Operation.RELATE, entityType, formString));
+        }
+        return formString;
+    }
+
 }

@@ -13,8 +13,8 @@ hasInvoice,有发票
 noInvoice,没有发票
 creator,创建用户
 createDate,创建时间
-lastModify,最后更新用户
-lastModifyDate,最后更新时间
+lastModify,更新用户
+lastModifyDate,更新时间
 True,是
 False,否
 Can,可以

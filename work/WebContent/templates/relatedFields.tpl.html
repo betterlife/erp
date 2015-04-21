@@ -1,0 +1,26 @@
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Related Entities
+        </div>
+        <div class="panel-body">
+            $relatedEntitiesList
+            <div class="form-group form-horizontal top-margin" ng-show="activeRelatedEntity != null">
+                <!--
+                <div class="form-group" ng-repeat="(key, value) in activeRelatedEntity"
+                     ng-show="activeRelatedEntityIsArray != true">
+                    <label class="col-md-3 control-label">{{key}}</label>
+                    <div class="col-md-8">
+                        <input type="text" disabled="disabled" size="20" name="{{key}}" value="{{value}}"
+                               class="form-control">
+                    </div>
+                </div>
+                -->
+                <div ng-bind-html="relatedEntityDetailInfo"></div>
+                <div ng-show="activeRelatedEntityIsArray == true" id="grid1" ui-grid="gridOptions"
+                     ui-grid-pagination class="detail-sub-grid">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

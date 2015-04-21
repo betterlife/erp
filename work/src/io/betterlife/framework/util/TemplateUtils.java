@@ -60,9 +60,9 @@ public class TemplateUtils {
         StringBuilder form = new StringBuilder();
         Class clazz = fieldMeta.getType();
         String key = fieldMeta.getName();
-        form.append("<div class='form-group'>\n");
+        form.append("<div class='detail-field-container col-md-4'>\n");
         form.append(getFieldLabelHtml(context, entityType, key));
-        form.append("<div class='col-md-4'>");
+        form.append("<div class='col-md-8'>");
         if (!Evaluator.getInstance().evalEditable(entityType, fieldMeta, null, operationType)) {
             form.append(getReadOnlyController(context, fieldMeta, clazz));
         }  else if (String.class.equals(clazz)) {
@@ -242,8 +242,31 @@ public class TemplateUtils {
 
     public String getFormHtml(String entityType, ServletContext context, String operationType,
                               LinkedHashMap<String, FieldMeta> sortedMeta) {
-        String frame = getFrameTemplate(context);
-        String breadCrumb = getBreadCrumb(context, entityType, operationType);
+        final String frame = getFormTemplate(context);
+        final String breadCrumb = getFormBreadCrumb(entityType, context, operationType);
+        final String fieldsList = getFieldsListString(entityType, context, operationType, sortedMeta);
+        final String withFieldsList = frame.replace("$fieldsList", fieldsList);
+        final String buttons = getFormButtons(entityType, context, operationType);
+        final String withBreadCrumb = withFieldsList.replace("$breadcrumb", breadCrumb);
+        final String withButtons = withBreadCrumb.replace("$buttons", buttons);
+        final String relatedFieldsHtml = getFormRelatedFieldsHtml(context, operationType, sortedMeta);
+        return withButtons.replace("$relatedEntities", relatedFieldsHtml);
+    }
+
+    private String getFormRelatedFieldsHtml(ServletContext context, String operationType, LinkedHashMap<String, FieldMeta> sortedMeta) {
+        return Operation.DETAIL.equals(operationType) ? getRelatedFieldsHtml(context, sortedMeta) : StringUtils.EMPTY;
+    }
+
+    private String getFormButtons(String entityType, ServletContext context, String operationType) {
+        return Operation.RELATE.equals(operationType)? StringUtils.EMPTY : getButtonsHtml(entityType, context, operationType);
+    }
+
+    private String getFormBreadCrumb(String entityType, ServletContext context, String operationType) {
+        return Operation.RELATE.equals(operationType)? StringUtils.EMPTY : getBreadCrumb(context, entityType, operationType);
+    }
+
+    private String getFieldsListString(String entityType, ServletContext context,
+                                       String operationType, LinkedHashMap<String, FieldMeta> sortedMeta) {
         StringBuilder fields = new StringBuilder();
         for (Map.Entry<String, FieldMeta> entry : sortedMeta.entrySet()) {
             final FieldMeta fieldMeta = entry.getValue();
@@ -252,23 +275,55 @@ public class TemplateUtils {
             fields.append(getFieldController(context, operationType, entityType, fieldMeta,
                                              I18n.getInstance().getFieldLabel(entityType, key)));
         }
+        return fields.toString();
+    }
+
+    private String getRelatedFieldsHtml(ServletContext context, LinkedHashMap<String, FieldMeta> sortedMeta) {
+        List<FieldMeta> relatedFields = new ArrayList<>();
+        for (Map.Entry<String, FieldMeta> entry : sortedMeta.entrySet()) {
+            final FieldMeta fieldMeta = entry.getValue();
+            if (ClassUtils.isAssignable(fieldMeta.getType(), List.class)
+                || EntityUtils.getInstance().isBaseObject(fieldMeta.getType())){
+                relatedFields.add(fieldMeta);
+            }
+        }
+        String relatedFieldsListHtml = getRelatedFieldsTabHtml(relatedFields);
+        return getHtmlTemplate(context, "templates/relatedFields.tpl.html")
+            .replaceAll("\\$relatedEntitiesList", relatedFieldsListHtml);
+    }
+
+    private String getRelatedFieldsTabHtml(List<FieldMeta> relatedFields) {
+        final String locale = ApplicationConfig.getInstance().getLocale();
+        StringBuilder sb = new StringBuilder("<ul class=\"nav nav-tabs\">\n");
+        for (FieldMeta meta : relatedFields) {
+            final String metaName = meta.getName();
+            String metaLabel = I18n.getInstance().get(metaName, locale);
+            sb.append("<li role=\"tablist\" ng-class=\"{active: activeRelatedEntityTab == '")
+                .append(metaName).append("'}\"\n><a ng-click=\"getRelatedEntity('")
+                .append(metaName).append("','").append(meta.getType().getSimpleName()).append("')\">")
+                .append(metaLabel).append("</a></li>\n");
+        }
+        sb.append("</ul>");
+        return sb.toString();
+    }
+
+    private String getButtonsHtml(String entityType, ServletContext context, String operationType) {
         String buttons = "";
-        if (!Operation.DETAIL.equals(operationType)){
+        if (!Operation.DETAIL.equals(operationType)) {
             buttons = getEditButtons(context, entityType, operationType);
         } else {
-            buttons = getDetailButtons(context, entityType, operationType);
+            buttons = getDetailButtons(context, entityType);
         }
-        final String fieldsList = fields.toString();
-        final String withBreadCrumb = frame.replace("$breadcrumb", breadCrumb);
-        final String withButtons = withBreadCrumb.replace("$buttons", buttons);
-        return withButtons.replace("$fieldsList", fieldsList);
+        return buttons;
     }
 
-    private String getDetailButtons(ServletContext context, String entityType, String operationType) {
-        return getHtmlTemplate(context, "templates/detail.buttons.tpl.html").replaceAll("\\$entityType", entityType);
+    private String getDetailButtons(ServletContext context, String entityType) {
+        final String locale = ApplicationConfig.getInstance().getLocale();
+        return getHtmlTemplate(context, "templates/detail.buttons.tpl.html")
+            .replaceAll("\\$entityType", entityType);
     }
 
-    public String getFrameTemplate(ServletContext context) {
+    public String getFormTemplate(ServletContext context) {
         return getHtmlTemplate(context, "templates/form.tpl.html");
     }
 
