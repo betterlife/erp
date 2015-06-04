@@ -88,7 +88,8 @@ public class Supplier extends BaseObject {
 
     @FormField(DisplayRank = 40, TrueLabel = "Can", FalseLabel = "Cannot")
     public boolean getCanMixedWholesale() {
-        return getValue("canMixedWholesale");
+        Object obj = getValue("canMixedWholesale");
+        return null != obj && (boolean) obj;
     }
 
     public void setCanMixedWholesale(boolean canMixedWholesale) {
@@ -105,7 +106,7 @@ public class Supplier extends BaseObject {
         setValue("remark", remark);
     }
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "supplier")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "supplier")
     @FormField(Visible = FalseCondition.class)
     @JsonManagedReference
     public List<PaymentMethod> getPaymentMethods() {
