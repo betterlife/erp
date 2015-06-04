@@ -2,9 +2,11 @@ package io.betterlife.framework.util;
 
 import io.betterlife.framework.application.I18n;
 import io.betterlife.framework.application.config.ApplicationConfig;
+import io.betterlife.framework.application.manager.MetaDataManager;
 import io.betterlife.framework.condition.Evaluator;
 import io.betterlife.framework.constant.Operation;
 import io.betterlife.framework.domains.BaseObject;
+import io.betterlife.framework.meta.EntityMeta;
 import io.betterlife.framework.meta.FieldMeta;
 import io.betterlife.framework.persistence.BaseOperator;
 import io.betterlife.framework.persistence.NamedQueryRules;
@@ -239,8 +241,19 @@ public class TemplateUtils {
     public String getListController(ServletContext context, String entityType) {
         final String label = I18n.getInstance().get(BLStringUtils.capitalize(entityType),
                                                     ApplicationConfig.getInstance().getLocale());
+        EntityMeta masterEntityMeta = MetaDataManager.getInstance().getEntityMeta(BLStringUtils.capitalize(entityType));
+        String uiGridExpendable = "";
+        if (null != masterEntityMeta) {
+            Map<String, Object> detailFieldsInfo = new HashMap<>(2);
+            String detailField = masterEntityMeta.getDetailField();
+            Class detailFieldType = masterEntityMeta.getDetailFieldType();
+            if (null != detailField && null != detailFieldType) {
+                uiGridExpendable = "ui-grid-expandable";
+            }
+        }
         return getHtmlTemplate(context, "templates/list.tpl.html")
             .replaceAll("\\$entityType", BLStringUtils.uncapitalize(entityType))
+            .replaceAll("\\$uiGridExpandable", uiGridExpendable)
             .replaceAll("\\$entityLabel", label);
     }
 
