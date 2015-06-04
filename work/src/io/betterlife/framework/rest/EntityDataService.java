@@ -1,7 +1,10 @@
 package io.betterlife.framework.rest;
 
+import io.betterlife.erp.domains.common.Supplier;
+import io.betterlife.erp.domains.financial.PaymentMethod;
 import io.betterlife.framework.application.manager.MetaDataManager;
 import io.betterlife.framework.domains.BaseObject;
+import io.betterlife.framework.domains.security.User;
 import io.betterlife.framework.persistence.BaseOperator;
 import io.betterlife.framework.persistence.NamedQueryRules;
 import io.betterlife.framework.util.EntityUtils;
@@ -86,8 +89,8 @@ public class EntityDataService {
                          InputStream requestBody)
         throws ClassNotFoundException, IllegalAccessException, InstantiationException, IOException {
         HttpSession session = request.getSession();
-        Object obj = session.getAttribute("betterlifeLoginUser");
-        if (null == obj) {
+        Object loginUser = session.getAttribute("betterlifeLoginUser");
+        if (null == loginUser) {
             //Failure
             return new ExecuteResult<String>().getRestString("FAILED");
         }
@@ -98,7 +101,9 @@ public class EntityDataService {
         );
         if (null != existingObj) {
             existingObj.setValues(entityParams);
-            existingObj.setValue("lastModify", obj);
+            if (loginUser instanceof User) {
+                existingObj.setValue("lastModify", loginUser);
+            }
         }
         getBaseOperator().save(existingObj, BaseOperator.UPDATE_OPERA);
         return new ExecuteResult<String>().getRestString("SUCCESS");
