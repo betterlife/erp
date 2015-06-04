@@ -4,7 +4,7 @@ applications:
   memory: 384M
   host: betterlife-erp
   domain: mybluemix.net
-  path: betterlife-erp_0.1.war
+  path: betterlife-erp_0.3.war
   instances: 1
   disk_quota: 512M
   services:
