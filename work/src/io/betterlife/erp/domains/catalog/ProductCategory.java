@@ -1,5 +1,6 @@
 package io.betterlife.erp.domains.catalog;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.betterlife.framework.domains.BaseObject;
 import io.betterlife.framework.annotation.FormField;
 
@@ -43,6 +44,11 @@ public class ProductCategory extends BaseObject {
     }
 
     public void setParentCategory(ProductCategory productCategory) {
+        if ((productCategory != null && productCategory.getId() == getId()) ||
+            (productCategory != null && productCategory.getParentCategory() != null &&
+                (productCategory.getParentCategory().getId() == getId()))) {
+            throw new RuntimeException("parent category should not be same as itself.");
+        }
         setValue("parentCategory", productCategory);
     }
 }
