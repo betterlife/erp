@@ -18,25 +18,6 @@ public class ProductCategoryTest {
     }
 
     @Test
-    public void testGetParentCategory() throws Exception {
-        ProductCategory parent = Mockito.mock(ProductCategory.class);
-        productCategory.setParentCategory(parent);
-        assertNotNull(productCategory.getParentCategory());
-        assertSame(parent, productCategory.getParentCategory());
-    }
-
-    @Test
-    public void testSetParentCategory() throws Exception {
-        ProductCategory parent = Mockito.mock(ProductCategory.class);
-        productCategory.setParentCategory(parent);
-        ProductCategory parent1 = Mockito.mock(ProductCategory.class);
-        productCategory.setParentCategory(parent1);
-        assertNotNull(productCategory.getParentCategory());
-        assertNotEquals(parent, productCategory.getParentCategory());
-        assertSame(parent1, productCategory.getParentCategory());
-    }
-
-    @Test
     public void testSetName() throws Exception {
         final String name = "A Expense Category Name";
         productCategory.setName(name);
