@@ -11,11 +11,13 @@
 		<class>io.betterlife.erp.domains.financial.Expense</class>
 		<class>io.betterlife.erp.domains.financial.ExpenseCategory</class>
 		<class>io.betterlife.erp.domains.financial.IncomingCategory</class>
+        <class>io.betterlife.erp.domains.financial.PaymentMethod</class>
         <class>io.betterlife.erp.domains.financial.DefaultFinancialSetting</class>
 		<class>io.betterlife.erp.domains.catalog.Product</class>
 		<class>io.betterlife.erp.domains.catalog.ProductCategory</class>
 		<class>io.betterlife.erp.domains.common.Supplier</class>
 		<class>io.betterlife.erp.domains.order.PurchaseOrder</class>
+		<class>io.betterlife.erp.domains.order.PurchaseOrderLine</class>
 		<class>io.betterlife.erp.domains.order.SalesOrder</class>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		<properties>

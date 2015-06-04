@@ -18,18 +18,6 @@ public class EntityFormServiceTest {
     }
 
     @Test
-    public void testGetTemplateUtils() throws Exception {
-        assertNotNull(service.getTemplateUtils());
-    }
-
-    @Test
-    public void testSetTemplateUtils() throws Exception {
-        TemplateUtils templateUtils = Mockito.mock(TemplateUtils.class);
-        service.setTemplateUtils(templateUtils);
-        assertEquals(templateUtils, service.getTemplateUtils());
-    }
-
-    @Test
     public void testGetCreateForm() throws Exception {
 
     }

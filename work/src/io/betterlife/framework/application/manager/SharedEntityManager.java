@@ -45,7 +45,7 @@ public class SharedEntityManager {
             }
             initialized = true;
             try {
-                instance.factory = Persistence.createEntityManagerFactory(ApplicationConfig.PersistenceUnitName);
+                instance.factory = Persistence.createEntityManagerFactory(ApplicationConfig.getInstance().PersistenceUnitName);
             } catch (Throwable t) {
                 logger.error("Error init Entity manager", t);
             }

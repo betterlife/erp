@@ -5,10 +5,10 @@
     <title>Betterlife ERP Dashboard</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script type="text/javascript" src='/js/bower_components/angular/angular.min.js'></script>
+    <script type="text/javascript" src='/js/bower_components/angular/angular.js'></script>
     <script type="text/javascript" src="/js/bower_components/angular-cookies/angular-cookies.min.js"></script>
     <script type="text/javascript" src="/js/bower_components/angular-route/angular-route.min.js"></script>
-    <script type="text/javascript" src="/js/3rd/angular-ui-grid/ui-grid.min.js"></script>
+    <script type="text/javascript" src="/js/3rd/angular-ui-grid/ui-grid.js"></script>
     <script type="text/javascript" src="/js/bower_components/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="/js/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
@@ -30,7 +30,9 @@
     <script type="text/javascript" src="/js/app/controller/entity/listCtrl.js"></script>
     <script type="text/javascript" src="/js/app/controller/entity/editCtrl.js"></script>
     <script type="text/javascript" src="/js/app/controller/entity/detailCtrl.js"></script>
+    <script type="text/javascript" src="/js/app/controller/entity/relateCtrl.js"></script>
     <script type="text/javascript" src="/js/app/directive/menu.js"></script>
+    <script type="text/javascript" src="/js/app/directive/entity.js"></script>
     <script type="text/javascript" src="/js/app/filter/commonFilters.js"></script>
     <link rel="stylesheet" href="/css/style.css">
     <base href="/">
@@ -72,10 +74,10 @@
                                 <menuitem entityLabel="收入分类" entityName="incomingCategory" icon="glyphicon-tag"></menuitem>
                                 <menuitem entityLabel="收入" entityName="incoming" icon="glyphicon-signal"></menuitem>
                                 <menuitem entityLabel="支出" entityName="expense" icon="glyphicon-minus"></menuitem>
-                                <menuitem entityLabel="付款方式" entityName="incoming" icon="glyphicon-usd"></menuitem>
+                                <menuitem entityLabel="付款方式" entityName="paymentMethod" icon="glyphicon-usd"></menuitem>
                                 <li class="dropdown-header menu-title">
                                     <span class="glyphicon glyphicon-wrench">
-                                        <a href="/defaultFinancialSetting/edit/1">编辑财务设置</a>
+                                        <a href="/defaultFinancialSetting/edit/1" class="menu-item-title">编辑财务设置</a>
                                     </span>
                                 <li>
                                 <!--
@@ -89,13 +91,14 @@
                             <ul class="dropdown-menu">
                                 <menuitem entityLabel="产品分类" entityName="productCategory" icon="glyphicon-tag"></menuitem>
                                 <menuitem entityLabel="供应商" entityName="supplier" icon="glyphicon-user"></menuitem>
-                                <menuitem entityLabel="产品" entityName="supplier" icon="glyphicon-barcode"></menuitem>
+                                <menuitem entityLabel="产品" entityName="product" icon="glyphicon-barcode"></menuitem>
                             </ul>
                          </li>
                         <li ng-class="{active: (isActive('/purchaseOrder') || isActive('/salesOrder'))}" ng-show="isLoggedIn()">
                             <a class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-shopping-cart"></span> 订单<span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <menuitem entityLabel="采购订单" entityName="purchaseOrder" icon="glyphicon-shopping-cart"></menuitem>
+                                <menuitem entityLabel="采购订单行" entityName="purchaseOrderLine" icon="glyphicon-shopping-cart"></menuitem>
                                 <menuitem entityLabel="销售订单" entityName="salesOrder" icon="glyphicon-send"></menuitem>
                             </ul>
                          </li>

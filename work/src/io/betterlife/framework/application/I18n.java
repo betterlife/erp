@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,9 @@ public class I18n {
 
     private final Logger logger = LogManager.getLogger(I18n.class.getName());
     private Map<String, Map<String, String>> translations = new HashMap<>();
+    private List<String> resources = new ArrayList<>(4);
+    private ServletContext context;
+    private ApplicationConfig config;
 
     private static I18n instance = new I18n();
     private I18n(){}
@@ -36,6 +40,15 @@ public class I18n {
     public String get(String key, String locale) {
         if (null == key) {
             key = "null";
+        }
+        if (getConfig().isDevelopmentMode()) {
+            for (String resource : resources) {
+                try {
+                    loadResource(context, resource);
+                } catch (IOException e) {
+                    logger.warn("Failed to load resource[%s]", resource);
+                }
+            }
         }
         String result = translations.get(locale).get(key);
         return (null == result) ? BLStringUtils.capitalize(key) : result;
@@ -70,14 +83,29 @@ public class I18n {
     }
 
     public int initResources(ServletContext servletContext) throws IOException {
-        final String resourceName = "/WEB-INF/classes/resources/i18n/" + ApplicationConfig.getLocale() + ".csv";
+        final String resourceName = "/WEB-INF/classes/resources/i18n/" + getConfig().getLocale() + ".csv";
+        resources.add(resourceName);
+        this.context = servletContext;
+        return loadResource(servletContext, resourceName);
+    }
+
+    public int loadResource(ServletContext servletContext, String resourceName) throws IOException {
         InputStream stream = servletContext.getResourceAsStream(resourceName);
-        int count = loadTranslations(stream, ApplicationConfig.getLocale());
-        logger.info("Number of translation loaded: " + count);
-        return count;
+        return loadTranslations(stream, getConfig().getLocale());
     }
 
     public String getFieldLabel(String entityType, String key) {
-        return I18n.getInstance().getFieldLabel(entityType, key, ApplicationConfig.getLocale());
+        return I18n.getInstance().getFieldLabel(entityType, key, getConfig().getLocale());
+    }
+
+    public void setConfig(ApplicationConfig config) {
+        this.config = config;
+    }
+
+    public ApplicationConfig getConfig(){
+        if (null == this.config){
+            return ApplicationConfig.getInstance();
+        }
+        return this.config;
     }
 }

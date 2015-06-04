@@ -29,8 +29,12 @@ public class MetaDataManager {
     private MetaDataManager() {
     }
 
+    public EntityMeta getEntityMeta(String simpleClassName) {
+        return entityMetaDataContainer.get(simpleClassName);
+    }
+
     public EntityMeta getEntityMeta(Class<? extends BaseObject> aClass) {
-        return entityMetaDataContainer.get(aClass.getSimpleName());
+        return getEntityMeta(aClass.getSimpleName());
     }
 
     public FieldMeta getFieldMeta(Class<? extends BaseObject> aClass, String fieldName) {

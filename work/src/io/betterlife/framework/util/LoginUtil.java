@@ -7,6 +7,7 @@ import io.betterlife.framework.rest.ExecuteResult;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
@@ -24,7 +25,7 @@ public class LoginUtil {
     private LoginUtil() {
     }
 
-    public String login(Map<String, Object> params) {
+    public String login(HttpServletRequest request, Map<String, Object> params) {
         User user;
         String username = (String) params.get("username");
         String password = (String) params.get("password");
@@ -36,7 +37,10 @@ public class LoginUtil {
             params.put("password", encryptedPassword);
             user = BaseOperator.getInstance().getBaseObject(User.GetByUserNameAndPasswordQuery, params);
             if (null == user) {
+                request.getSession().removeAttribute("betterlifeLoginUser");
                 return createErrorLoginResult(username, encryptedPassword);
+            } else {
+                request.getSession().setAttribute("betterlifeLoginUser", user);
             }
         } catch (Exception e) {
             logger.error(String.format("Exception during login of user[%s], password[%s](encrypted)", username, encryptedPassword), e);

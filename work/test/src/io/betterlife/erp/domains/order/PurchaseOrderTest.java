@@ -26,86 +26,6 @@ public class PurchaseOrderTest {
     }
 
     @Test
-    public void testProduct() throws Exception {
-        Product product = Mockito.mock(Product.class);
-        purchaseOrder.setProduct(product);
-        assertNotNull(purchaseOrder.getProduct());
-        assertSame(product, purchaseOrder.getProduct());
-        Product product1 = Mockito.mock(Product.class);
-        purchaseOrder.setProduct(product1);
-        assertNotNull(purchaseOrder.getProduct());
-        assertNotEquals(product, purchaseOrder.getProduct());
-        assertSame(product1, purchaseOrder.getProduct());
-    }
-
-    @Test
-    public void testGetSupplier() throws Exception {
-        Product product = Mockito.mock(Product.class);
-        Supplier supplier = Mockito.mock(Supplier.class);
-        when(product.getSupplier()).thenReturn(supplier);
-        purchaseOrder.setProduct(product);
-        assertNotNull(purchaseOrder.getSupplier());
-        assertSame(supplier, purchaseOrder.getSupplier());
-        Product newProduct = Mockito.mock(Product.class);
-        Supplier newSupplier = Mockito.mock(Supplier.class);
-        when(newProduct.getSupplier()).thenReturn(newSupplier);
-        purchaseOrder.setProduct(newProduct);
-        assertNotNull(purchaseOrder.getSupplier());
-        assertNotEquals(supplier, purchaseOrder.getSupplier());
-        assertSame(newSupplier, purchaseOrder.getSupplier());
-    }
-
-    @Test
-    public void testPricePerUnit() throws Exception {
-        BigDecimal ppu = new BigDecimal("20.00");
-        purchaseOrder.setPricePerUnit(ppu);
-        assertNotNull(purchaseOrder.getPricePerUnit());
-        assertSame(ppu, purchaseOrder.getPricePerUnit());
-        BigDecimal newPPU = new BigDecimal("100.21");
-        purchaseOrder.setPricePerUnit(newPPU);
-        assertNotNull(purchaseOrder.getPricePerUnit());
-        assertNotEquals(ppu, purchaseOrder.getPricePerUnit());
-        assertSame(newPPU, purchaseOrder.getPricePerUnit());
-    }
-
-    @Test
-    public void testQuantity() throws Exception {
-        BigDecimal qty = new BigDecimal("20.00");
-        purchaseOrder.setQuantity(qty);
-        assertNotNull(purchaseOrder.getQuantity());
-        assertSame(qty, purchaseOrder.getQuantity());
-        BigDecimal newQty = new BigDecimal("100.00");
-        purchaseOrder.setQuantity(newQty);
-        assertNotNull(purchaseOrder.getQuantity());
-        assertNotEquals(qty, purchaseOrder.getQuantity());
-        assertSame(newQty, purchaseOrder.getQuantity());
-    }
-
-    @Test
-    public void testAmount() throws Exception {
-        BigDecimal qty = new BigDecimal("20.00");
-        purchaseOrder.setQuantity(qty);
-        BigDecimal ppu = new BigDecimal("50.00");
-        purchaseOrder.setPricePerUnit(ppu);
-        BigDecimal amount = purchaseOrder.getAmount();
-        assertNotNull(amount);
-        assertEquals(qty.multiply(ppu), amount);
-        BigDecimal newQty = new BigDecimal("21");
-        purchaseOrder.setQuantity(newQty);
-        BigDecimal newAmt = purchaseOrder.getAmount();
-        assertNotNull(newAmt);
-        assertNotEquals(qty.multiply(ppu), newAmt);
-        assertEquals(newQty.multiply(ppu), newAmt);
-        BigDecimal newPpu = new BigDecimal("45.00");
-        purchaseOrder.setPricePerUnit(newPpu);
-        BigDecimal newAmt2 = purchaseOrder.getAmount();
-        assertNotNull(newAmt2);
-        assertNotEquals(qty.multiply(ppu), newAmt2);
-        assertNotEquals(newQty.multiply(ppu), newAmt2);
-        assertEquals(newQty.multiply(newPpu), newAmt2);
-    }
-
-    @Test
     public void testPurchaseDate() throws Exception {
         Date date = new Date();
         purchaseOrder.setOrderDate(date);
@@ -147,29 +67,6 @@ public class PurchaseOrderTest {
         assertSame(bd1, amount);
     }
 
-    @Test
-    public void testGetUnitLogisticAmount() throws Exception {
-        BigDecimal totalLogisticAmt = new BigDecimal("8");
-        purchaseOrder.setLogisticAmount(totalLogisticAmt);
-        BigDecimal qty = new BigDecimal("10");
-        purchaseOrder.setQuantity(qty);
-        BigDecimal unitLogisticAmt = purchaseOrder.getUnitLogisticAmount();
-        assertNotNull(unitLogisticAmt);
-        assertEquals(totalLogisticAmt.divide(qty, 2, BigDecimal.ROUND_HALF_UP), unitLogisticAmt);
-        BigDecimal newTotalLogisticAmt = new BigDecimal("10");
-        purchaseOrder.setLogisticAmount(newTotalLogisticAmt);
-        unitLogisticAmt = purchaseOrder.getUnitLogisticAmount();
-        assertNotNull(unitLogisticAmt);
-        assertNotEquals(totalLogisticAmt.divide(qty, 2, BigDecimal.ROUND_HALF_UP), unitLogisticAmt);
-        assertEquals(newTotalLogisticAmt.divide(qty, 2, BigDecimal.ROUND_HALF_UP), unitLogisticAmt);
-        BigDecimal newQty = new BigDecimal("5");
-        purchaseOrder.setQuantity(newQty);
-        unitLogisticAmt = purchaseOrder.getUnitLogisticAmount();
-        assertNotNull(unitLogisticAmt);
-        assertNotEquals(totalLogisticAmt.divide(qty, 2, BigDecimal.ROUND_HALF_UP), unitLogisticAmt);
-        assertNotEquals(newTotalLogisticAmt.divide(qty, 2, BigDecimal.ROUND_HALF_UP), unitLogisticAmt);
-        assertEquals(newTotalLogisticAmt.divide(newQty, 2, BigDecimal.ROUND_HALF_UP), unitLogisticAmt);
-    }
 
     @Test
     public void testOtherAmount() throws Exception {

@@ -1,0 +1,16 @@
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Related Entities
+        </div>
+        <div class="panel-body">
+            $relatedEntitiesList
+            <div class="form-group form-horizontal top-margin">
+                <entity ng-show="activeRelatedEntityIsArray != true"></entity>
+                <div ng-show="activeRelatedEntityIsArray == true" id="grid1" ui-grid="gridOptions"
+                     ui-grid-pagination class="detail-sub-grid">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

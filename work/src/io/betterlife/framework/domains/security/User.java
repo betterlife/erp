@@ -49,4 +49,13 @@ public class User extends BaseObject {
     public void setDisplayName(String displayName) {
         setValue("displayName", displayName);
     }
+
+    @FormField(DisplayRank = 15)
+    public String getEmail() {
+        return getValue("email");
+    }
+
+    public void setEmail(String email) {
+        setValue("email", email);
+    }
 }

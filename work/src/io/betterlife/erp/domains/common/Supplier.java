@@ -1,12 +1,14 @@
 package io.betterlife.erp.domains.common;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import io.betterlife.erp.domains.financial.PaymentMethod;
+import io.betterlife.framework.annotation.EntityForm;
+import io.betterlife.framework.condition.FalseCondition;
 import io.betterlife.framework.domains.BaseObject;
 import io.betterlife.framework.annotation.FormField;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
+import javax.persistence.*;
+import java.util.List;
 
 /**
  * Author: Lawrence Liu
@@ -18,6 +20,7 @@ import javax.persistence.NamedQuery;
     @NamedQuery(name = "Supplier.getAll", query = "SELECT c FROM Supplier c WHERE c.active = TRUE ORDER BY c.id DESC"),
     @NamedQuery(name = "Supplier.getByKeyword", query = "SELECT c FROM Supplier c WHERE c.active = TRUE and (c.name like :keyword or c.contact like :keyword or c.email like :keyword or c.phone like :keyword or c.qq like :keyword or c.website like :keyword or c.remark like :keyword)")
 })
+@EntityForm(DetailField = "paymentMethods", DetailFieldType = PaymentMethod.class)
 public class Supplier extends BaseObject {
 
     @FormField(DisplayRank = 5)
@@ -85,7 +88,8 @@ public class Supplier extends BaseObject {
 
     @FormField(DisplayRank = 40, TrueLabel = "Can", FalseLabel = "Cannot")
     public boolean getCanMixedWholesale() {
-        return getValue("canMixedWholesale");
+        Object obj = getValue("canMixedWholesale");
+        return null != obj && (boolean) obj;
     }
 
     public void setCanMixedWholesale(boolean canMixedWholesale) {
@@ -102,4 +106,14 @@ public class Supplier extends BaseObject {
         setValue("remark", remark);
     }
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "supplier")
+    @FormField(Visible = FalseCondition.class)
+    @JsonManagedReference
+    public List<PaymentMethod> getPaymentMethods() {
+        return getValue("paymentMethods");
+    }
+
+    public void setPaymentMethods(List<PaymentMethod> paymentMethods) {
+        setValue("paymentMethods", paymentMethods);
+    }
 }

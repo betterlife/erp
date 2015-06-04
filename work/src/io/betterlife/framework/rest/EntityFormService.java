@@ -29,25 +29,10 @@ public class EntityFormService {
 
     private static final Logger logger = LogManager.getLogger(EntityFormService.class.getName());
 
-    private TemplateUtils templateUtils;
-
-    public TemplateUtils getTemplateUtils() {
-        if (null == templateUtils) {
-            templateUtils = TemplateUtils.getInstance();
-        }
-        return templateUtils;
-    }
-
-    public void setTemplateUtils(TemplateUtils templateUtils) {
-        this.templateUtils = templateUtils;
-    }
-
     @GET @Path("/{entityType}/create")
     @Produces(MediaType.TEXT_HTML)
     public String getCreateForm(@PathParam("entityType") String entityType, @Context HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        ServletContext context = session.getServletContext();
-        return getForm(entityType, context, Operation.CREATE);
+        return getForm(entityType, request, Operation.CREATE);
     }
 
     @GET @Path("/{entityType}/edit/{id}")
@@ -55,19 +40,7 @@ public class EntityFormService {
     public String getEditForm(@PathParam("entityType") String entityType,
                               @Context HttpServletRequest request,
                               @PathParam("id") int id) {
-        HttpSession session = request.getSession();
-        ServletContext context = session.getServletContext();
-        return getForm(entityType, context, Operation.UPDATE);
-    }
-
-    public String getForm(String entityType, ServletContext context, final String operationType) {
-        Map<String, FieldMeta> meta = MetaDataManager.getInstance().getMetaFromEntityType(entityType);
-        LinkedHashMap<String, FieldMeta> sortedMeta = EntityUtils.getInstance().sortEntityMetaByDisplayRank(meta);
-        String formString = getTemplateUtils().getFormHtml(entityType, context, operationType, sortedMeta);
-        if (logger.isTraceEnabled()) {
-            logger.trace(String.format("%s form template for EntityType[%s]:%n\t%s", operationType, entityType, formString));
-        }
-        return formString;
+        return getForm(entityType, request, Operation.UPDATE);
     }
 
     @GET @Path("/{entityType}/list")
@@ -75,7 +48,7 @@ public class EntityFormService {
     public String getListForm(@PathParam("entityType") String entityType, @Context HttpServletRequest request) {
         HttpSession session = request.getSession();
         ServletContext context = session.getServletContext();
-        final String formString = getTemplateUtils().getListController(context, entityType);
+        final String formString = TemplateUtils.getInstance().getListController(context, entityType);
         if (logger.isTraceEnabled()) {
             logger.trace(String.format("List template for EntityType[%s]:%n\t%s", entityType, formString));
         }
@@ -87,15 +60,28 @@ public class EntityFormService {
     public String getDetailForm(@PathParam("entityType") String entityType,
                                 @Context HttpServletRequest request,
                                 @PathParam("id") int id) {
+        return getForm(entityType, request, Operation.DETAIL);
+    }
+
+    @GET @Path("/{entityType}/relate/{id}")
+    @Produces(MediaType.TEXT_HTML)
+    public String getRelateForm(@PathParam("entityType") String entityType,
+                                @Context HttpServletRequest request,
+                                @PathParam("id") int id) {
+        return getForm(entityType, request, Operation.RELATE);
+    }
+
+    private String getForm(String entityType, HttpServletRequest request, String operationType) {
         HttpSession session = request.getSession();
         ServletContext context = session.getServletContext();
         Map<String, FieldMeta> meta = MetaDataManager.getInstance().getMetaFromEntityType(entityType);
         LinkedHashMap<String, FieldMeta> sortedMeta = EntityUtils.getInstance().sortEntityMetaByDisplayRank(meta);
-        String formString = getTemplateUtils().getFormHtml(entityType, context, Operation.DETAIL, sortedMeta);
+        String formString = TemplateUtils.getInstance().getFormHtml(entityType, context, operationType, sortedMeta);
         if (logger.isTraceEnabled()) {
-            logger.trace(String.format("%s form template for EntityType[%s]:%n\t%s", Operation.DETAIL, entityType, formString));
+            logger.trace(String.format("%s form template for EntityType[%s]:%n\t%s", operationType, entityType, formString));
         }
         return formString;
     }
+
 
 }

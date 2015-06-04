@@ -7,6 +7,8 @@ import io.betterlife.framework.persistence.BaseOperator;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +35,10 @@ public class LoginUtilTest {
         params.put("password", PASSWORD);
         mockBaseOperator(params);
         mockBLStringUtils();
-        String result = loginUtil.login(params);
+        HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
+        HttpSession session = Mockito.mock(HttpSession.class);
+        when(request.getSession()).thenReturn(session);
+        String result = loginUtil.login(request, params);
         JsonNode node = JsonUtils.getInstance().stringToJsonNode(result);
         assertEquals(ENCRYPTED_PASSWORD, node.get("result").get("password").asText());
         assertEquals(USER_NAME, node.get("result").get("username").asText());
@@ -76,7 +81,8 @@ public class LoginUtilTest {
         logic.action(operator, params);
         BaseOperator.setInstance(operator);
         mockBLStringUtils();
-        JsonNode node  = JsonUtils.getInstance().stringToJsonNode(loginUtil.login(params));
+        HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
+        JsonNode node  = JsonUtils.getInstance().stringToJsonNode(loginUtil.login(request, params));
         assertNotNull(node);
         assertEquals(false, node.get("success").asBoolean());
         final ArrayNode errorMessages = (ArrayNode) node.get("errorMessages");

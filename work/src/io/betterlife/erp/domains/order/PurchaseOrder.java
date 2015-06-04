@@ -2,13 +2,17 @@ package io.betterlife.erp.domains.order;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.betterlife.erp.domains.catalog.Product;
 import io.betterlife.erp.domains.common.Supplier;
 import io.betterlife.erp.domains.financial.Expense;
+import io.betterlife.erp.domains.financial.PaymentMethod;
 import io.betterlife.erp.trigger.PurchaseOrderSaveTrigger;
+import io.betterlife.framework.annotation.EntityForm;
 import io.betterlife.framework.annotation.FormField;
 import io.betterlife.framework.annotation.Triggers;
 import io.betterlife.framework.condition.FalseCondition;
+import io.betterlife.framework.condition.TrueCondition;
 import io.betterlife.framework.domains.BaseObject;
 import io.betterlife.framework.domains.security.User;
 
@@ -28,46 +32,29 @@ import java.util.List;
     @NamedQuery(name = "PurchaseOrder.getAll", query = "SELECT c FROM PurchaseOrder c WHERE c.active = TRUE ORDER BY c.id DESC")
 })
 @Triggers(Save = PurchaseOrderSaveTrigger.class)
+@EntityForm(DetailField = "orderLines", DetailFieldType = PurchaseOrderLine.class)
 public class PurchaseOrder extends BaseObject {
 
     @ManyToOne
-    @FormField(DisplayRank = 5, RepresentField = "name")
-    public Product getProduct() {
-        return getValue("product");
-    }
-
-    public void setProduct(Product product) {
-        setValue("product", product);
-    }
-
-    @Transient
     @FormField(DisplayRank = 10, RepresentField = "name")
     public Supplier getSupplier() {
-        return getProduct().getSupplier();
+        return getValue("supplier");
     }
 
-    @FormField(DisplayRank = 15)
-    public BigDecimal getPricePerUnit() {
-        return getValue("pricePerUnit");
-    }
-
-    public void setPricePerUnit(BigDecimal price) {
-        setValue("pricePerUnit", price);
-    }
-
-    @FormField(DisplayRank = 20)
-    public BigDecimal getQuantity() {
-        return getValue("quantity");
-    }
-
-    public void setQuantity(BigDecimal quantity) {
-        setValue("quantity", quantity);
+    public void setSupplier(Supplier supplier) {
+        setValue("supplier", supplier);
     }
 
     @Transient
     @FormField(DisplayRank = 25)
     public BigDecimal getAmount() {
-        return getQuantity().multiply(getPricePerUnit());
+        BigDecimal amount = BigDecimal.ZERO;
+        if (null != getOrderLines() && getOrderLines().size() > 0) {
+            for (PurchaseOrderLine line : getOrderLines()) {
+                amount = amount.add(line.getAmount());
+            }
+        }
+        return amount;
     }
 
     @Temporal(value = TemporalType.DATE)
@@ -88,16 +75,6 @@ public class PurchaseOrder extends BaseObject {
 
     public void setLogisticAmount(BigDecimal amount) {
         setValue("logisticAmount", amount);
-    }
-
-    @FormField(DisplayRank = 35)
-    @Transient
-    public BigDecimal getUnitLogisticAmount() {
-        BigDecimal result = BigDecimal.ZERO;
-        if (getLogisticAmount() != null && getQuantity() != null) {
-            result = getLogisticAmount().divide(getQuantity(), 2, BigDecimal.ROUND_HALF_UP);
-        }
-        return result;
     }
 
     @FormField(DisplayRank = 40)
@@ -154,10 +131,21 @@ public class PurchaseOrder extends BaseObject {
     @Transient
     public String getRepresentField() {
         final StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(getId()).append("-").append(getProduct().getName()).append("-").append(getAmount());
+        stringBuilder.append(getId()).append("-").append("-").append(getAmount());
         if (getOrderDate() != null){
             stringBuilder.append("-").append(new SimpleDateFormat("yyyy/MM/dd").format(getOrderDate()));
         }
         return stringBuilder.toString();
+    }
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "orderHeader")
+    @FormField(Visible = FalseCondition.class)
+    @JsonManagedReference
+    public List<PurchaseOrderLine> getOrderLines() {
+        return getValue("orderLines");
+    }
+
+    public void setOrderLines(List<PurchaseOrderLine> lines) {
+        setValue("orderLines", lines);
     }
 }
