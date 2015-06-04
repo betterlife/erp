@@ -22,7 +22,7 @@ var detailCtrl = function ($scope, $http, $location, $sce, loginService, $routeP
         $scope.activeRelatedEntity = $scope.entity[name];
         $scope.activeRelatedEntityIsArray = Array.isArray($scope.activeRelatedEntity);
         $scope.activeRelatedEntityTab = name;
-        var relatedId = $scope.activeRelatedEntity.id;
+        $scope.activeRelatedEntityType = entityType;
         if ($scope.activeRelatedEntityIsArray && $scope.activeRelatedEntity.length > 0) {
             $scope.relatedEntityDetailInfo = $sce.trustAsHtml("");
             $scope.gridOptions = {
@@ -46,14 +46,6 @@ var detailCtrl = function ($scope, $http, $location, $sce, loginService, $routeP
                     );
                 }
             }
-        } else {
-            var formUrl = '/rest/form/' + entityType + '/relate/' + relatedId;
-            $http.get(formUrl, {}).success(function (data) {
-                $scope.relatedEntityDetailInfo = $sce.trustAsHtml(data);
-            }).error(function (data, status) {
-                console.error(data);
-                console.error(status);
-            });
         }
     };
 };
