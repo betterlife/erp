@@ -40,7 +40,7 @@ public class LoginUtil {
                 request.getSession().removeAttribute("betterlifeLoginUser");
                 return createErrorLoginResult(username, encryptedPassword);
             } else {
-                request.getSession().setAttribute("betterlifeLoginUser", user.getUsername());
+                request.getSession().setAttribute("betterlifeLoginUser", user);
             }
         } catch (Exception e) {
             logger.error(String.format("Exception during login of user[%s], password[%s](encrypted)", username, encryptedPassword), e);
